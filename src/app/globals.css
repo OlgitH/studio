@@ -1,21 +1,10 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Univers";
-  src:
-    local("Univers LT Std 45 Light"),
-    local("Univers 45 Light"),
-    url("/fonts/UniversLTStd-Light.woff2") format("woff2"),
-    url("/fonts/UniversLTStd-Light.woff") format("woff");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme inline {
   --color-background: #120d0d;
   --color-foreground: #ffffff;
-  --font-sans: "Univers", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans:
+    var(--font-univers), "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 :root {
@@ -33,5 +22,7 @@ body {
   min-height: 100svh;
   background-color: var(--page-background);
   color: var(--page-foreground);
-  font-family: "Univers", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family:
+    var(--font-univers), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
 }
