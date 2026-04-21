@@ -7,13 +7,13 @@ export default function Home() {
     mx-auto 
     min-h-svh 
     w-full 
-    xl:max-w-[1480px] 
+    xl:w-[1580px] 
     p-[20px] 
     grid 
     gap-x-[20px] 
     xl:gap-y-0 
     gap-y-8 
-    grid-cols-6 
+    grid-cols-[160px_1fr] 
     grid-rows-[auto_1fr_auto] 
     xl:grid-cols-10
     xl:grid-rows-[auto_1fr_auto]"
@@ -25,7 +25,7 @@ export default function Home() {
           className="h-auto w-40 xl:w-86"
         />
       </div>
-      <div className="col-start-1 row-start-2 self-start xl:col-start-2 xl:row-start-3 xl:self-start">
+      <div className="col-start-1 col-span-2 row-start-2 self-start xl:col-start-2 xl:row-start-3 xl:self-start">
         <Image
           src={Logo}
           alt="Greencrown Logo"
@@ -49,11 +49,12 @@ export default function Home() {
           </li>
         </ul>
       </nav>
-
-      <p className="col-span-2 row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-2 xl:self-start">
-        Greencrown is a creative and experimental design practice based in Bath,
-        Somerset.
-      </p>
+      <div className="col-span-2 max-w-[400px] row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-4 xl:self-start">
+        <p>
+          Greencrown is a creative and experimental design practice based in
+          Bath, Somerset.
+        </p>
+      </div>
     </main>
   );
 }
