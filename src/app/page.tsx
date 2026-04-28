@@ -39,8 +39,8 @@ export default function Home() {
       </nav>
       <div className="col-span-2 max-w-[400px] row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-4 xl:self-start">
         <p>
-          Greencrown is a creative and experimental design practice based in
-          Bath, Somerset.
+          Greencrown Studio is a creative and experimental design practice based
+          in Bath, Somerset.
         </p>
       </div>
     </main>
