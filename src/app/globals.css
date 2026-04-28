@@ -26,3 +26,13 @@ body {
     var(--font-univers), "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
 }
+
+@layer components {
+  .back-home-link {
+    @apply fixed top-4 left-4 z-50 flex flex-col items-start gap-2 text-sm xl:top-5 xl:left-5;
+  }
+
+  .back-home-link img {
+    @apply h-auto w-24 xl:w-32;
+  }
+}
