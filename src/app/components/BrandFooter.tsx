@@ -15,43 +15,53 @@ export default function PhotographyFooter({
         showFooter ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       }`}
     >
-      <div className="mx-auto w-full max-w-6xl px-4 py-5 xl:px-5 xl:py-6">
-        <div className="grid gap-x-5 gap-y-8 grid-cols-[160px_1fr] grid-rows-[auto_1fr_auto] xl:gap-y-0 xl:grid-cols-10 xl:grid-rows-[auto_1fr_auto]">
-          <div className="col-start-1 col-span-2 row-start-2 self-start xl:row-start-3 xl:self-start">
-            <Link href="/" className="underline">
-              <Image
-                src={Logo}
-                alt="Greencrown Logo"
-                width={100}
-                className="h-auto w-32"
-              />
-            </Link>
-          </div>
-          <nav
-            className="col-start-2 row-start-2 self-start justify-self-start xl:col-start-3 xl:row-start-3 xl:self-start"
-            aria-label="Primary"
-          >
-            <ul className="flex flex-col gap-1 text-xl leading-none">
-              <li>
-                <a href="#">projects</a>
-              </li>
-              <li>
-                <a href="#">visual art</a>
-              </li>
-              <li>
-                <Link href="/photography" className="underline">
-                  photography
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <div className="col-span-2 max-w-100 row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-4 xl:self-start">
-            <p>
-              Greencrown Studio is a creative and experimental design practice
-              based in Bath, Somerset.
-            </p>
+      <div className="w-full h-full-relative">
+        <div className="mx-auto w-full max-w-6xl px-4 py-5 xl:px-5 xl:py-6">
+          <div className="grid gap-x-5 gap-y-8 grid-cols-[160px_1fr] grid-rows-[auto_1fr_auto] xl:gap-y-0 xl:grid-cols-10 xl:grid-rows-[auto_1fr_auto]">
+            <section className="col-start-1 col-span-2 row-start-2 self-start xl:row-start-3 xl:self-start">
+              <Link href="/" className="underline">
+                <Image
+                  src={Logo}
+                  alt="Greencrown Logo"
+                  width={100}
+                  className="h-auto w-32"
+                />
+              </Link>
+            </section>
+            <nav
+              className="col-start-2 row-start-2 self-start justify-self-start xl:col-start-3 xl:row-start-3 xl:self-start"
+              aria-label="Primary"
+            >
+              <ul className="flex flex-col gap-1 text-xl leading-none">
+                <li>
+                  <a href="#">projects</a>
+                </li>
+                <li>
+                  <a href="#">visual art</a>
+                </li>
+                <li>
+                  <Link href="/photography" className="underline">
+                    photography
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+            <section className="col-span-2 max-w-100 row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-4 xl:self-start">
+              <p>
+                Greencrown Studio is a creative and experimental design practice
+                based in Bath, Somerset.
+              </p>
+            </section>
           </div>
         </div>
+        <section className="absolute right-4 bottom-4">
+          <p>
+            <a href="mailto:olly@greencrown.studio">olly@greencrown.studio</a>
+          </p>
+          <p>
+            <a href="tel:+01225699150">+44 1225 699150</a>
+          </p>
+        </section>
       </div>
     </footer>
   );

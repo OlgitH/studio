@@ -43,6 +43,14 @@ export default function Home() {
           in Bath, Somerset.
         </p>
       </div>
+      <section className="mt-10 row-start-4 lg:col-start-2">
+        <p>
+          <a href="mailto:olly@greencrown.studio">olly@greencrown.studio</a>
+        </p>
+        <p>
+          <a href="tel:+01225699150">+44 1225 699150</a>
+        </p>
+      </section>
     </main>
   );
 }

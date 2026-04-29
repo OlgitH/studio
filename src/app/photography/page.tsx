@@ -57,6 +57,21 @@ export default function Photography() {
             className="h-auto w-full"
           />
         </section>
+        <section className="mx-auto max-w-6xl w-full py-10">
+          <div className="max-w-2xl">
+            <h2 className="text-lg font-bold mb-4">Bespoke photography</h2>
+            <p className="">
+              We are able to do bespoke photography for your website or project.
+              We analyse the tone, style and messaging needed, then plan and
+              execute photography to high standards, tailoring to it's final use
+              case (e.g. website splash banner, social media post, brochure
+              etc.). With unique photography being increasingly important for
+              SEO and to appear in AI generated search results, we know you may
+              not have the time or expertise to achieve this. If you would like
+              to discuss how we can help, please send us an email.
+            </p>
+          </div>
+        </section>
         <BrandFooter showFooter={showFooter} />
       </main>
     </>
