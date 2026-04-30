@@ -49,9 +49,9 @@ export default function PhotographyFooter({
               </ul>
             </nav>
             <section className="col-span-2 max-w-100 row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-4 xl:self-start">
-              <p>
-                Greencrown Studio is a creative and experimental design practice
-                based in Bath, Somerset.
+              <p className="font-light">
+                Greencrown Studio is a design practice based
+                in Bath, Somerset. We specialise in data visualisation, making your data meaningful so your story can be told effectively.
               </p>
             </section>
             <section className="block lg:hidden row-start-4 font-light">

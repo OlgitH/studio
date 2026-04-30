@@ -25,22 +25,22 @@ export default function Home() {
       >
         <ul className="flex flex-col gap-1 text-xl leading-none font-light">
           <li>
-            <a href="#">projects</a>
+            <a href="#">Data visualisation</a>
           </li>
           <li>
-            <a href="#">visual art</a>
+            <a href="#">Visual art</a>
           </li>
           <li>
             <Link href="/photography" className="underline">
-              photography
+              Photography
             </Link>
           </li>
         </ul>
       </nav>
       <div className="col-span-2 max-w-[400px] row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-4 xl:self-start">
         <p className="font-light">
-          Greencrown Studio is a creative and experimental design practice based
-          in Bath, Somerset.
+          Greencrown Studio is a design practice based
+          in Bath, Somerset. We specialise in data visualisation, making your data meaningful so your story can be told effectively.
         </p>
       </div>
       <section className="mt-10 row-start-4 xl:col-start-2 font-light">
