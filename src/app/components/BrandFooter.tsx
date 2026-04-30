@@ -20,19 +20,21 @@ export default function PhotographyFooter({
           <div className="grid gap-x-5 gap-y-8 grid-cols-[160px_1fr] grid-rows-[auto_1fr_auto] xl:gap-y-0 xl:grid-cols-10 xl:grid-rows-[auto_1fr_auto]">
             <section className="col-start-1 col-span-2 row-start-2 self-start xl:row-start-3 xl:self-start">
               <Link href="/" className="underline">
-                <Image
-                  src={Logo}
-                  alt="Greencrown Logo"
-                  width={100}
-                  className="h-auto w-32"
-                />
+                <h1>
+                  <Image
+                    src={Logo}
+                    alt="Greencrown Logo"
+                    width={100}
+                    className="h-auto w-32"
+                  />
+                </h1>
               </Link>
             </section>
             <nav
               className="col-start-2 row-start-2 self-start justify-self-start xl:col-start-3 xl:row-start-3 xl:self-start"
               aria-label="Primary"
             >
-              <ul className="flex flex-col gap-1 text-xl leading-none">
+              <ul className="flex flex-col gap-1 text-xl leading-none font-light">
                 <li>
                   <a href="#">projects</a>
                 </li>
@@ -52,7 +54,7 @@ export default function PhotographyFooter({
                 based in Bath, Somerset.
               </p>
             </section>
-            <section className="block lg:hidden row-start-4">
+            <section className="block lg:hidden row-start-4 font-light">
               <p>
                 <a href="mailto:olly@greencrown.studio">
                   olly@greencrown.studio

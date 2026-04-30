@@ -24,7 +24,6 @@ body {
   color: var(--page-foreground);
   font-family:
     var(--font-univers), "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 300;
 }
 
 @layer components {

@@ -14,7 +14,7 @@ export default function Home() {
       <div className="col-start-1 col-span-2 row-start-2 self-start xl:col-start-2 xl:row-start-3 xl:self-start">
         <Image
           src={Logo}
-          alt="Greencrown Logo"
+          alt="Greencrown Studio"
           width={100}
           className="h-auto w-32"
         />
@@ -23,7 +23,7 @@ export default function Home() {
         className="col-start-2 row-start-2 self-start justify-self-start xl:col-start-3 xl:row-start-3 xl:self-start"
         aria-label="Primary"
       >
-        <ul className="flex flex-col gap-1 text-xl leading-none">
+        <ul className="flex flex-col gap-1 text-xl leading-none font-light">
           <li>
             <a href="#">projects</a>
           </li>
@@ -38,13 +38,12 @@ export default function Home() {
         </ul>
       </nav>
       <div className="col-span-2 max-w-[400px] row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-4 xl:self-start">
-        <h1 className="text-2xl font-semibold leading-none mb-2">Greencrown</h1>
-        <p>
+        <p className="font-light">
           Greencrown Studio is a creative and experimental design practice based
           in Bath, Somerset.
         </p>
       </div>
-      <section className="mt-10 row-start-4 lg:col-start-2">
+      <section className="mt-10 row-start-4 xl:col-start-2 font-light">
         <p>
           <a href="mailto:olly@greencrown.studio">olly@greencrown.studio</a>
         </p>
