@@ -1,23 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 import Logo from "@/../public/logo/logo.svg";
 export default function Home() {
   return (
-    <main
-      className="
-    mx-auto 
-    min-h-svh 
-    w-full 
-    xl:w-[1580px] 
-    p-[20px] 
-    grid 
-    gap-x-[20px] 
-    xl:gap-y-0 
-    gap-y-8 
-    grid-cols-[160px_1fr] 
-    grid-rows-[auto_1fr_auto] 
-    xl:grid-cols-10
-    xl:grid-rows-[auto_1fr_auto]"
-    >
+    <main className="mx-auto min-h-svh w-full p-[20px] grid gap-x-[20px] gap-y-8 grid-cols-[160px_1fr] grid-rows-[auto_1fr_auto] xl:w-[1580px] xl:gap-y-0 xl:grid-cols-10 xl:grid-rows-[auto_1fr_auto]">
       <div className="col-start-1 col-span-4 row-start-1 self-start xl:col-start-2 xl:row-start- xl:self-start">
         <img
           src="/bird-icon.svg"
@@ -45,19 +31,27 @@ export default function Home() {
             <a href="#">visual art</a>
           </li>
           <li>
-            <a href="#">photography</a>
+            <Link href="/photography" className="underline">
+              photography
+            </Link>
           </li>
         </ul>
       </nav>
       <div className="col-span-2 max-w-[400px] row-start-3 self-end text-base leading-tight xl:col-start-4 xl:row-start-3 xl:col-span-4 xl:self-start">
         <h1 className="text-2xl font-semibold leading-none mb-2">Greencrown</h1>
         <p>
-          Greencrown is a creative and experimental design practice based in
-          Bath, Somerset. We work across visual identity, art direction, and
-          digital experience — exploring the space between craft and concept to
-          build work that is considered, curious, and lasting.
+          Greencrown Studio is a creative and experimental design practice based
+          in Bath, Somerset.
         </p>
       </div>
+      <section className="mt-10 row-start-4 lg:col-start-2">
+        <p>
+          <a href="mailto:olly@greencrown.studio">olly@greencrown.studio</a>
+        </p>
+        <p>
+          <a href="tel:+01225699150">+44 1225 699150</a>
+        </p>
+      </section>
     </main>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 
 const univers = localFont({
@@ -54,6 +55,11 @@ export const metadata: Metadata = {
   description: "Creative and experimental studio in Bath, Somerset",
 };
 
+const GA_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-XXXXXXXXXX";
+
+const hasValidGaId = GA_MEASUREMENT_ID !== "G-XXXXXXXXXX";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -62,6 +68,22 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${univers.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
+      {hasValidGaId ? (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_MEASUREMENT_ID}');
+            `}
+          </Script>
+        </>
+      ) : null}
     </html>
   );
 }
