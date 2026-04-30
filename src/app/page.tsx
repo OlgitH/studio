@@ -25,14 +25,14 @@ export default function Home() {
       >
         <ul className="flex flex-col gap-1 text-xl leading-none font-light">
           <li>
-            <a href="#">Data visualisation</a>
+            <a href="#">data visualisation</a>
           </li>
           <li>
-            <a href="#">Visual art</a>
+            <a href="#">visual art</a>
           </li>
           <li>
             <Link href="/photography" className="underline">
-              Photography
+              photography
             </Link>
           </li>
         </ul>
