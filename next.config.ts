@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: ".",
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "olgith.github.io",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

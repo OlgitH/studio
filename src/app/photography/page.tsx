@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import BackHomeLink from "../components/BackHomeLink";
 import BrandFooter from "../components/BrandFooter";
 
 export default function Photography() {
@@ -23,16 +23,7 @@ export default function Photography() {
 
   return (
     <>
-      <Link href="/" className="back-home-link" aria-label="Back home">
-        <Image
-          src="/bird-icon.svg"
-          alt="Greencrown mark"
-          width={160}
-          height={94}
-          priority
-        />
-        <span>back home</span>
-      </Link>
+      <BackHomeLink />
       <main className="p-4 pb-52 w-full xl:pb-40">
         <section className="mx-auto w-full max-w-6xl flex flex-col gap-4">
           <Image
@@ -63,7 +54,7 @@ export default function Photography() {
             <p className="pb-20">
               We are able to do bespoke photography for your website or project.
               We analyse the tone, style and messaging needed, then plan and
-              execute photography to high standards, tailoring to it's final use
+              execute photography to high standards, tailoring to it&apos;s final use
               case (e.g. website splash banner, social media post, brochure
               etc.). With unique photography being increasingly important for
               SEO and to appear in AI generated search results, we know you may
