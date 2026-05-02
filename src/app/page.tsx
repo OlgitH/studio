@@ -25,7 +25,7 @@ export default function Home() {
       >
         <ul className="flex flex-col gap-1 text-xl leading-none font-light">
           <li>
-            <a href="#" className="whitespace-nowrap"><Link href="/data-visualisation" className="underline">data visualisation</Link></a>
+            <Link href="/data-visualisation" className="underline">data visualisation</Link>
           </li>
           <li>
             <a href="#">visual art</a>
@@ -34,6 +34,9 @@ export default function Home() {
             <Link href="/photography" className="underline">
               photography
             </Link>
+          </li>
+          <li>
+            <Link href="/about" className="underline">about</Link>
           </li>
         </ul>
       </nav>

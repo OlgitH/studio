@@ -36,7 +36,7 @@ export default function PhotographyFooter({
             >
               <ul className="flex flex-col gap-1 text-xl leading-none font-light">
                 <li>
-                  <Link href="/data-visualisation" className="underline">data visualisation</Link>
+                  <Link href="/data-visualisation" className="underline whitespace-nowrap">data visualisation</Link>
                 </li>
                 <li>
                   <a href="#">visual art</a>
@@ -45,6 +45,9 @@ export default function PhotographyFooter({
                   <Link href="/photography" className="underline">
                     photography
                   </Link>
+                </li>
+                <li>
+                  <Link href="/about" className="underline">about</Link>
                 </li>
               </ul>
             </nav>
