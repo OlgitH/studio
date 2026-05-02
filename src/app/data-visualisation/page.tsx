@@ -11,7 +11,7 @@ export default function DataVisualisationPage() {
 					Explore current data visualisation work and reports.
 				</p>
 				<Link href="/data-visualisation/jobs" className="underline">
-					View job market analysis
+					View Bristol job market analysis
 				</Link>
 			</main>
 		</>
