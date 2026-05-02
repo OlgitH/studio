@@ -8,8 +8,8 @@ const PAGE_SIZE = 20;
 type JobListing = {
   title: string;
   company: string;
-  salary_min: number;
-  salary_max: number;
+  salary_min: number | null;
+  salary_max: number | null;
   days_on_market: number;
 };
 
@@ -58,6 +58,22 @@ function resetBar(
     .attr('stroke', 'none')
     .attr('stroke-width', 0)
     .attr('opacity', 0.9);
+}
+
+function formatMoney(value: number | null) {
+  if (value == null || !Number.isFinite(value) || value <= 0) return 'Salary not listed';
+  return `£${Math.round(value).toLocaleString('en-GB')}`;
+}
+
+function formatSalaryRange(min: number | null, max: number | null) {
+  if ((min == null || !Number.isFinite(min) || min <= 0) && (max == null || !Number.isFinite(max) || max <= 0)) {
+    return 'Salary not listed';
+  }
+  if (min != null && Number.isFinite(min) && min > 0 && max != null && Number.isFinite(max) && max > 0) {
+    if (Math.round(min) === Math.round(max)) return formatMoney(min);
+    return `${formatMoney(min)} - ${formatMoney(max)}`;
+  }
+  return formatMoney((max ?? min) as number);
 }
 
 export default function JobBarChart({ data }: Props) {
@@ -142,6 +158,28 @@ export default function JobBarChart({ data }: Props) {
       .scaleSequential()
       .domain([frictionMax, frictionMin])
       .interpolator(d3.piecewise(d3.interpolateRgb, ['#f5f0eb', '#ff6b4a', '#e8000d']));
+
+    const salarySeries = data.map((row) => {
+      const salaries = row.jobs
+        .map((job) => {
+          const min = job.salary_min;
+          const max = job.salary_max;
+          const hasMin = min != null && Number.isFinite(min) && min > 0;
+          const hasMax = max != null && Number.isFinite(max) && max > 0;
+          if (!hasMin && !hasMax) return null;
+          if (hasMin && hasMax) return (min + max) / 2;
+          return hasMin ? min : max;
+        })
+        .filter((v): v is number => v != null);
+
+      return {
+        category: row.category,
+        avgSalary: salaries.length ? d3.mean(salaries) ?? null : null,
+      };
+    });
+    const salaryValues = salarySeries
+      .map((d) => d.avgSalary)
+      .filter((v): v is number => v != null && Number.isFinite(v) && v > 0);
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
@@ -248,9 +286,73 @@ export default function JobBarChart({ data }: Props) {
       .attr('y', (d) => y(d.vacancies))
       .attr('height', (d) => innerH - y(d.vacancies));
 
+    if (salaryValues.length > 0) {
+      const maxSalary = d3.max(salaryValues) ?? 1;
+      const salaryY = d3
+        .scaleLinear()
+        .domain([0, maxSalary * 1.15])
+        .nice()
+        .range([innerH, 0]);
+
+      const salaryAxis = d3
+        .axisRight(salaryY)
+        .ticks(5)
+        .tickFormat((d) => {
+          const num = Number(d);
+          if (num >= 1000) return `£${Math.round(num / 1000)}k`;
+          return `£${Math.round(num)}`;
+        })
+        .tickSizeOuter(0);
+
+      g.append('g')
+        .attr('transform', `translate(${innerW + 4},0)`)
+        .call(salaryAxis)
+        .call((ax) => {
+          ax.selectAll('text').attr('fill', '#f2f2f2').style('font-size', '11px');
+          ax.selectAll('line, path').attr('stroke', '#6a6a6a');
+        });
+
+      g.append('text')
+        .attr('transform', `translate(${innerW + 56},${innerH / 2}) rotate(90)`)
+        .attr('fill', '#f2f2f2')
+        .attr('text-anchor', 'middle')
+        .style('font-size', '12px')
+        .text('Avg salary');
+
+      const salaryLine = d3
+        .line<{ category: string; avgSalary: number }>()
+        .x((d) => (x(d.category) ?? 0) + x.bandwidth() / 2)
+        .y((d) => salaryY(d.avgSalary))
+        .curve(d3.curveMonotoneX);
+
+      const salaryPoints = salarySeries.filter(
+        (d): d is { category: string; avgSalary: number } => d.avgSalary != null,
+      );
+
+      g.append('path')
+        .datum(salaryPoints)
+        .attr('fill', 'none')
+        .attr('stroke', '#ffffff')
+        .attr('stroke-width', 2)
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
+        .attr('opacity', 0.9)
+        .attr('d', salaryLine);
+
+      g.append('g')
+        .selectAll('circle')
+        .data(salaryPoints)
+        .join('circle')
+        .attr('cx', (d) => (x(d.category) ?? 0) + x.bandwidth() / 2)
+        .attr('cy', (d) => salaryY(d.avgSalary))
+        .attr('r', 3)
+        .attr('fill', '#ffffff')
+        .attr('opacity', 0.95);
+    }
+
     // Colour legend — vertical gradient bar on the right
     const legendH = 180;
-    const legendX = innerW + 36;
+    const legendX = innerW + 108;
     const legendY = (innerH - legendH) / 2;
     const legendW = 16;
     const gradId = 'friction-grad';
@@ -361,6 +463,7 @@ export default function JobBarChart({ data }: Props) {
               <li key={i} className="border-b border-zinc-800 pb-3 pt-1 text-xs">
                 <div className="font-medium leading-snug text-zinc-100">{job.title}</div>
                 <div className="mt-0.5 text-zinc-400">{job.company}</div>
+                <div className="mt-0.5 text-zinc-300">{formatSalaryRange(job.salary_min, job.salary_max)}</div>
                 <div className="mt-0.5 text-zinc-500">{job.days_on_market}d on market</div>
               </li>
             ))}
