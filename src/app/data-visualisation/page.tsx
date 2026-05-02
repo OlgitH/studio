@@ -10,7 +10,7 @@ export default function DataVisualisationPage() {
 				<p className="mb-8 max-w-2xl">
 					Explore current data visualisation work and reports.
 				</p>
-				<Link href="/data-visualisation/jobs" className="underline">
+				<Link href="/data-visualisation/bristol-jobs" className="underline">
 					View Bristol job market analysis
 				</Link>
 			</main>
