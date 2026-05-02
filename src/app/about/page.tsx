@@ -15,7 +15,7 @@ export default function AboutPage() {
                      <Link href="https://www.oliverberman.net" className="underline" target="_blank" rel="noopener noreferrer">Oliver Berman</Link> is the founder of Greencrown Studio. He has a background in web development and design, working mainly in universities. 
                 </p>
 
-                <p className="mb-4">Whilst designing and building websites and brands is part of what we do, what excites us most is visualising and bringing meaning to data, and working out ways to make it more engaging and accessible. </p>
+                <p className="mb-4">Whilst designing and building websites/brands is part of what we do, what excites us most is visualising and bringing meaning to data, working out ways to make it more engaging and accessible. </p>
 
                 </section>
 				
