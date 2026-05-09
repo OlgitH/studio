@@ -1,6 +1,8 @@
 import ScrollHeader from './ScrollHeader';
-import JobBarChart from './JobBarChart';
-import JobFrictionScatter from './JobFrictionScatter';
+import JobBarChart from './charts/JobBarChart';
+import JobFrictionScatter from './charts/JobFrictionScatter';
+import SalaryLineChart from './charts/SalaryLineChart';
+import { transformJobData } from './charts/jobDataUtils';
 
 // Force Next.js to revalidate this page on every request or at a specific interval
 export const revalidate = 3600; // Revalidate every hour
@@ -8,8 +10,8 @@ export const revalidate = 3600; // Revalidate every hour
 type JobListing = {
   title: string;
   company: string;
-  salary_min: number;
-  salary_max: number;
+  salary_min: number | null;
+  salary_max: number | null;
   days_on_market: number;
 };
 
@@ -32,11 +34,30 @@ async function getJobData() {
     // The JSON source may contain bare `NaN` (invalid JSON) — replace before parsing.
     const text = await res.text();
     const sanitised = text.replace(/:\s*NaN/g, ': null');
-    return JSON.parse(sanitised) as JobRow[];
+    const data = JSON.parse(sanitised) as JobRow[];
+    return transformJobData(data);
   } catch {
     console.error("Could not fetch data from GitHub Pages");
     return [];
   }
+}
+
+function getAverageSalary(jobs: JobListing[]): number | null {
+  const values = jobs
+    .map((job) => {
+      if (job.salary_min != null && job.salary_max != null) {
+        return (job.salary_min + job.salary_max) / 2;
+      }
+      if (job.salary_min != null) return job.salary_min;
+      if (job.salary_max != null) return job.salary_max;
+      return null;
+    })
+    .filter((salary): salary is number => salary != null);
+
+  if (values.length === 0) return null;
+
+  const total = values.reduce((sum, salary) => sum + salary, 0);
+  return total / values.length;
 }
 
 export default async function JobReportPage() {
@@ -56,25 +77,37 @@ export default async function JobReportPage() {
 
         <JobFrictionScatter data={data} />
 
+        <SalaryLineChart data={data} />
+
         {/* 2. Create a Dynamic Table from the JSON */}
         <div className="overflow-x-auto">
           <table className="min-w-full text-white ">
             <thead>
               <tr className="font-normal">
                 <th className="p-3 border">Category</th>
-                <th className="p-3 border">Vacancies</th>
-                <th className="p-3 border">Avg. Days (Friction)</th>
+                <th className="p-3 border">Number of vacancies</th>
+                <th className="p-3 border">Avg. days to fill vacancies</th>
+                <th className="p-3 border">Avg. salary</th>
               </tr>
             </thead>
             
             <tbody className="font-normal">
-              {data.map((row, index) => (
-                <tr key={`${row.category}-${index}`} className="text-center">
-                  <td className="p-3 border font-semibold">{row.category}</td>
-                  <td className="p-3 border">{row.vacancies}</td>
-                  <td className="p-3 border">{row.friction.toFixed(1)}d</td>
-                </tr>
-              ))}
+              {data.map((row, index) => {
+                const averageSalary = getAverageSalary(row.jobs);
+
+                return (
+                  <tr key={`${row.category}-${index}`} className="text-center">
+                    <td className="p-3 border font-semibold">{row.category}</td>
+                    <td className="p-3 border">{row.vacancies}</td>
+                    <td className="p-3 border">{row.friction.toFixed(1)}d</td>
+                    <td className="p-3 border">
+                      {averageSalary != null
+                        ? `£${Math.round(averageSalary).toLocaleString()}`
+                        : 'N/A'}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
 
           </table>

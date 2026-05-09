@@ -132,13 +132,11 @@ export default function JobBarChart({ data }: Props) {
 
     const width = 1100;
     const height = 520;
-    const margin = { top: 48, right: 180, bottom: 148, left: 78 };
+    const margin = { top: 48, right: 160, bottom: 148, left: 78 };
     const innerW = width - margin.left - margin.right;
     const innerH = height - margin.top - margin.bottom;
 
     const maxVacancies = d3.max(data, (d) => d.vacancies) ?? 1;
-    const frictionMin = d3.min(data, (d) => d.friction) ?? 0;
-    const frictionMax = d3.max(data, (d) => d.friction) ?? 1;
 
     const x = d3
       .scaleBand()
@@ -154,32 +152,13 @@ export default function JobBarChart({ data }: Props) {
 
     chartParamsRef.current = { y, innerH };
 
+    const frictionMin = d3.min(data, (d) => d.friction) ?? 0;
+    const frictionMax = d3.max(data, (d) => d.friction) ?? 1;
+
     const colorScale = d3
       .scaleSequential()
       .domain([frictionMax, frictionMin])
       .interpolator(d3.piecewise(d3.interpolateRgb, ['#f5f0eb', '#ff6b4a', '#e8000d']));
-
-    const salarySeries = data.map((row) => {
-      const salaries = row.jobs
-        .map((job) => {
-          const min = job.salary_min;
-          const max = job.salary_max;
-          const hasMin = min != null && Number.isFinite(min) && min > 0;
-          const hasMax = max != null && Number.isFinite(max) && max > 0;
-          if (!hasMin && !hasMax) return null;
-          if (hasMin && hasMax) return (min + max) / 2;
-          return hasMin ? min : max;
-        })
-        .filter((v): v is number => v != null);
-
-      return {
-        category: row.category,
-        avgSalary: salaries.length ? d3.mean(salaries) ?? null : null,
-      };
-    });
-    const salaryValues = salarySeries
-      .map((d) => d.avgSalary)
-      .filter((v): v is number => v != null && Number.isFinite(v) && v > 0);
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
@@ -230,7 +209,7 @@ export default function JobBarChart({ data }: Props) {
       .attr('fill', '#f2f2f2')
       .attr('text-anchor', 'middle')
       .style('font-size', '13px')
-      .text('Current vacancies');
+      .text('Number of current vacancies');
 
     // Bars
     const barG = g.append('g');
@@ -286,73 +265,11 @@ export default function JobBarChart({ data }: Props) {
       .attr('y', (d) => y(d.vacancies))
       .attr('height', (d) => innerH - y(d.vacancies));
 
-    if (salaryValues.length > 0) {
-      const maxSalary = d3.max(salaryValues) ?? 1;
-      const salaryY = d3
-        .scaleLinear()
-        .domain([0, maxSalary * 1.15])
-        .nice()
-        .range([innerH, 0]);
 
-      const salaryAxis = d3
-        .axisRight(salaryY)
-        .ticks(5)
-        .tickFormat((d) => {
-          const num = Number(d);
-          if (num >= 1000) return `£${Math.round(num / 1000)}k`;
-          return `£${Math.round(num)}`;
-        })
-        .tickSizeOuter(0);
-
-      g.append('g')
-        .attr('transform', `translate(${innerW + 4},0)`)
-        .call(salaryAxis)
-        .call((ax) => {
-          ax.selectAll('text').attr('fill', '#f2f2f2').style('font-size', '11px');
-          ax.selectAll('line, path').attr('stroke', '#6a6a6a');
-        });
-
-      g.append('text')
-        .attr('transform', `translate(${innerW + 56},${innerH / 2}) rotate(90)`)
-        .attr('fill', '#f2f2f2')
-        .attr('text-anchor', 'middle')
-        .style('font-size', '12px')
-        .text('Avg salary');
-
-      const salaryLine = d3
-        .line<{ category: string; avgSalary: number }>()
-        .x((d) => (x(d.category) ?? 0) + x.bandwidth() / 2)
-        .y((d) => salaryY(d.avgSalary))
-        .curve(d3.curveMonotoneX);
-
-      const salaryPoints = salarySeries.filter(
-        (d): d is { category: string; avgSalary: number } => d.avgSalary != null,
-      );
-
-      g.append('path')
-        .datum(salaryPoints)
-        .attr('fill', 'none')
-        .attr('stroke', '#ffffff')
-        .attr('stroke-width', 2)
-        .attr('stroke-linejoin', 'round')
-        .attr('stroke-linecap', 'round')
-        .attr('opacity', 0.9)
-        .attr('d', salaryLine);
-
-      g.append('g')
-        .selectAll('circle')
-        .data(salaryPoints)
-        .join('circle')
-        .attr('cx', (d) => (x(d.category) ?? 0) + x.bandwidth() / 2)
-        .attr('cy', (d) => salaryY(d.avgSalary))
-        .attr('r', 3)
-        .attr('fill', '#ffffff')
-        .attr('opacity', 0.95);
-    }
 
     // Colour legend — vertical gradient bar on the right
     const legendH = 180;
-    const legendX = innerW + 108;
+    const legendX = innerW + 24;
     const legendY = (innerH - legendH) / 2;
     const legendW = 16;
     const gradId = 'friction-grad';
@@ -422,7 +339,7 @@ export default function JobBarChart({ data }: Props) {
 
   return (
     <section className="mb-12 rounded-lg border border-zinc-700 bg-[#171111] p-4 shadow-lg md:p-6">
-      <h2 className="mb-1 text-xl font-semibold">Vacancies by sector</h2>
+      <h2 className="mb-1 text-xl font-semibold">Vacancies vs Time to fill vacancies, by sector</h2>
       <p className="mb-5 text-sm text-zinc-300">
         Bar height = total current vacancies. Colour = avg. days to fill (friction) — red is fast/hot, off-white is
         slow. Click a bar to see active listings.

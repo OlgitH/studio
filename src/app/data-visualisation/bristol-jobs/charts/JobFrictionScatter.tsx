@@ -2,15 +2,10 @@
 
 import { useEffect, useMemo, useRef } from 'react';
 import * as d3 from 'd3';
+import type { JobRow } from './jobDataUtils';
 
 const STAGGER_MS = 120; // delay between each dot
 const DOT_DURATION_MS = 600;
-
-type JobRow = {
-  category: string;
-  vacancies: number;
-  friction: number;
-};
 
 type PlotDatum = {
   id: string;
@@ -68,16 +63,16 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
     const maxVacancies = d3.max(plotData, (d) => d.vacancies) ?? 1;
 
     const x = d3
-      .scalePoint<string>()
-      .domain(titles)
-      .range([margin.left, width - margin.right])
-      .padding(0.55);
-
-    const y = d3
       .scaleLinear()
       .domain([0, maxFriction * 1.12])
       .nice()
-      .range([height - margin.bottom, margin.top]);
+      .range([margin.left, width - margin.right]);
+
+    const y = d3
+      .scalePoint<string>()
+      .domain(titles)
+      .range([height - margin.bottom, margin.top])
+      .padding(0.55);
 
     const radius = d3
       .scaleSqrt()
@@ -104,18 +99,26 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
 
     const plot = svg.append('g');
 
+    // Highlight high-friction zone (100+ days) with a subtle near-black tint.
+    if (x.domain()[1] > 100) {
+      plot
+        .append('rect')
+        .attr('x', x(100))
+        .attr('y', margin.top)
+        .attr('width', width - margin.right - x(100))
+        .attr('height', height - margin.top - margin.bottom)
+        .attr('fill', '#ffffff')
+        .attr('fill-opacity', 0.08);
+    }
+
     plot
       .append('g')
       .attr('transform', `translate(0,${height - margin.bottom})`)
-      .call(d3.axisBottom(x).tickSizeOuter(0))
+      .call(d3.axisBottom(x).ticks(8).tickSizeOuter(0))
       .call((g) => {
         g.selectAll('text')
           .attr('fill', '#f2f2f2')
-          .style('font-size', '11px')
-          .attr('text-anchor', 'end')
-          .attr('transform', 'rotate(-38)')
-          .attr('dx', '-0.6em')
-          .attr('dy', '0.15em');
+          .style('font-size', '11px');
 
         g.selectAll('line, path').attr('stroke', '#4a4a4a');
       });
@@ -123,7 +126,7 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
     plot
       .append('g')
       .attr('transform', `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y).ticks(8).tickSizeOuter(0))
+      .call(d3.axisLeft(y).tickSizeOuter(0))
       .call((g) => {
         g.selectAll('text').attr('fill', '#f2f2f2').style('font-size', '12px');
         g.selectAll('line').attr('stroke', '#4a4a4a');
@@ -135,12 +138,12 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
       .attr('stroke', '#303030')
       .attr('stroke-dasharray', '4 5')
       .selectAll('line')
-      .data(y.ticks(8))
+      .data(x.ticks(8))
       .join('line')
-      .attr('x1', margin.left)
-      .attr('x2', width - margin.right)
-      .attr('y1', (d) => y(d))
-      .attr('y2', (d) => y(d));
+      .attr('x1', (d) => x(d))
+      .attr('x2', (d) => x(d))
+      .attr('y1', margin.top)
+      .attr('y2', height - margin.bottom);
 
     plot
       .append('text')
@@ -149,7 +152,7 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
       .attr('fill', '#f2f2f2')
       .attr('text-anchor', 'middle')
       .style('font-size', '13px')
-      .text('Job title');
+      .text('Avg. days (friction)');
 
     plot
       .append('text')
@@ -158,8 +161,7 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
       .attr('y', 18)
       .attr('fill', '#f2f2f2')
       .attr('text-anchor', 'middle')
-      .style('font-size', '13px')
-      .text('Avg. days (friction)');
+      .style('font-size', '13px');
 
     // Sort by vacancies descending — largest dots flung first
     const sortedData = [...plotData].sort((a, b) => b.vacancies - a.vacancies);
@@ -168,9 +170,12 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
     const originX = margin.left;
     const originY = margin.top - 80;
 
-    const dots = plot
+    const dotLayer = plot
       .append('g')
       .attr('clip-path', 'url(#scatter-clip)')
+      .attr('class', 'dot-layer');
+
+    const dots = dotLayer
       .selectAll('circle')
       .data(sortedData, (d) => (d as PlotDatum).id)
       .join('circle')
@@ -182,9 +187,67 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
       .attr('stroke', '#ffffff')
       .attr('stroke-width', 1.2);
 
-    dots.append('title').text(
-      (d) => `${d.title}\nFriction: ${d.friction.toFixed(1)} days\nVacancies: ${d.vacancies}`,
-    );
+    const hoverLabel = plot
+      .append('text')
+      .attr('fill', '#ffffff')
+      .style('font-size', '12px')
+      .style('font-weight', '600')
+      .style('paint-order', 'stroke')
+      .style('stroke', '#000000')
+      .style('stroke-width', '3px')
+      .style('stroke-linejoin', 'round')
+      .style('pointer-events', 'none')
+      .attr('text-anchor', 'middle')
+      .attr('opacity', 0);
+
+    dots
+      .on('mouseenter', function (event, d) {
+        const dot = d3.select(this);
+        const cx = Number(dot.attr('cx'));
+        const cy = Number(dot.attr('cy'));
+
+        dot.raise()
+          .interrupt('hover')
+          .transition('hover')
+          .duration(140)
+          .attr('r', radius(d.vacancies) * 1.16)
+          .attr('stroke-width', 1.8)
+          .attr('fill-opacity', 1);
+
+        hoverLabel
+          .interrupt('hover')
+          .text(d.title)
+          .attr('x', cx)
+          .attr('y', cy - radius(d.vacancies) * 1.35)
+          .transition('hover')
+          .duration(120)
+          .attr('opacity', 1);
+      })
+      .on('mousemove', function (event) {
+        const dot = d3.select(this);
+        const cx = Number(dot.attr('cx'));
+        const cy = Number(dot.attr('cy'));
+
+        hoverLabel
+          .attr('x', cx)
+          .attr('y', cy - Number(dot.attr('r')) - 8);
+      })
+      .on('mouseleave', function (event, d) {
+        const dot = d3.select(this);
+
+        dot.interrupt('hover')
+          .transition('hover')
+          .duration(140)
+          .attr('r', radius(d.vacancies))
+          .attr('stroke-width', 1.2)
+          .attr('fill-opacity', 0.88);
+
+        hoverLabel
+          .interrupt('hover')
+          .transition('hover')
+          .duration(100)
+          .attr('opacity', 0);
+      });
 
     // Expose the animation so IntersectionObserver can re-trigger it
     animateRef.current = () => {
@@ -196,8 +259,8 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
         .delay((_, i) => i * STAGGER_MS)
         .duration(DOT_DURATION_MS)
         .ease(d3.easeBackOut.overshoot(1.6))
-        .attr('cx', (d) => (x(d.title) ?? margin.left) + d.slotOffset)
-        .attr('cy', (d) => y(d.friction));
+        .attr('cx', (d) => x(d.friction))
+        .attr('cy', (d) => (y(d.title) ?? margin.top) + d.slotOffset);
     };
   }, [plotData]);
 
@@ -229,15 +292,15 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
       ref={sectionRef}
       className="mb-12 rounded-lg border border-zinc-700 bg-[#171111] p-4 shadow-lg md:p-6"
     >
-      <h2 className="mb-4 text-xl font-semibold">Friction by job title (scatter)</h2>
+      <h2 className="mb-4 text-xl font-semibold">How long it takes to fill vacancies, by sector</h2>
       <p className="mb-5 text-sm text-zinc-300">
-        X-axis uses unique job titles, while up to two roles per title are plotted as separate dots.
+        Each dot represents a sector, with horizontal position showing average time to fill (friction). Size and color indicate the number of vacancies.
       </p>
       <svg
         ref={svgRef}
         className="h-auto w-full"
         role="img"
-        aria-label="Scatter chart showing job title vs average days friction"
+        aria-label="Scatter chart showing time to fill vacancies by sector"
       />
     </section>
   );
