@@ -81,6 +81,7 @@ export default function JobBarChart({ data }: Props) {
   const panelRef = useRef<HTMLElement | null>(null);
   const [selectedRow, setSelectedRow] = useState<JobRow | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [isMobileFullscreen, setIsMobileFullscreen] = useState(false);
   const chartParamsRef = useRef<{ y: d3.ScaleLinear<number, number>; innerH: number } | null>(null);
   const selectedBarRef = useRef<{ el: SVGRectElement; d: JobRow } | null>(null);
   // Stable ref so D3 event handlers never have a stale closePanel closure
@@ -119,13 +120,27 @@ export default function JobBarChart({ data }: Props) {
 
   // Escape → close
   useEffect(() => {
-    if (!selectedRow) return;
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') closePanelRef.current();
+      if (e.key === 'Escape') {
+        if (selectedRow) closePanelRef.current();
+        if (isMobileFullscreen) setIsMobileFullscreen(false);
+      }
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedRow]);
+  }, [selectedRow, isMobileFullscreen]);
+
+  // Lock page scroll while the mobile fullscreen chart is open.
+  useEffect(() => {
+    if (!isMobileFullscreen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobileFullscreen]);
 
   useEffect(() => {
     if (!svgRef.current || data.length === 0) return;
@@ -338,24 +353,49 @@ export default function JobBarChart({ data }: Props) {
   const hasMore = selectedRow ? visibleCount < selectedRow.jobs.length : false;
 
   return (
-    <section className="mb-12 rounded-lg border border-zinc-700 bg-[#171111] p-4 shadow-lg md:p-6">
-      <h2 className="mb-1 text-xl font-semibold">Vacancies vs Time to fill vacancies, by sector</h2>
-      <p className="mb-5 text-sm text-zinc-300">
-        Bar height = total current vacancies. Colour = avg. days to fill (friction) — red is fast/hot, off-white is
-        slow. Click a bar to see active listings.
-      </p>
-      <svg
-        ref={svgRef}
-        className="h-auto w-full"
-        role="img"
-        aria-label="Bar chart showing vacancies per sector, colour-coded by friction"
-      />
+    <section
+      className={
+        isMobileFullscreen
+          ? 'fixed inset-0 z-[70] mb-0 flex h-[100svh] flex-col overflow-hidden bg-[#171111] p-3'
+          : 'mb-12 overflow-hidden rounded-lg border border-zinc-700 bg-[#171111] p-4 shadow-lg md:p-6'
+      }
+    >
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div>
+          <h2 className="mb-1 text-xl font-semibold">Vacancies vs Time to fill vacancies, by sector</h2>
+          <p className="text-sm text-zinc-300">
+            Bar height = total current vacancies. Colour = avg. days to fill (friction) — red is fast/hot, off-white is
+            slow. Click a bar to see active listings.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsMobileFullscreen((prev) => !prev)}
+          className="shrink-0 rounded border border-zinc-600 px-3 py-1.5 text-xs text-zinc-100 hover:bg-zinc-800 md:hidden"
+          aria-label={isMobileFullscreen ? 'Exit fullscreen chart' : 'Expand chart to fullscreen'}
+        >
+          {isMobileFullscreen ? 'Close' : 'Expand'}
+        </button>
+      </div>
+
+      {isMobileFullscreen && (
+        <p className="mb-2 text-xs text-zinc-400 md:hidden">Rotate your phone to switch between portrait and landscape.</p>
+      )}
+
+      <div className={isMobileFullscreen ? 'min-h-0 flex-1' : ''}>
+        <svg
+          ref={svgRef}
+          className={isMobileFullscreen ? 'h-full w-full' : 'h-auto w-full'}
+          role="img"
+          aria-label="Bar chart showing vacancies per sector, colour-coded by friction"
+        />
+      </div>
 
       {/* Fixed full-height right-side panel */}
       {selectedRow && (
         <aside
           ref={panelRef}
-          className="fixed inset-y-0 right-0 z-50 flex w-80 flex-col border-l border-zinc-700 bg-zinc-950 shadow-2xl"
+          className="fixed inset-y-0 right-0 z-50 flex w-full max-w-[100vw] flex-col border-l border-zinc-700 bg-zinc-950 shadow-2xl sm:w-80"
         >
           {/* Header */}
           <div className="flex shrink-0 items-start justify-between border-b border-zinc-800 p-5">

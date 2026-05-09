@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import type { JobRow } from './jobDataUtils';
 
@@ -22,10 +22,33 @@ type JobFrictionScatterProps = {
 export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
+  const [isMobileFullscreen, setIsMobileFullscreen] = useState(false);
   // Holds a function that resets + replays the scatter animation
   const animateRef = useRef<(() => void) | null>(null);
   // Tracks whether the section was visible on the last observation tick
   const wasVisibleRef = useRef(false);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && isMobileFullscreen) {
+        setIsMobileFullscreen(false);
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileFullscreen]);
+
+  // Lock page scroll while the mobile fullscreen chart is open.
+  useEffect(() => {
+    if (!isMobileFullscreen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobileFullscreen]);
 
   const plotData = useMemo(() => {
     const grouped = d3.group(data, (d) => d.category);
@@ -290,18 +313,41 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
   return (
     <section
       ref={sectionRef}
-      className="mb-12 rounded-lg border border-zinc-700 bg-[#171111] p-4 shadow-lg md:p-6"
+      className={
+        isMobileFullscreen
+          ? 'fixed inset-0 z-[70] mb-0 flex h-[100svh] flex-col overflow-hidden bg-[#171111] p-3'
+          : 'mb-12 overflow-hidden rounded-lg border border-zinc-700 bg-[#171111] p-4 shadow-lg md:p-6'
+      }
     >
-      <h2 className="mb-4 text-xl font-semibold">How long it takes to fill vacancies, by sector</h2>
-      <p className="mb-5 text-sm text-zinc-300">
-        Each dot represents a sector, with horizontal position showing average time to fill (friction). Size and color indicate the number of vacancies.
-      </p>
-      <svg
-        ref={svgRef}
-        className="h-auto w-full"
-        role="img"
-        aria-label="Scatter chart showing time to fill vacancies by sector"
-      />
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div>
+          <h2 className="mb-1 text-xl font-semibold">How long it takes to fill vacancies, by sector</h2>
+          <p className="text-sm text-zinc-300">
+            Each dot represents a sector, with horizontal position showing average time to fill (friction). Size and color indicate the number of vacancies.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsMobileFullscreen((prev) => !prev)}
+          className="shrink-0 rounded border border-zinc-600 px-3 py-1.5 text-xs text-zinc-100 hover:bg-zinc-800 md:hidden"
+          aria-label={isMobileFullscreen ? 'Exit fullscreen chart' : 'Expand chart to fullscreen'}
+        >
+          {isMobileFullscreen ? 'Close' : 'Expand'}
+        </button>
+      </div>
+
+      {isMobileFullscreen && (
+        <p className="mb-2 text-xs text-zinc-400 md:hidden">Rotate your phone to switch between portrait and landscape.</p>
+      )}
+
+      <div className={isMobileFullscreen ? 'min-h-0 flex-1' : ''}>
+        <svg
+          ref={svgRef}
+          className={isMobileFullscreen ? 'h-full w-full' : 'h-auto w-full'}
+          role="img"
+          aria-label="Scatter chart showing time to fill vacancies by sector"
+        />
+      </div>
     </section>
   );
 }
