@@ -65,7 +65,7 @@ export default async function JobReportPage() {
   return (
     <>
       <ScrollHeader title="Bristol Job Market Analysis" />
-      <main className="max-w-4xl mx-auto p-8">
+      <main className="mx-auto max-w-4xl p-4 md:p-8">
 
         {/* 1. D3 bar chart — vacancies per sector, colour-coded by friction */}
         <h2 className='font-bold mb-6'>Are jobs like UX/UI really in demand?</h2>
@@ -80,14 +80,14 @@ export default async function JobReportPage() {
         <SalaryLineChart data={data} />
 
         {/* 2. Create a Dynamic Table from the JSON */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-white ">
+        <div className="w-full max-w-full overflow-x-auto overscroll-x-contain">
+          <table className="w-full min-w-[760px] text-white">
             <thead>
               <tr className="font-normal">
-                <th className="p-3 border">Category</th>
-                <th className="p-3 border">Number of vacancies</th>
-                <th className="p-3 border">Avg. days to fill vacancies</th>
-                <th className="p-3 border">Avg. salary</th>
+                <th className="border p-3 whitespace-nowrap">Category</th>
+                <th className="border p-3 whitespace-nowrap">Number of vacancies</th>
+                <th className="border p-3 whitespace-nowrap">Avg. days to fill vacancies</th>
+                <th className="border p-3 whitespace-nowrap">Avg. salary</th>
               </tr>
             </thead>
             
@@ -97,10 +97,10 @@ export default async function JobReportPage() {
 
                 return (
                   <tr key={`${row.category}-${index}`} className="text-center">
-                    <td className="p-3 border font-semibold">{row.category}</td>
-                    <td className="p-3 border">{row.vacancies}</td>
-                    <td className="p-3 border">{row.friction.toFixed(1)}d</td>
-                    <td className="p-3 border">
+                    <td className="border p-3 font-semibold whitespace-nowrap">{row.category}</td>
+                    <td className="border p-3 whitespace-nowrap">{row.vacancies}</td>
+                    <td className="border p-3 whitespace-nowrap">{row.friction.toFixed(1)}d</td>
+                    <td className="border p-3 whitespace-nowrap">
                       {averageSalary != null
                         ? `£${Math.round(averageSalary).toLocaleString()}`
                         : 'N/A'}
