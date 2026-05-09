@@ -81,13 +81,13 @@ export default async function JobReportPage() {
 
         {/* 2. Create a Dynamic Table from the JSON */}
         <div className="w-full max-w-full overflow-x-auto overscroll-x-contain">
-          <table className="w-full min-w-[760px] text-white">
+          <table className="w-full table-fixed text-white">
             <thead>
               <tr className="font-normal">
-                <th className="border p-3 whitespace-nowrap">Category</th>
-                <th className="border p-3 whitespace-nowrap">Number of vacancies</th>
-                <th className="border p-3 whitespace-nowrap">Avg. days to fill vacancies</th>
-                <th className="border p-3 whitespace-nowrap">Avg. salary</th>
+                <th className="border p-3 w-[32%]">Category</th>
+                <th className="border p-3 w-[18%]">Vacancies</th>
+                <th className="border p-3 w-[25%]">Days to fill</th>
+                <th className="border p-3 w-[25%]">Salary</th>
               </tr>
             </thead>
             
@@ -97,10 +97,10 @@ export default async function JobReportPage() {
 
                 return (
                   <tr key={`${row.category}-${index}`} className="text-center">
-                    <td className="border p-3 font-semibold whitespace-nowrap">{row.category}</td>
-                    <td className="border p-3 whitespace-nowrap">{row.vacancies}</td>
-                    <td className="border p-3 whitespace-nowrap">{row.friction.toFixed(1)}d</td>
-                    <td className="border p-3 whitespace-nowrap">
+                    <td className="border p-3 font-semibold break-words">{row.category}</td>
+                    <td className="border p-3 break-words">{row.vacancies}</td>
+                    <td className="border p-3 break-words">{row.friction.toFixed(1)}d</td>
+                    <td className="border p-3 break-words">
                       {averageSalary != null
                         ? `£${Math.round(averageSalary).toLocaleString()}`
                         : 'N/A'}
