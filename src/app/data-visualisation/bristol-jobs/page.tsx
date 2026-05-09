@@ -1,4 +1,4 @@
-import BackHomeLink from '../../components/BackHomeLink';
+import ScrollHeader from './ScrollHeader';
 import JobBarChart from './JobBarChart';
 import JobFrictionScatter from './JobFrictionScatter';
 
@@ -43,9 +43,8 @@ export default async function JobReportPage() {
   const data = await getJobData();
   return (
     <>
-      <BackHomeLink />
+      <ScrollHeader title="Bristol Job Market Analysis" />
       <main className="max-w-4xl mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-6">Bristol Job Market Analysis</h1>
 
         {/* 1. D3 bar chart — vacancies per sector, colour-coded by friction */}
         <h2 className='font-bold mb-6'>Are jobs like UX/UI really in demand?</h2>
@@ -67,6 +66,7 @@ export default async function JobReportPage() {
                 <th className="p-3 border">Avg. Days (Friction)</th>
               </tr>
             </thead>
+            
             <tbody className="font-normal">
               {data.map((row, index) => (
                 <tr key={`${row.category}-${index}`} className="text-center">
@@ -76,6 +76,7 @@ export default async function JobReportPage() {
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
       </main>

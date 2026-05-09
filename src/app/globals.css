@@ -34,4 +34,12 @@ body {
   .back-home-link img {
     @apply h-auto w-24 xl:w-32;
   }
+
+  header .back-home-link {
+    @apply static top-auto left-auto z-auto;
+  }
+
+  header .back-home-link img {
+    @apply w-16;
+  }
 }

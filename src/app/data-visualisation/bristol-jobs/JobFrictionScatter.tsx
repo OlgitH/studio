@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useRef } from 'react';
 import * as d3 from 'd3';
 
+const STAGGER_MS = 120; // delay between each dot
+const DOT_DURATION_MS = 600;
+
 type JobRow = {
   category: string;
   vacancies: number;
@@ -23,6 +26,11 @@ type JobFrictionScatterProps = {
 
 export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  // Holds a function that resets + replays the scatter animation
+  const animateRef = useRef<(() => void) | null>(null);
+  // Tracks whether the section was visible on the last observation tick
+  const wasVisibleRef = useRef(false);
 
   const plotData = useMemo(() => {
     const grouped = d3.group(data, (d) => d.category);
@@ -84,6 +92,16 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
     svg.selectAll('*').remove();
     svg.attr('viewBox', `0 0 ${width} ${height}`);
 
+    // Clip dots to the chart canvas so they're invisible during the fling
+    svg.append('defs')
+      .append('clipPath')
+      .attr('id', 'scatter-clip')
+      .append('rect')
+      .attr('x', margin.left)
+      .attr('y', margin.top)
+      .attr('width', width - margin.left - margin.right)
+      .attr('height', height - margin.top - margin.bottom);
+
     const plot = svg.append('g');
 
     plot
@@ -143,14 +161,22 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
       .style('font-size', '13px')
       .text('Avg. days (friction)');
 
+    // Sort by vacancies descending — largest dots flung first
+    const sortedData = [...plotData].sort((a, b) => b.vacancies - a.vacancies);
+
+    // Brush launch origin — top-left corner of plot area (off-canvas before clip)
+    const originX = margin.left;
+    const originY = margin.top - 80;
+
     const dots = plot
       .append('g')
+      .attr('clip-path', 'url(#scatter-clip)')
       .selectAll('circle')
-      .data(plotData, (d) => (d as PlotDatum).id)
+      .data(sortedData, (d) => (d as PlotDatum).id)
       .join('circle')
-      .attr('cx', width / 2)
-      .attr('cy', height - margin.bottom + 24)
-      .attr('r', 0)
+      .attr('cx', originX)
+      .attr('cy', originY)
+      .attr('r', (d) => radius(d.vacancies))
       .attr('fill', (d) => color(d.vacancies))
       .attr('fill-opacity', 0.88)
       .attr('stroke', '#ffffff')
@@ -160,18 +186,49 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
       (d) => `${d.title}\nFriction: ${d.friction.toFixed(1)} days\nVacancies: ${d.vacancies}`,
     );
 
-    dots
-      .transition()
-      .delay((_, i) => i * 34)
-      .duration(900)
-      .ease(d3.easeCubicOut)
-      .attr('cx', (d) => (x(d.title) ?? margin.left) + d.slotOffset)
-      .attr('cy', (d) => y(d.friction))
-      .attr('r', (d) => radius(d.vacancies));
+    // Expose the animation so IntersectionObserver can re-trigger it
+    animateRef.current = () => {
+      dots
+        .interrupt()
+        .attr('cx', originX)
+        .attr('cy', originY)
+        .transition()
+        .delay((_, i) => i * STAGGER_MS)
+        .duration(DOT_DURATION_MS)
+        .ease(d3.easeBackOut.overshoot(1.6))
+        .attr('cx', (d) => (x(d.title) ?? margin.left) + d.slotOffset)
+        .attr('cy', (d) => y(d.friction));
+    };
   }, [plotData]);
 
+  // Run animation on first mount and whenever the section scrolls into view
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !wasVisibleRef.current) {
+            wasVisibleRef.current = true;
+            animateRef.current?.();
+          } else if (!entry.isIntersecting) {
+            wasVisibleRef.current = false;
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="mb-12 rounded-lg border border-zinc-700 bg-[#171111] p-4 shadow-lg md:p-6">
+    <section
+      ref={sectionRef}
+      className="mb-12 rounded-lg border border-zinc-700 bg-[#171111] p-4 shadow-lg md:p-6"
+    >
       <h2 className="mb-4 text-xl font-semibold">Friction by job title (scatter)</h2>
       <p className="mb-5 text-sm text-zinc-300">
         X-axis uses unique job titles, while up to two roles per title are plotted as separate dots.
