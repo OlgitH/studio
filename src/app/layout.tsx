@@ -51,8 +51,8 @@ const univers = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Greencrown",
-  description: "Creative and experimental studio in Bath, Somerset",
+  title: "Greencrown Studio",
+  description: "Creative website development in Bath, Somerset",
 };
 
 const GA_MEASUREMENT_ID =
