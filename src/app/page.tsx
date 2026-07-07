@@ -16,7 +16,7 @@ export default function Home() {
           src={Logo}
           alt="Greencrown Studio"
           width={100}
-          className="h-auto w-32"
+          className="brand-logo h-auto w-32"
         />
       </div>
       <nav

@@ -36,17 +36,21 @@ body {
     text-decoration: none;
   }
 
-  .brand-icon {
+  .brand-icon,
+  .brand-logo {
     transition: filter 0.2s ease;
   }
 
-  .home-main:has(.primary-nav a:hover) {
-    background-color: #c6ff00;
-    color: #120d0d;
-  }
+  @media (hover: hover) and (pointer: fine) {
+    .home-main:has(.primary-nav a:hover) {
+      background-color: #c6ff00;
+      color: #120d0d;
+    }
 
-  .home-main:has(.primary-nav a:hover) .brand-icon {
-    filter: brightness(0);
+    .home-main:has(.primary-nav a:hover) .brand-icon,
+    .home-main:has(.primary-nav a:hover) .brand-logo {
+      filter: brightness(0);
+    }
   }
 
   .back-home-link {
