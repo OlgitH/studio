@@ -63,7 +63,6 @@ export default function Photography() {
             </p>
           </div>
         </section>
-        <BrandFooter showFooter={showFooter} />
       </main>
     </>
   );
