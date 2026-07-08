@@ -12,7 +12,7 @@ export default function AboutPage() {
 						Greencrown Studio is your personalised creative department. We like to work with small to medium sized companies, or individuals, from all industries - including artists, architects, engineering and manufacturing.  We can help you to simplify your tech and make it work for you, instead of bringing noise and headaches. 
 					</p>
 					<p className="mb-4">
-						For expamples of work take a look at Oliver Berman's <Link href="https://www.oliverberman.net" className="underline" target="_blank" rel="noopener noreferrer">website</Link> 
+						For examples of work take a look at Oliver Berman's <Link href="https://www.oliverberman.net" className="underline" target="_blank" rel="noopener noreferrer">website</Link> 
 					</p>
                 </section>
 				<section className="max-w-2xl font-light">

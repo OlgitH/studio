@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
+import BurgerMenu from "./components/BurgerMenu";
 import "./globals.css";
 
 const univers = localFont({
@@ -67,7 +68,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${univers.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <BurgerMenu />
+        {children}
+      </body>
       {hasValidGaId ? (
         <>
           <Script
