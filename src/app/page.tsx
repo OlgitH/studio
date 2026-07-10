@@ -3,7 +3,7 @@ import Link from "next/link";
 import Logo from "@/../public/logo/logo.svg";
 export default function Home() {
   return (
-    <main className="home-main mx-auto min-h-svh w-full p-[20px] grid gap-x-[20px] gap-y-8 grid-cols-[160px_1fr] grid-rows-[auto_1fr_auto] xl:w-[1580px] xl:gap-y-0 xl:grid-cols-10 xl:grid-rows-[auto_1fr_auto]">
+    <main className="home-main text-foreground mx-auto min-h-svh w-full p-[20px] grid gap-x-[20px] gap-y-8 grid-cols-[160px_1fr] grid-rows-[auto_1fr_auto] xl:w-[1580px] xl:gap-y-0 xl:grid-cols-10 xl:grid-rows-[auto_1fr_auto]">
       <div className="col-start-1 col-span-4 row-start-1 self-start xl:col-start-2 xl:row-start- xl:self-start">
         <img
           src="/bird-icon.svg"

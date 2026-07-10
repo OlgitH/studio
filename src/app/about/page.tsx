@@ -1,11 +1,12 @@
 import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
+import PageMain from "../components/PageMain";
 
 export default function AboutPage() {
 	return (
 		<>
 			<BackHomeLink />
-			<main className="mx-auto flex min-h-dvh max-w-4xl flex-col justify-end overflow-hidden p-6 pb-8 pt-24 md:min-h-0 md:justify-start md:overflow-visible md:p-8">
+			<PageMain>
                 <section className="max-w-2xl font-light mb-10 ">
 					<h1 className="text-3xl font-bold mb-4">About</h1>
 					<p className="mb-4 ">
@@ -39,8 +40,8 @@ export default function AboutPage() {
 						</li>
 					</ul>
 				</section>
-				
-			</main>
+
+			</PageMain>
 		</>
 	);
 }

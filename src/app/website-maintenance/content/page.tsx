@@ -1,4 +1,5 @@
 import BackHomeLink from "../../components/BackHomeLink";
+import PageMain from "../../components/PageMain";
 import Link from "next/link";
 
 const faqs = [
@@ -41,7 +42,7 @@ export default function ContentGrowthPage() {
 	return (
 		<>
 			<BackHomeLink />
-			<main className="mx-auto flex min-h-dvh max-w-4xl flex-col justify-end overflow-hidden p-6 pb-8 pt-24 md:min-h-0 md:justify-start md:overflow-visible md:p-8">
+			<PageMain>
 				<h1 className="text-3xl font-bold mb-4">Fresh Content</h1>
 
 				<p className="mb-4 max-w-2xl font-light">
@@ -110,7 +111,7 @@ export default function ContentGrowthPage() {
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
 				/>
-			</main>
+			</PageMain>
 		</>
 	);
 }

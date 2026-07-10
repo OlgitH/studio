@@ -1,10 +1,11 @@
 import BackHomeLink from "../components/BackHomeLink";
+import PageMain from "../components/PageMain";
 import Link from "next/link";
 export default function WebsiteMaintenancePage() {
 	return (
 		<>
 			<BackHomeLink />
-			<main className="mx-auto flex min-h-dvh max-w-4xl flex-col justify-end overflow-hidden p-6 pb-8 pt-24 md:min-h-0 md:justify-start md:overflow-visible md:p-8">
+			<PageMain>
 				<h1 className="text-3xl font-bold mb-4">Website maintenance</h1>
 				<p className="mb-4 max-w-2xl font-light">We help small businesses build and evolve their website over time, and monitor the performance, so you can be sure you are getting return on investment. 
 					It is crucial to have a fast, informative website that allows people to easily find you. Our website maintenance packages free up time for you and allow that growth to happen while you focus on delivering results to your clients. 
@@ -41,7 +42,7 @@ export default function WebsiteMaintenancePage() {
 				<p className="mb-8">
 						<Link href="https://www.oliverberman.net" className="underline" target="_blank" rel="noopener noreferrer">Website portfolio</Link>
 					</p>
-			</main>
+			</PageMain>
 		</>
 	);
 }

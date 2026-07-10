@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #120d0d;
-  --color-foreground: #ffffff;
+  --color-highlight: #c6ff00;
+  --color-background: #0c1f14;
+  --color-foreground: #fff;
   --font-sans:
     var(--font-univers), "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 :root {
-  --page-background: #120d0d;
-  --page-foreground: #ffffff;
+  --page-background: #0c1f14;
+  --page-foreground: var(--color-foreground);
 }
 
 html {
@@ -41,15 +42,21 @@ body {
     transition: filter 0.2s ease;
   }
 
+  /* .brand-icon,
+  .back-home-link img {
+    mix-blend-mode: soft-light;
+  } */
+
   @media (hover: hover) and (pointer: fine) {
     .home-main:has(.primary-nav a:hover) {
-      background-color: #c6ff00;
-      color: #120d0d;
+      background-color: var(--color-highlight);
+      color: var(--page-background);
     }
 
     .home-main:has(.primary-nav a:hover) .brand-icon,
     .home-main:has(.primary-nav a:hover) .brand-logo {
       filter: brightness(0);
+      mix-blend-mode: normal;
     }
   }
 

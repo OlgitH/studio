@@ -90,7 +90,7 @@ export default function BurgerMenu() {
 
       {/* Mobile: full-screen overlay menu */}
       <div
-        className={`fixed inset-0 z-10 bg-[#120d0d] transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 z-10 bg-[var(--page-background)] transition-opacity duration-300 md:hidden ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >

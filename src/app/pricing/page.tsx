@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
+import PageMain from "../components/PageMain";
 
 export const metadata: Metadata = {
 	title: "Pricing | Greencrown Studio",
@@ -120,7 +121,7 @@ export default function PricingPage() {
 	return (
 		<>
 			<BackHomeLink />
-			<main className="mx-auto flex min-h-dvh max-w-4xl flex-col justify-end overflow-hidden p-6 pb-8 pt-24 md:min-h-0 md:justify-start md:overflow-visible md:p-8">
+			<PageMain>
 				<section className="max-w-2xl font-light mb-10" aria-labelledby="pricing-heading">
 					<h1 id="pricing-heading" className="text-3xl font-bold mb-4">
 						How much does a website cost?
@@ -245,7 +246,7 @@ export default function PricingPage() {
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
 				/>
-			</main>
+			</PageMain>
 		</>
 	);
 }

@@ -1,11 +1,12 @@
 import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
+import PageMain from "../components/PageMain";
 
 export default function DataVisualisationPage() {
 	return (
 		<>
 			<BackHomeLink />
-			<main className="mx-auto flex min-h-dvh max-w-4xl flex-col justify-end overflow-hidden p-6 pb-8 pt-24 md:min-h-0 md:justify-start md:overflow-visible md:p-8">
+			<PageMain>
 				<h1 className="text-3xl font-bold mb-4">Data visualisation</h1>
 
 				<p className="mb-8 max-w-2xl font-light">
@@ -27,7 +28,7 @@ export default function DataVisualisationPage() {
 						View Bristol job market analysis
 					</Link>
 				</section>
-			</main>
+			</PageMain>
 		</>
 	);
 }
