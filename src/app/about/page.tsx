@@ -20,9 +20,19 @@ export default function AboutPage() {
 					<ul>
 						<li>Website Design</li>
 						<li>Website Development</li>
-						<li>Website maintenance</li>
+						<li>
+							<Link href="/website-maintenance" className="underline">
+								Website maintenance
+							</Link>
+						</li>
+						<li>SEO and marketing</li>
 						<li>AI business processes</li>
 						<li>Graphic design</li>
+						<li>
+							<Link href="/data-visualisation" className="underline">
+								Data visualisation
+							</Link>
+						</li>
 					</ul>
 				</section>
 				

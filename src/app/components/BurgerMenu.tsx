@@ -3,15 +3,36 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const NAV_LINKS = [
-  { href: "/about", label: "about" },
-  { href: "/website-maintenance", label: "website maintenance" },
-  { href: "/data-visualisation", label: "data visualisation" },
-  { href: "/photography", label: "photography" },
+type NavEntry =
+  | { type: "link"; href: string; label: string }
+  | {
+      type: "submenu";
+      label: string;
+      links: { href: string; label: string }[];
+    };
+
+const NAV_ENTRIES: NavEntry[] = [
+  { type: "link", href: "/about", label: "about" },
+  { type: "link", href: "/approach", label: "approach" },
+  {
+    type: "submenu",
+    label: "website maintenance",
+    links: [
+      { href: "/website-maintenance", label: "website maintenance" },
+      { href: "/website-maintenance/content", label: "content" },
+      {
+        href: "/website-maintenance/monitoring-progress",
+        label: "monitoring progress",
+      },
+      { href: "/website-maintenance/photography", label: "photography" },
+    ],
+  },
+  { type: "link", href: "/data-visualisation", label: "data visualisation" },
 ];
 
 export default function BurgerMenu() {
   const [open, setOpen] = useState(false);
+  const [maintenanceOpen, setMaintenanceOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -29,6 +50,12 @@ export default function BurgerMenu() {
       document.body.style.overflow = previousOverflow;
     };
   }, [open]);
+
+  useEffect(() => {
+    if (!open) setMaintenanceOpen(false);
+  }, [open]);
+
+  const closeMenu = () => setOpen(false);
 
   return (
     <div className="fixed top-4 right-4 z-[60] xl:top-5 xl:right-5">
@@ -71,23 +98,88 @@ export default function BurgerMenu() {
           className="flex h-full w-full items-center justify-center"
         >
           <ul className="flex flex-col items-center gap-6 text-2xl font-light">
-            {NAV_LINKS.map((link, index) => (
-              <li
-                key={link.href}
-                className={`transition-all duration-500 ease-out ${
-                  open
-                    ? "translate-x-0 opacity-100"
-                    : "translate-x-8 opacity-0"
-                }`}
-                style={{
-                  transitionDelay: open ? `${index * 80 + 150}ms` : "0ms",
-                }}
-              >
-                <Link href={link.href} onClick={() => setOpen(false)}>
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            {NAV_ENTRIES.map((entry, index) => {
+              const itemClassName = `transition-all duration-500 ease-out ${
+                open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
+              }`;
+              const itemStyle = {
+                transitionDelay: open ? `${index * 80 + 150}ms` : "0ms",
+              };
+
+              if (entry.type === "link") {
+                return (
+                  <li key={entry.href} className={itemClassName} style={itemStyle}>
+                    <Link href={entry.href} onClick={closeMenu}>
+                      {entry.label}
+                    </Link>
+                  </li>
+                );
+              }
+
+              return (
+                <li
+                  key={entry.label}
+                  className={`flex flex-col items-center ${itemClassName}`}
+                  style={itemStyle}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setMaintenanceOpen((value) => !value)}
+                    aria-expanded={maintenanceOpen}
+                    aria-controls="website-maintenance-submenu-mobile"
+                    className="flex items-center gap-2"
+                  >
+                    {entry.label}
+                    <span className="relative block h-2 w-2">
+                      <span
+                        className={`absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-current transition-transform duration-300 ${
+                          maintenanceOpen ? "rotate-90" : "rotate-0"
+                        }`}
+                      />
+                      <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-current" />
+                    </span>
+                  </button>
+
+                  <div
+                    id="website-maintenance-submenu-mobile"
+                    className={`grid w-full justify-items-center overflow-hidden transition-all duration-500 ease-out ${
+                      maintenanceOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="min-h-0 flex flex-col items-center overflow-hidden pt-4">
+                      <div
+                        aria-hidden="true"
+                        className={`h-px self-center bg-white transition-all duration-500 ease-out ${
+                          maintenanceOpen ? "w-24 opacity-100" : "w-0 opacity-0"
+                        }`}
+                      />
+                      <ul className="mt-4 flex flex-col items-center gap-6">
+                        {entry.links.map((link, subIndex) => (
+                          <li
+                            key={link.href}
+                            className={`transition-all duration-500 ease-out ${
+                              maintenanceOpen && open
+                                ? "translate-x-0 opacity-100"
+                                : "translate-x-8 opacity-0"
+                            }`}
+                            style={{
+                              transitionDelay:
+                                maintenanceOpen && open
+                                  ? `${subIndex * 80 + 150}ms`
+                                  : "0ms",
+                            }}
+                          >
+                            <Link href={link.href} onClick={closeMenu}>
+                              {link.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>
@@ -100,25 +192,86 @@ export default function BurgerMenu() {
         }`}
       >
         <ul className="flex flex-col items-end gap-2 text-lg font-light">
-          {NAV_LINKS.map((link, index) => (
-            <li
-              key={link.href}
-              className={`transition-all duration-500 ease-out ${
-                open ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
-              }`}
-              style={{
-                transitionDelay: open ? `${index * 80 + 100}ms` : "0ms",
-              }}
-            >
-              <Link
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="whitespace-nowrap"
+          {NAV_ENTRIES.map((entry, index) => {
+            const itemClassName = `transition-all duration-500 ease-out ${
+              open ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
+            }`;
+            const itemStyle = {
+              transitionDelay: open ? `${index * 80 + 100}ms` : "0ms",
+            };
+
+            if (entry.type === "link") {
+              return (
+                <li key={entry.href} className={itemClassName} style={itemStyle}>
+                  <Link href={entry.href} onClick={closeMenu} className="whitespace-nowrap">
+                    {entry.label}
+                  </Link>
+                </li>
+              );
+            }
+
+            return (
+              <li
+                key={entry.label}
+                className={`flex flex-col items-end ${itemClassName}`}
+                style={itemStyle}
               >
-                {link.label}
-              </Link>
-            </li>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => setMaintenanceOpen((value) => !value)}
+                  aria-expanded={maintenanceOpen}
+                  aria-controls="website-maintenance-submenu-desktop"
+                  className="flex items-center gap-2 whitespace-nowrap"
+                >
+                  {entry.label}
+                  <span className="relative block h-2 w-2 shrink-0">
+                    <span
+                      className={`absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-current transition-transform duration-300 ${
+                        maintenanceOpen ? "rotate-90" : "rotate-0"
+                      }`}
+                    />
+                    <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-current" />
+                  </span>
+                </button>
+
+                <div
+                  id="website-maintenance-submenu-desktop"
+                  className={`grid w-full justify-items-end overflow-hidden transition-all duration-500 ease-out ${
+                    maintenanceOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                  }`}
+                >
+                  <div className="min-h-0 flex flex-col items-end overflow-hidden pt-2">
+                    <div
+                      aria-hidden="true"
+                      className={`h-px self-end bg-white transition-all duration-500 ease-out ${
+                        maintenanceOpen ? "w-24 opacity-100" : "w-0 opacity-0"
+                      }`}
+                    />
+                    <ul className="mt-2 flex flex-col items-end gap-2">
+                      {entry.links.map((link, subIndex) => (
+                        <li
+                          key={link.href}
+                          className={`transition-all duration-500 ease-out ${
+                            maintenanceOpen && open
+                              ? "translate-x-0 opacity-100"
+                              : "translate-x-4 opacity-0"
+                          }`}
+                          style={{
+                            transitionDelay:
+                              maintenanceOpen && open ? `${subIndex * 80 + 150}ms` : "0ms",
+                          }}
+                        >
+                          <Link href={link.href} onClick={closeMenu} className="whitespace-nowrap">
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </div>

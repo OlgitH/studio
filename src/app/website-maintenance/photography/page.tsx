@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import BackHomeLink from "../components/BackHomeLink";
-import BrandFooter from "../components/BrandFooter";
+import BackHomeLink from "../../components/BackHomeLink";
+import BrandFooter from "../../components/BrandFooter";
 
 export default function Photography() {
   const [showFooter, setShowFooter] = useState(false);

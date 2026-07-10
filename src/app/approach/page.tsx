@@ -1,0 +1,28 @@
+import Link from "next/link";
+import BackHomeLink from "../components/BackHomeLink";
+
+export default function ApproachPage() {
+	return (
+		<>
+			<BackHomeLink />
+			<main className="mx-auto flex min-h-dvh max-w-4xl flex-col justify-end overflow-hidden p-6 pb-8 pt-24 md:min-h-0 md:justify-start md:overflow-visible md:p-8">
+                <section className="max-w-2xl font-light mb-10 ">
+					<h1 className="text-3xl font-bold mb-4">Our approach</h1>
+					<p className="mb-4 ">
+						We like to think we are friendly and approachable, and really try to get to know the business of our client. Your success is our success, and increasingly the role of a website developer is to ensure the company&apos;s whole brand, ethos and target audience is relected in the website. This requires ongoing effort and a real passion for your business, so we try to approach each new project like it our own business.
+					</p>
+					<p className="mb-4 ">
+						We often work small businesses who are time poor, not especially tech savvy, and would rather hand off their website and digital marketing than manage it themselves, and understand the value that this gives them as they can focus on delivering for their clients. We offer a holistic, all-round service covering website maintenance, content and SEO, and ongoing monitoring, so you have one point of contact instead of juggling several suppliers.
+					</p>
+				
+				</section>
+				<section className="max-w-2xl font-light">
+					<h2 className="mb-4 text-xl font-bold">See how it&apos;s priced</h2>
+					<p className="mb-4">
+						<Link href="/pricing" className="underline">View our pricing</Link>
+					</p>
+				</section>
+			</main>
+		</>
+	);
+}
