@@ -42,7 +42,7 @@ export default function PhotographyFooter({
                   <a href="#">visual art</a>
                 </li>
                 <li>
-                  <Link href="/photography" className="underline">
+                  <Link href="/website-maintenance/photography" className="underline">
                     photography
                   </Link>
                 </li>

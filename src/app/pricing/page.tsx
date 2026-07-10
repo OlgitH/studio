@@ -206,7 +206,11 @@ export default function PricingPage() {
 					</h2>
 					<p className="mb-4 font-light">
 						Prefer to learn to do some tasks yourself &mdash; updating WordPress posts, coding,
-						or even building an AI program? Sessions are tailored to what you need.
+						or even building an AI program? Sessions are tailored to what you need.{" "}
+						<Link href="/training" className="underline">
+							Read more about training
+						</Link>
+						.
 					</p>
 					<div className="overflow-x-auto">
 						<table className="w-full border-collapse text-left font-light">

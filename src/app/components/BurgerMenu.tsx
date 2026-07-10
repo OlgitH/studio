@@ -28,6 +28,8 @@ const NAV_ENTRIES: NavEntry[] = [
     ],
   },
   { type: "link", href: "/data-visualisation", label: "data visualisation" },
+  { type: "link", href: "/business-processes", label: "AI business processes" },
+  { type: "link", href: "/training", label: "training" },
 ];
 
 export default function BurgerMenu() {
@@ -169,7 +171,11 @@ export default function BurgerMenu() {
                                   : "0ms",
                             }}
                           >
-                            <Link href={link.href} onClick={closeMenu}>
+                            <Link
+                              href={link.href}
+                              onClick={closeMenu}
+                              className="font-light text-[#e3ffb3]"
+                            >
                               {link.label}
                             </Link>
                           </li>
@@ -261,7 +267,11 @@ export default function BurgerMenu() {
                               maintenanceOpen && open ? `${subIndex * 80 + 150}ms` : "0ms",
                           }}
                         >
-                          <Link href={link.href} onClick={closeMenu} className="whitespace-nowrap">
+                          <Link
+                            href={link.href}
+                            onClick={closeMenu}
+                            className="whitespace-nowrap font-light text-[#e3ffb3]"
+                          >
                             {link.label}
                           </Link>
                         </li>

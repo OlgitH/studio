@@ -88,7 +88,7 @@ export default function MonitoringProgressPage() {
 					<dl className="space-y-4">
 						{faqs.map((faq) => (
 							<div key={faq.question}>
-								<dt className="font-medium">{faq.question}</dt>
+								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
 								<dd className="font-light mt-1">{faq.answer}</dd>
 							</div>
 						))}

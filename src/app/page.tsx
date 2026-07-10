@@ -32,6 +32,14 @@ export default function Home() {
               website maintenance
             </Link>
           </li>
+          <li>
+            <Link href="/business-processes" className="whitespace-nowrap">
+              AI business processes
+            </Link>
+          </li>
+          <li>
+            <Link href="/training">training</Link>
+          </li>
         </ul>
       </nav>
       <div className="col-span-2 max-w-[400px] row-start-3 self-end text-base leading-tight xl:col-start-5 xl:row-start-3 xl:col-span-4 xl:self-start">

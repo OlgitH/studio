@@ -9,7 +9,7 @@ export default function AboutPage() {
                 <section className="max-w-2xl font-light mb-10 ">
 					<h1 className="text-3xl font-bold mb-4">About</h1>
 					<p className="mb-4 ">
-						Greencrown Studio is your personalised creative department. We like to work with small to medium sized companies, or individuals, from all industries - including artists, architects, engineering and manufacturing.  We can help you to simplify your tech and make it work for you, instead of bringing noise and headaches. 
+						Greencrown Studio is your personalised creative department. We like to work with small companies, or individuals, from all industries - including artists, architects, engineering and manufacturing.  We can help you to simplify your tech and make it work for you, instead of bringing noise and headaches. 
 					</p>
 					<p className="mb-4">
 						For examples of work take a look at Oliver Berman's <Link href="https://www.oliverberman.net" className="underline" target="_blank" rel="noopener noreferrer">website</Link> 
@@ -26,7 +26,11 @@ export default function AboutPage() {
 							</Link>
 						</li>
 						<li>SEO and marketing</li>
-						<li>AI business processes</li>
+						<li>
+							<Link href="/business-processes" className="underline">
+								AI business processes
+							</Link>
+						</li>
 						<li>Graphic design</li>
 						<li>
 							<Link href="/data-visualisation" className="underline">
