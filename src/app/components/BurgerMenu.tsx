@@ -30,6 +30,7 @@ const NAV_ENTRIES: NavEntry[] = [
   { type: "link", href: "/data-visualisation", label: "data visualisation" },
   { type: "link", href: "/business-processes", label: "AI business processes" },
   { type: "link", href: "/training", label: "training" },
+  { type: "link", href: "/contact", label: "contact" },
 ];
 
 export default function BurgerMenu() {
