@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 503.8 284.9">
+  <!-- Generator: Adobe Illustrator 30.6.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 109)  -->
+  <defs>
+    <style>
+      .st0 {
+        font-family: GillSans-Light, 'Gill Sans';
+        font-weight: 300;
+      }
+
+      .st0, .st1, .st2 {
+        fill: #fff;
+      }
+
+      .st0, .st2 {
+        font-size: 74.19px;
+      }
+
+      .st3 {
+        letter-spacing: 0em;
+      }
+
+      .st4 {
+        letter-spacing: -.06em;
+      }
+
+      .st5 {
+        letter-spacing: -.06em;
+      }
+
+      .st6 {
+        letter-spacing: -.05em;
+      }
+
+      .st7 {
+        letter-spacing: -.04em;
+      }
+
+      .st8 {
+        letter-spacing: -.04em;
+      }
+
+      .st9 {
+        letter-spacing: -.04em;
+      }
+
+      .st2 {
+        font-family: GillSans, 'Gill Sans';
+      }
+
+      .st10 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st1" width="326.53" height="165.46"/>
+    </clipPath>
+  </defs>
+  <text class="st0" transform="translate(341.35 257.62)"><tspan class="st9" x="0" y="0">st</tspan><tspan class="st7" x="42.86" y="0">u</tspan><tspan class="st9" x="76.26" y="0">di</tspan><tspan class="st3" x="122.24" y="0">o</tspan></text>
+  <text class="st2" transform="translate(.02 257.62)"><tspan class="st9" x="0" y="0">g</tspan><tspan class="st5" x="28.77" y="0">r</tspan><tspan class="st9" x="53.69" y="0">eenc</tspan><tspan class="st4" x="182.78" y="0">r</tspan><tspan class="st6" x="207.41" y="0">o</tspan><tspan class="st8" x="244.7" y="0">w</tspan><tspan x="295.09" y="0">n</tspan></text>
+  <g>
+    <rect class="st1" width="326.53" height="165.46"/>
+    <g class="st10">
+      <path class="st1" d="M134.6,163.28L2.18,119.14l156.93-14.71S227.82-22.1,324.35,6.35"/>
+    </g>
+  </g>
+</svg>
