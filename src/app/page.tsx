@@ -22,7 +22,7 @@ export default function Home() {
           />
         </div>
         <nav
-          className="primary-nav col-start-2 row-start-2 self-start justify-self-start xl:col-start-3 xl:col-span-2 xl:row-start-3 xl:self-start"
+          className="primary-nav hidden col-start-2 row-start-2 self-start justify-self-start sm:block xl:col-start-3 xl:col-span-2 xl:row-start-3 xl:self-start"
           aria-label="Primary"
         >
           <ul className="flex flex-col gap-1 text-xl leading-none font-light">
