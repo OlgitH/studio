@@ -23,6 +23,11 @@ export default function WebsiteMaintenancePage() {
 				<h2 className="text-xl font-semibold mb-2">Website maintenance services</h2>
 				<ul className="list-disc pl-5 space-y-1 font-light mb-8">
 					<li>
+						<Link href="/website-maintenance/plan" className="underline">
+							Maintenance Plan
+						</Link>
+					</li>
+					<li>
 						<Link href="/website-maintenance/content" className="underline">
 							Fresh content
 						</Link>

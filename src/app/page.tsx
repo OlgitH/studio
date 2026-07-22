@@ -54,7 +54,7 @@ export default function Home() {
             <a href="mailto:olly@greencrown.studio">olly@greencrown.studio</a>
           </p>
           <p>
-            <a href="tel:+01225699150">+44 1225 699150</a>
+            <a href="tel:+01225699150" className="whitespace-nowrap">+44 1225 699150</a>
           </p>
         </section>
       </div>

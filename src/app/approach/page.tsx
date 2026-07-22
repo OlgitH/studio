@@ -1,4 +1,3 @@
-import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 
@@ -16,12 +15,6 @@ export default function ApproachPage() {
 						We often work small businesses who are time poor, not especially tech savvy, and would rather hand off their website and digital marketing than manage it themselves, and understand the value that this gives them as they can focus on delivering for their clients. We offer a holistic, all-round service covering website maintenance, content and SEO, and ongoing monitoring, so you have one point of contact instead of juggling several suppliers.
 					</p>
 				
-				</section>
-				<section className="max-w-2xl font-light">
-					<h2 className="mb-4 text-xl font-bold">See how it&apos;s priced</h2>
-					<p className="mb-4">
-						<Link href="/pricing" className="underline">View our pricing</Link>
-					</p>
 				</section>
 			</PageMain>
 		</>
