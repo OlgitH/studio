@@ -2,14 +2,14 @@
 
 @theme inline {
   --color-highlight: #c6ff00;
-  --color-background: #0c1f14;
+  --color-background: #120d0d;
   --color-foreground: #fff;
   --font-sans:
     var(--font-univers), "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 :root {
-  --page-background: #0c1f14;
+  --page-background: #120d0d;
   --page-foreground: var(--color-foreground);
 }
 
@@ -30,7 +30,9 @@ body {
 
 @layer components {
   .home-main {
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   .primary-nav a {
