@@ -45,7 +45,7 @@ export default function BusinessProcessesPage() {
 			<PageMain>
 				<h1 className="text-3xl font-bold mb-4">AI business processes</h1>
 
-				<p className="mb-8 max-w-2xl font-light">
+				<p className="mb-8 body-text">
 					Small businesses lose a lot of hours to admin that doesn&apos;t need
 					a human eye every time &mdash; replying to the same enquiries,
 					chasing paperwork, updating spreadsheets, writing up reports. We use
@@ -71,7 +71,7 @@ export default function BusinessProcessesPage() {
 					<h2 id="why-it-works-heading" className="text-xl font-semibold mb-2">
 						Why it works
 					</h2>
-					<p className="font-light">
+					<p className="body-text">
 						Time-poor businesses don&apos;t need more software &mdash; they
 						need fewer manual steps. By automating the repetitive parts first,
 						you get time back straight away, and every process we streamline
@@ -87,7 +87,7 @@ export default function BusinessProcessesPage() {
 						{faqs.map((faq) => (
 							<div key={faq.question}>
 								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
-								<dd className="font-light mt-1">{faq.answer}</dd>
+								<dd className="body-text mt-1">{faq.answer}</dd>
 							</div>
 						))}
 					</dl>

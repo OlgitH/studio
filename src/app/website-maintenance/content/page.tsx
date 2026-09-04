@@ -45,8 +45,8 @@ export default function ContentGrowthPage() {
 			<PageMain>
 				<h1 className="text-3xl font-bold mb-4">Fresh Content</h1>
 
-				<p className="mb-4 max-w-2xl font-light">
-					Publishing content regularly is one of the most reliable ways to grow your business. 
+				<p className="mb-4 body-text">
+					Publishing content regularly is one of the most reliable ways to grow your business.
 					It gives search engines fresh material to index, gives
 					potential customers a reason to keep returning, and builds up a bank of
 					pages that keep attracting traffic long after they&apos;re published. A
@@ -58,7 +58,7 @@ export default function ContentGrowthPage() {
 					<h2 id="why-it-works-heading" className="text-xl font-semibold mb-2">
 						Why it works
 					</h2>
-					<p className="font-light">
+					<p className="body-text">
 						Research into blogging and content marketing consistently backs this up.
 						Businesses that blog generate around 67% more leads than those that
 						don&apos;t, and marketers who prioritise content are roughly 13x more
@@ -90,7 +90,7 @@ export default function ContentGrowthPage() {
 						{faqs.map((faq) => (
 							<div key={faq.question}>
 								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
-								<dd className="font-light mt-1">{faq.answer}</dd>
+								<dd className="body-text mt-1">{faq.answer}</dd>
 							</div>
 						))}
 					</dl>

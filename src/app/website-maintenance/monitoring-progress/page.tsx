@@ -45,7 +45,7 @@ export default function MonitoringProgressPage() {
 			<PageMain>
 				<h1 className="text-3xl font-bold mb-4">Monitoring website improvements</h1>
 
-				<p className="mb-4 max-w-2xl font-light">
+				<p className="mb-4 body-text">
 					Website monitoring is the ongoing practice of tracking how a site performs after
 					launch, measuring traffic, engagement and search visibility so improvements are
 					made on real data rather than guesswork. A successful website needs regular
@@ -72,7 +72,7 @@ export default function MonitoringProgressPage() {
 					<h2 id="why-it-matters-heading" className="text-xl font-semibold mb-2">
 						Why ongoing monitoring matters
 					</h2>
-					<p className="font-light">
+					<p className="body-text">
 						A website isn&apos;t a one-off project &mdash; it&apos;s a living asset. Search
 						engines and visitor behaviour shift constantly, so a site that isn&apos;t
 						reviewed regularly can quietly lose rankings and traffic without you ever
@@ -90,7 +90,7 @@ export default function MonitoringProgressPage() {
 						{faqs.map((faq) => (
 							<div key={faq.question}>
 								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
-								<dd className="font-light mt-1">{faq.answer}</dd>
+								<dd className="body-text mt-1">{faq.answer}</dd>
 							</div>
 						))}
 					</dl>

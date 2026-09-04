@@ -14,10 +14,10 @@ export default function AboutPage() {
 					<h1 className="text-3xl font-bold mb-4">About</h1>
 					<div className="flex flex-col gap-4 md:flex-row md:items-start">
 						<div className="md:w-3/5">
-							<p className="mb-4 text-pretty">
+							<p className="mb-4 text-pretty body-text">
 								Greencrown Studio is your personalised creative department. We&nbsp;like to work with small companies, or individuals, from all industries - including artists, architects, engineering and manufacturing.  We can help you to simplify your tech and make it work for you, instead of bringing noise and headaches.
 							</p>
-							<p className="mb-4 text-pretty">
+							<p className="mb-4 text-pretty body-text">
 								For examples of work take a look at Oliver Berman's <Link href="https://www.oliverberman.net" className="underline" target="_blank" rel="noopener noreferrer">website</Link>
 							</p>
 						</div>

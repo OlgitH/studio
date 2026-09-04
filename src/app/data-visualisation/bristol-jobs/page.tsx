@@ -69,10 +69,10 @@ export default async function JobReportPage() {
 
         {/* 1. D3 bar chart — vacancies per sector, colour-coded by friction */}
         <h2 className='font-bold mb-6'>Are jobs like UX/UI really in demand?</h2>
-        <p className='mb-10 font-light'>We are told there is a skills shortage but are employers actually struggling to fill these roles? If they were would they not be offering jobs to people quicker? The frustration of people who have taken bootcamps and courses only to find they cannot be hired is clear.</p>
+        <p className='mb-10 body-text'>We are told there is a skills shortage but are employers actually struggling to fill these roles? If they were would they not be offering jobs to people quicker? The frustration of people who have taken bootcamps and courses only to find they cannot be hired is clear.</p>
         <JobBarChart data={data} />
-        <p className='mb-10 font-light'>It appears that design and construction roles are taking notably longer than other sectors to fill roles.</p>
-        <p className='mb-10 font-light'>It appears that green jobs are in high demand and are quickly filled, but there are not many green jobs on offer.</p>
+        <p className='mb-10 body-text'>It appears that design and construction roles are taking notably longer than other sectors to fill roles.</p>
+        <p className='mb-10 body-text'>It appears that green jobs are in high demand and are quickly filled, but there are not many green jobs on offer.</p>
 
 
         <JobFrictionScatter data={data} />

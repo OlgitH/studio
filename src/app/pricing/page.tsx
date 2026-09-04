@@ -126,12 +126,12 @@ export default function PricingPage() {
 					<h1 id="pricing-heading" className="text-3xl font-bold mb-4">
 						How much does a website cost?
 					</h1>
-					<p className="mb-4">
+					<p className="mb-4 body-text">
 						Honestly? Nobody can say without seeing the details of the site required &mdash; it&apos;s a bit like asking how long a
 						piece of string is. Every business needs something different, so a one-size price
 						tag would only be a guess.
 					</p>
-					<p className="mb-4">
+					<p className="mb-4 body-text">
 						What we can offer is a predictable way of getting there: a fixed price
 						for building your site, agreed before we start, and then &mdash; if you want your
 						site to keep evolving and take advantage of website marketing &mdash; an ongoing
@@ -187,14 +187,14 @@ export default function PricingPage() {
 					<h2 id="maintenance-heading" className="text-xl font-bold mb-2">
 						Ongoing maintenance &amp; growth
 					</h2>
-					<p className="mb-4 font-light">
+					<p className="mb-4 body-text">
 						Once your site is live, our maintenance packages start from{" "}
 						<strong>£70 per month </strong> and keep it looking fresh, secure and up to date. We
 						handle the technical side, update content as your business changes, and monitor and
 						report on traffic and engagement so you can see your site&apos;s real-world impact
 						over time.
 					</p>
-					<p className="font-light">
+					<p className="body-text">
 						<Link href="/website-maintenance" className="underline">
 							See what&apos;s included in website maintenance
 						</Link>
@@ -205,7 +205,7 @@ export default function PricingPage() {
 					<h2 id="training-heading" className="text-xl font-bold mb-2">
 						One-to-one training
 					</h2>
-					<p className="mb-4 font-light">
+					<p className="mb-4 body-text">
 						Prefer to learn to do some tasks yourself &mdash; updating WordPress posts, coding,
 						or even building an AI program? Sessions are tailored to what you need.{" "}
 						<Link href="/training" className="underline">

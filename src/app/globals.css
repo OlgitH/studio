@@ -64,6 +64,11 @@ body {
   header .back-home-link img {
     @apply w-16;
   }
+
+  /* Caps body copy to a ~10-12 word measure per line for readability. */
+  .body-text {
+    @apply font-light max-w-[60ch];
+  }
 }
 
 /* Unlayered: must win over Tailwind's utilities layer (e.g. text-foreground on

@@ -45,7 +45,7 @@ export default function TrainingPage() {
 			<PageMain>
 				<h1 className="text-3xl font-bold mb-4">One-to-one training</h1>
 
-				<p className="mb-8 max-w-2xl font-light">
+				<p className="mb-8 body-text">
 					Prefer to learn to do certain tasks yourself rather than hand them
 					off? One-to-one training sessions are tailored to what you need,
 					so you leave able to do it again on your own next time.
@@ -67,7 +67,7 @@ export default function TrainingPage() {
 					<h2 id="pricing-heading" className="text-xl font-semibold mb-2">
 						Pricing
 					</h2>
-					<p className="font-light">
+					<p className="body-text">
 						Sessions run from £60 for an hour up to £360 for a full day. See
 						the{" "}
 						<Link href="/pricing" className="underline">
@@ -85,7 +85,7 @@ export default function TrainingPage() {
 						{faqs.map((faq) => (
 							<div key={faq.question}>
 								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
-								<dd className="font-light mt-1">{faq.answer}</dd>
+								<dd className="body-text mt-1">{faq.answer}</dd>
 							</div>
 						))}
 					</dl>

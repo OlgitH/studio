@@ -104,17 +104,17 @@ export default function WebsiteMaintenancePlanPage() {
 					<h1 id="plan-heading" className="text-3xl font-bold mb-4">
 						Website Maintenance Plan
 					</h1>
-					<p className="mb-4 font-light">
+					<p className="mb-4 body-text">
 						Your website, looked after — technically, visually and strategically — for one
 						monthly fee. A website isn&apos;t a one-off project, it&apos;s a living asset. Left
 						alone, it quietly loses speed, security and search visibility. Our Maintenance Plan
 						means someone is always keeping an eye on it, acting on what the data shows, and
 						reporting back — so you don&apos;t have to think about it.
 					</p>
-					<p className="mb-4 font-light">
+					<p className="mb-4 body-text">
 						<strong>From £280/month for your first 6 months</strong> (£320/month thereafter).
 					</p>
-					<p className="font-light">
+					<p className="body-text">
 						<Link href="/contact" className="underline">
 							Get in touch
 						</Link>
@@ -129,7 +129,7 @@ export default function WebsiteMaintenancePlanPage() {
 						{whatsIncluded.map((item) => (
 							<div key={item.heading}>
 								<h3 className="font-normal mb-1">{item.heading}</h3>
-								<p className="font-light">{item.body}</p>
+								<p className="body-text">{item.body}</p>
 							</div>
 						))}
 					</div>
@@ -139,13 +139,13 @@ export default function WebsiteMaintenancePlanPage() {
 					<h2 id="monthly-report-heading" className="text-xl font-semibold mb-2">
 						What you get every month
 					</h2>
-					<p className="mb-2 font-light">A straightforward report showing:</p>
+					<p className="mb-2 body-text">A straightforward report showing:</p>
 					<ul className="list-disc pl-5 space-y-1 font-light">
 						{monthlyReport.map((item) => (
 							<li key={item}>{item}</li>
 						))}
 					</ul>
-					<p className="mt-4 font-light">
+					<p className="mt-4 body-text">
 						No jargon, no dashboards to decode — just a clear view of what&apos;s changed and
 						what we&apos;re doing next.
 					</p>
@@ -157,7 +157,7 @@ export default function WebsiteMaintenancePlanPage() {
 					</h2>
 					<div className="space-y-3">
 						{benefits.map((item) => (
-							<p key={item.heading} className="font-light">
+							<p key={item.heading} className="body-text">
 								<strong>{item.heading}</strong> {item.body}
 							</p>
 						))}
@@ -168,18 +168,18 @@ export default function WebsiteMaintenancePlanPage() {
 					<h2 id="pricing-heading" className="text-xl font-semibold mb-2">
 						Pricing
 					</h2>
-					<p className="mb-4 font-light">
+					<p className="mb-4 body-text">
 						<strong>£280/month</strong> for the first 6 months, then <strong>£320/month</strong>{" "}
 						ongoing.
 					</p>
-					<p className="mb-4 font-light">
+					<p className="mb-4 body-text">
 						This covers the core plan: server management, monthly SEO analysis and reporting,
 						and content guidance. Larger content production — video, photography shoots,
 						in-depth case studies — is scoped and quoted separately, so your monthly fee stays
 						predictable.
 					</p>
-					<p className="mb-4 font-light">No lock-in contracts. Cancel with 30 days&apos; notice.</p>
-					<p className="font-light">
+					<p className="mb-4 body-text">No lock-in contracts. Cancel with 30 days&apos; notice.</p>
+					<p className="body-text">
 						<Link href="/contact" className="underline">
 							Get in touch to tailor a plan for your site
 						</Link>
@@ -194,7 +194,7 @@ export default function WebsiteMaintenancePlanPage() {
 						{faqs.map((faq) => (
 							<div key={faq.question}>
 								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
-								<dd className="font-light mt-1">{faq.answer}</dd>
+								<dd className="body-text mt-1">{faq.answer}</dd>
 							</div>
 						))}
 					</dl>
