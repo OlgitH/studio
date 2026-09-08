@@ -1,6 +1,7 @@
 import BackHomeLink from "../../components/BackHomeLink";
 import PageMain from "../../components/PageMain";
-import Link from "next/link";
+import FaqAccordion from "../../components/FaqAccordion";
+import CtaButton from "../../components/CtaButton";
 
 const faqs = [
 	{
@@ -55,8 +56,8 @@ export default function MonitoringProgressPage() {
 					tracking for you.
 				</p>
 
-				<section className="mb-6 max-w-2xl" aria-labelledby="what-we-track-heading">
-					<h2 id="what-we-track-heading" className="text-xl font-semibold mb-2">
+				<section className="mb-10 max-w-2xl" aria-labelledby="what-we-track-heading">
+					<h2 id="what-we-track-heading" className="text-2xl font-semibold mb-4">
 						What we track
 					</h2>
 					<ul className="list-disc pl-5 space-y-1 font-light">
@@ -68,8 +69,8 @@ export default function MonitoringProgressPage() {
 					</ul>
 				</section>
 
-				<section className="mb-6 max-w-2xl" aria-labelledby="why-it-matters-heading">
-					<h2 id="why-it-matters-heading" className="text-xl font-semibold mb-2">
+				<section className="mb-10 max-w-2xl" aria-labelledby="why-it-matters-heading">
+					<h2 id="why-it-matters-heading" className="text-2xl font-semibold mb-4">
 						Why ongoing monitoring matters
 					</h2>
 					<p className="body-text">
@@ -83,28 +84,20 @@ export default function MonitoringProgressPage() {
 				</section>
 
 				<section className="mb-8 max-w-2xl" aria-labelledby="faq-heading">
-					<h2 id="faq-heading" className="text-xl font-semibold mb-2">
+					<h2 id="faq-heading" className="text-xl font-semibold mb-4">
 						Frequently asked questions
 					</h2>
-					<dl className="space-y-4">
-						{faqs.map((faq) => (
-							<div key={faq.question}>
-								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
-								<dd className="body-text mt-1">{faq.answer}</dd>
-							</div>
-						))}
-					</dl>
+					<FaqAccordion faqs={faqs} />
 				</section>
 
-				<p className="mb-8">
-					<Link
+				<p className="mb-8 body-text">
+					<CtaButton
 						href="https://www.oliverberman.net"
-						className="underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						Website portfolio
-					</Link>
+						Portfolio website
+					</CtaButton>
 				</p>
 
 				<script

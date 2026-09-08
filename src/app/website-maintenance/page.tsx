@@ -1,7 +1,8 @@
 import Image from "next/image";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
-import Link from "next/link";
+import CtaButton from "../components/CtaButton";
+import LinkBoxList from "../components/LinkBoxList";
 export default function WebsiteMaintenancePage() {
 	return (
 		<>
@@ -31,33 +32,30 @@ export default function WebsiteMaintenancePage() {
 					As part of the package, we monitor and report on web engagement and traffic, so you can track the real-world impact of the improvements we make over time. Get in touch if you would like to discuss a package tailored to your site.
 				</p>
 
-				<h2 className="text-xl font-semibold mb-2">Website maintenance services</h2>
-				<ul className="list-disc pl-5 space-y-1 font-light mb-8">
-					<li>
-						<Link href="/website-maintenance/plan" className="underline">
-							Maintenance Plan
-						</Link>
-					</li>
-					<li>
-						<Link href="/website-maintenance/content" className="underline">
-							Fresh content
-						</Link>
-					</li>
-					<li>
-						<Link href="/website-maintenance/monitoring-progress" className="underline">
-							Monitoring website improvements
-						</Link>
-					</li>
-					<li>
-						<Link href="/website-maintenance/photography" className="underline">
-							Bespoke photography
-						</Link>
-					</li>
-				</ul>
+				<h2 className="text-2xl font-semibold mb-4">Website maintenance services</h2>
+				<div className="mb-8">
+					<LinkBoxList
+						items={[
+							{ label: "Maintenance Plan", href: "/website-maintenance/plan" },
+							{ label: "Fresh content", href: "/website-maintenance/content" },
+							{
+								label: "Monitoring website improvements",
+								href: "/website-maintenance/monitoring-progress",
+							},
+							{ label: "Bespoke photography", href: "/website-maintenance/photography" },
+						]}
+					/>
+				</div>
 
-				<p className="mb-8">
-						<Link href="https://www.oliverberman.net" className="underline" target="_blank" rel="noopener noreferrer">Website portfolio</Link>
-					</p>
+				<p className="mb-8 body-text">
+					<CtaButton
+						href="https://www.oliverberman.net"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Portfolio website
+					</CtaButton>
+				</p>
 				</div>
 				</section>
 			</PageMain>

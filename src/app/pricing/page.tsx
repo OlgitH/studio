@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
+import CtaButton from "../components/CtaButton";
 
 export const metadata: Metadata = {
 	title: "Pricing | Greencrown Studio",
@@ -195,9 +196,9 @@ export default function PricingPage() {
 						over time.
 					</p>
 					<p className="body-text">
-						<Link href="/website-maintenance" className="underline">
+						<CtaButton href="/website-maintenance">
 							See what&apos;s included in website maintenance
-						</Link>
+						</CtaButton>
 					</p>
 				</section>
 

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
+import FaqAccordion from "../components/FaqAccordion";
+import CtaButton from "../components/CtaButton";
 
 const faqs = [
 	{
@@ -81,25 +83,17 @@ export default function TrainingPage() {
 					<h2 id="faq-heading" className="text-xl font-semibold mb-2">
 						Frequently asked questions
 					</h2>
-					<dl className="space-y-4">
-						{faqs.map((faq) => (
-							<div key={faq.question}>
-								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
-								<dd className="body-text mt-1">{faq.answer}</dd>
-							</div>
-						))}
-					</dl>
+					<FaqAccordion faqs={faqs} />
 				</section>
 
-				<p className="mb-8">
-					<Link
+				<p className="mb-8 body-text">
+					<CtaButton
 						href="https://www.oliverberman.net"
-						className="underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						Website portfolio
-					</Link>
+						Portfolio website
+					</CtaButton>
 				</p>
 
 				<script

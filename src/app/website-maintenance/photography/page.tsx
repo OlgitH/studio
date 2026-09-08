@@ -50,7 +50,7 @@ export default function Photography() {
         </section>
         <section className="mx-auto max-w-6xl w-full py-10">
           <div className="max-w-2xl">
-            <h2 className="text-lg font-bold mb-4">Bespoke photography</h2>
+            <h1 className="text-3xl font-bold mb-4">Bespoke photography</h1>
             <p className="pb-20 body-text">
               We are able to do bespoke photography for your website or project.
               We analyse the tone, style and messaging needed, then plan and

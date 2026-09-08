@@ -1,6 +1,7 @@
 import BackHomeLink from "../../components/BackHomeLink";
 import PageMain from "../../components/PageMain";
-import Link from "next/link";
+import FaqAccordion from "../../components/FaqAccordion";
+import CtaButton from "../../components/CtaButton";
 
 const faqs = [
 	{
@@ -54,8 +55,8 @@ export default function ContentGrowthPage() {
 					&mdash; one that&apos;s added to consistently keeps compounding in value.
 				</p>
 
-				<section className="mb-6 max-w-2xl" aria-labelledby="why-it-works-heading">
-					<h2 id="why-it-works-heading" className="text-xl font-semibold mb-2">
+				<section className="mb-10 max-w-2xl" aria-labelledby="why-it-works-heading">
+					<h2 id="why-it-works-heading" className="text-2xl font-semibold mb-4">
 						Why it works
 					</h2>
 					<p className="body-text">
@@ -69,8 +70,8 @@ export default function ContentGrowthPage() {
 					</p>
 				</section>
 
-				<section className="mb-6 max-w-2xl" aria-labelledby="what-good-looks-like-heading">
-					<h2 id="what-good-looks-like-heading" className="text-xl font-semibold mb-2">
+				<section className="mb-10 max-w-2xl" aria-labelledby="what-good-looks-like-heading">
+					<h2 id="what-good-looks-like-heading" className="text-2xl font-semibold mb-4">
 						What good, regular content looks like
 					</h2>
 					<ul className="list-disc pl-5 space-y-1 font-light">
@@ -83,28 +84,20 @@ export default function ContentGrowthPage() {
 				</section>
 
 				<section className="mb-8 max-w-2xl" aria-labelledby="faq-heading">
-					<h2 id="faq-heading" className="text-xl font-semibold mb-2">
+					<h2 id="faq-heading" className="text-xl font-semibold mb-4">
 						Frequently asked questions
 					</h2>
-					<dl className="space-y-4">
-						{faqs.map((faq) => (
-							<div key={faq.question}>
-								<dt className="font-light text-[#e3ffb3]">{faq.question}</dt>
-								<dd className="body-text mt-1">{faq.answer}</dd>
-							</div>
-						))}
-					</dl>
+					<FaqAccordion faqs={faqs} />
 				</section>
 
-				<p className="mb-8">
-					<Link
+				<p className="mb-8 body-text">
+					<CtaButton
 						href="https://www.oliverberman.net"
-						className="underline"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						Website portfolio
-					</Link>
+						Portfolio website
+					</CtaButton>
 				</p>
 
 				<script

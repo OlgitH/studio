@@ -1,6 +1,6 @@
-import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
+import CtaButton from "../components/CtaButton";
 
 export default function DataVisualisationPage() {
 	return (
@@ -24,9 +24,9 @@ export default function DataVisualisationPage() {
 					<p className="body-text mb-2">
 						Explore current data visualisation work and reports.
 					</p>
-					<Link href="/data-visualisation/bristol-jobs" className="underline">
+					<CtaButton href="/data-visualisation/bristol-jobs">
 						View Bristol job market analysis
-					</Link>
+					</CtaButton>
 				</section>
 			</PageMain>
 		</>
