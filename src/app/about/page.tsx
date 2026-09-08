@@ -5,21 +5,12 @@ import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
 import LinkBoxList from "../components/LinkBoxList";
-import PageBgImage from "../components/PageBgImage";
 
 export default function AboutPage() {
 	return (
 		<>
 			<BackHomeLink />
 			<PageMain>
-				<PageBgImage
-					src="/bird-blur-3.png"
-					width={2000}
-					height={1000}
-					opacityClassName="opacity-40"
-					maxWidthClassName="max-w-4xl"
-					positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
-				/>
 				<section className="relative z-10 max-w-4xl font-light mb-10 ">
 					<h1 className="text-3xl font-bold mb-4">About</h1>
 					<div className="flex flex-col gap-4 md:flex-row md:items-start">
@@ -46,7 +37,7 @@ export default function AboutPage() {
 						</div>
 						<div className="md:w-2/5">
 							<div
-								className="relative aspect-[9/16] select-none"
+								className="relative aspect-[9/16] select-none before:content-[''] before:absolute before:inset-0 before:-translate-y-4 before:translate-x-4 before:bg-[var(--color-highlight)] before:pointer-events-none"
 								onContextMenu={(e) => e.preventDefault()}
 							>
 								<iframe
@@ -54,7 +45,7 @@ export default function AboutPage() {
 									frameBorder="0"
 									allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
 									referrerPolicy="strict-origin-when-cross-origin"
-									className="absolute inset-0 h-full w-full"
+									className="absolute inset-0 h-full w-full bg-[#333]"
 									title="intro_video"
 								/>
 							</div>

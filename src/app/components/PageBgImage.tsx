@@ -57,7 +57,7 @@ export default function PageBgImage({
 			quality={60}
 			priority={priority}
 			aria-hidden="true"
-			className={`fixed z-0 w-[788px] ${maxWidthClassName} h-auto object-contain ${opacityClassName} pointer-events-none ${positionClassName} min-[1051px]:w-full`}
+			className={`absolute z-0 w-[788px] ${maxWidthClassName} h-auto object-contain ${opacityClassName} pointer-events-none ${positionClassName} min-[1051px]:w-full`}
 		/>
 	);
 }

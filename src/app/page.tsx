@@ -11,7 +11,7 @@ export default function Home() {
 				height={1507}
 				opacityClassName="opacity-60"
 				maxWidthClassName="max-w-3xl"
-				positionClassName="translate-x-[10vw]"
+				positionClassName="translate-x-[10vw] sm:translate-x-[56vw]"
 				priority
 			/>
 			<div className="relative z-10 mx-auto flex flex-1 flex-col w-full p-[20px] xl:w-[1080px]">

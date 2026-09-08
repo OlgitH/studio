@@ -37,7 +37,7 @@ export default function ApproachPage() {
 							</p>
 						</section>
 						<section>
-							<h2 className="text-2xl font-bold mb-4">Holistic Approach</h2>
+							<h2 className=" text-2xl font-bold mb-4">Holistic Approach</h2>
 							<p className="mb-4 body-text">
 								We offer a holistic, all-round service covering website
 								maintenance, content and SEO, and ongoing monitoring, so you
