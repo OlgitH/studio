@@ -3,6 +3,7 @@ import BackHomeLink from "../../components/BackHomeLink";
 import PageMain from "../../components/PageMain";
 import CtaButton from "../../components/CtaButton";
 import FaqAccordion from "../../components/FaqAccordion";
+import PageBgImage from "../../components/PageBgImage";
 
 export const metadata: Metadata = {
 	title: "Website Maintenance Plan | Greencrown Studio",
@@ -103,6 +104,15 @@ export default function WebsiteMaintenancePlanPage() {
 		<>
 			<BackHomeLink />
 			<PageMain>
+				<PageBgImage
+					src="/bird-blur-3.png"
+					width={2000}
+					height={1000}
+					opacityClassName="opacity-40"
+					maxWidthClassName="max-w-4xl"
+					positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
+				/>
+				<div className="relative z-10">
 				<section className="mb-10 max-w-2xl" aria-labelledby="plan-heading">
 					<h1 id="plan-heading" className="text-3xl font-bold mb-4">
 						Website Maintenance Plan
@@ -208,6 +218,7 @@ export default function WebsiteMaintenancePlanPage() {
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
 				/>
+				</div>
 			</PageMain>
 		</>
 	);

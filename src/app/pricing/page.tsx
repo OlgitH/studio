@@ -3,6 +3,7 @@ import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
+import PageBgImage from "../components/PageBgImage";
 
 export const metadata: Metadata = {
 	title: "Pricing | Greencrown Studio",
@@ -123,6 +124,15 @@ export default function PricingPage() {
 		<>
 			<BackHomeLink />
 			<PageMain>
+				<PageBgImage
+					src="/bird-blur-3.png"
+					width={2000}
+					height={1000}
+					opacityClassName="opacity-40"
+					maxWidthClassName="max-w-4xl"
+					positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
+				/>
+				<div className="relative z-10">
 				<section className="max-w-2xl font-light mb-10" aria-labelledby="pricing-heading">
 					<h1 id="pricing-heading" className="text-3xl font-bold mb-4">
 						How much does a website cost?
@@ -247,6 +257,7 @@ export default function PricingPage() {
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
 				/>
+				</div>
 			</PageMain>
 		</>
 	);

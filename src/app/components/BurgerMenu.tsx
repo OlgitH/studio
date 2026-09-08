@@ -12,6 +12,7 @@ type NavEntry =
     };
 
 const NAV_ENTRIES: NavEntry[] = [
+  { type: "link", href: "/", label: "home" },
   { type: "link", href: "/about", label: "about" },
   { type: "link", href: "/approach", label: "approach" },
   {

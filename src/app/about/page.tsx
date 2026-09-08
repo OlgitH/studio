@@ -5,13 +5,22 @@ import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
 import LinkBoxList from "../components/LinkBoxList";
+import PageBgImage from "../components/PageBgImage";
 
 export default function AboutPage() {
 	return (
 		<>
 			<BackHomeLink />
 			<PageMain>
-				<section className="max-w-4xl font-light mb-10 ">
+				<PageBgImage
+					src="/bird-blur-3.png"
+					width={2000}
+					height={1000}
+					opacityClassName="opacity-40"
+					maxWidthClassName="max-w-4xl"
+					positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
+				/>
+				<section className="relative z-10 max-w-4xl font-light mb-10 ">
 					<h1 className="text-3xl font-bold mb-4">About</h1>
 					<div className="flex flex-col gap-4 md:flex-row md:items-start">
 						<div className="md:w-3/5">
@@ -56,7 +65,7 @@ export default function AboutPage() {
 						strategy="lazyOnload"
 					/>
 				</section>
-				<section className="max-w-2xl font-light">
+				<section className="relative z-10 max-w-2xl font-light">
 					<h2 className="mb-4 text-xl font-bold">Services</h2>
 					<LinkBoxList
 						items={[

@@ -1,12 +1,22 @@
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
+import PageBgImage from "../components/PageBgImage";
 
 export default function DataVisualisationPage() {
 	return (
 		<>
 			<BackHomeLink />
 			<PageMain>
+				<PageBgImage
+					src="/bird-blur-3.png"
+					width={2000}
+					height={1000}
+					opacityClassName="opacity-40"
+					maxWidthClassName="max-w-4xl"
+					positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
+				/>
+				<div className="relative z-10">
 				<h1 className="text-3xl font-bold mb-4">Data visualisation</h1>
 
 				<p className="mb-8 body-text">
@@ -28,6 +38,7 @@ export default function DataVisualisationPage() {
 						View Bristol job market analysis
 					</CtaButton>
 				</section>
+				</div>
 			</PageMain>
 		</>
 	);

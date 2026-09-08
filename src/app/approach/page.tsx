@@ -1,6 +1,6 @@
-import Image from "next/image";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
+import PageBgImage from "../components/PageBgImage";
 
 export default function ApproachPage() {
 	return (
@@ -8,13 +8,13 @@ export default function ApproachPage() {
 			<BackHomeLink />
 			<PageMain>
 				<section className="relative max-w-4xl font-light mb-10">
-					<Image
-						src="/bird-blur-2.png"
-						alt=""
-						width={1000}
-						height={1200}
-						aria-hidden="true"
-						className="fixed -top-24 -right-24 z-0 w-4/5 max-w-4xl h-auto object-contain opacity-40 pointer-events-none origin-top-right md:w-3/4"
+					<PageBgImage
+						src="/bird-blur-3.png"
+						width={2000}
+						height={1000}
+						opacityClassName="opacity-40"
+						maxWidthClassName="max-w-4xl"
+						positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
 					/>
 					<div className="relative z-10">
 						<section className="mb-8">

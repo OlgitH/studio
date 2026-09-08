@@ -1,5 +1,6 @@
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
+import PageBgImage from "../components/PageBgImage";
 
 export default function ContactPage() {
 	return (
@@ -7,7 +8,14 @@ export default function ContactPage() {
 			<BackHomeLink />
 			<PageMain>
 				<section className="relative max-w-4xl font-light">
-					
+					<PageBgImage
+						src="/bird-blur-3.png"
+						width={2000}
+						height={1000}
+						opacityClassName="opacity-40"
+						maxWidthClassName="max-w-4xl"
+						positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
+					/>
 					<div className="relative z-10 max-w-2xl">
 					<h1 className="text-3xl font-bold mb-4">Contact</h1>
 					<p className="mb-4">

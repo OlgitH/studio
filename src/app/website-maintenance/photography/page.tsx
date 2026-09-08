@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import BackHomeLink from "../../components/BackHomeLink";
 import BrandFooter from "../../components/BrandFooter";
+import PageBgImage from "../../components/PageBgImage";
 
 export default function Photography() {
   const [showFooter, setShowFooter] = useState(false);
@@ -24,8 +25,16 @@ export default function Photography() {
   return (
     <>
       <BackHomeLink />
-      <main className="p-4 pb-52 w-full xl:pb-40">
-        <section className="mx-auto w-full max-w-6xl flex flex-col gap-4">
+      <main className="relative p-4 pb-52 w-full xl:pb-40">
+        <PageBgImage
+          src="/bird-blur-3.png"
+          width={2000}
+          height={1000}
+          opacityClassName="opacity-40"
+          maxWidthClassName="max-w-4xl"
+          positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
+        />
+        <section className="relative z-10 mx-auto w-full max-w-6xl flex flex-col gap-4">
           <Image
             src="/scrapbook/abstract1.png"
             alt="Abstract image"
@@ -48,7 +57,7 @@ export default function Photography() {
             className="h-auto w-full"
           />
         </section>
-        <section className="mx-auto max-w-6xl w-full py-10">
+        <section className="relative z-10 mx-auto max-w-6xl w-full py-10">
           <div className="max-w-2xl">
             <h1 className="text-3xl font-bold mb-4">Bespoke photography</h1>
             <p className="pb-20 body-text">

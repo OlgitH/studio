@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
         hostname: "olgith.github.io",
       },
     ],
+    qualities: [60, 75],
   },
 };
 

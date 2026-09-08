@@ -2,6 +2,7 @@ import BackHomeLink from "../../components/BackHomeLink";
 import PageMain from "../../components/PageMain";
 import FaqAccordion from "../../components/FaqAccordion";
 import CtaButton from "../../components/CtaButton";
+import PageBgImage from "../../components/PageBgImage";
 
 const faqs = [
 	{
@@ -44,6 +45,15 @@ export default function ContentGrowthPage() {
 		<>
 			<BackHomeLink />
 			<PageMain>
+				<PageBgImage
+					src="/bird-blur-3.png"
+					width={2000}
+					height={1000}
+					opacityClassName="opacity-40"
+					maxWidthClassName="max-w-4xl"
+					positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
+				/>
+				<div className="relative z-10">
 				<h1 className="text-3xl font-bold mb-4">Fresh Content</h1>
 
 				<p className="mb-4 body-text">
@@ -104,6 +114,7 @@ export default function ContentGrowthPage() {
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
 				/>
+				</div>
 			</PageMain>
 		</>
 	);
