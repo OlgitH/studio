@@ -14,7 +14,7 @@ export default function ContactPage() {
 						height={1000}
 						opacityClassName="opacity-40"
 						maxWidthClassName="max-w-4xl"
-						positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
+						positionClassName="-translate-x-[40vw] -top-[90vh] md:-top-[10vh] md:translate-x-[20vw]"
 					/>
 					<div className="relative z-10 max-w-2xl">
 					<h1 className="text-3xl font-bold mb-4">Contact</h1>

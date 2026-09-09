@@ -25,7 +25,7 @@ export default function Photography() {
   return (
     <>
       <BackHomeLink />
-      <main className="relative p-4 pb-52 w-full xl:pb-40">
+      <main className="relative overflow-hidden p-4 pb-52 w-full min-[1051px]:overflow-visible xl:pb-40">
         <PageBgImage
           src="/bird-blur-3.png"
           width={2000}
