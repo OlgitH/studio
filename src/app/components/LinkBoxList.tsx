@@ -7,7 +7,7 @@ type LinkBoxItem = {
 
 export default function LinkBoxList({ items }: { items: LinkBoxItem[] }) {
 	return (
-		<ul className="space-y-2">
+		<ul className="max-w-[60ch] space-y-2">
 			{items.map(({ label, href }) =>
 				href ? (
 					<li key={label}>
