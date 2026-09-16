@@ -5,6 +5,7 @@ import Image from "next/image";
 import BackHomeLink from "../../components/BackHomeLink";
 import BrandFooter from "../../components/BrandFooter";
 import PageBgImage from "../../components/PageBgImage";
+import FadeInOnView from "../../components/FadeInOnView";
 
 export default function Photography() {
   const [showFooter, setShowFooter] = useState(false);
@@ -32,46 +33,47 @@ export default function Photography() {
           height={1000}
           opacityClassName="opacity-40"
           maxWidthClassName="max-w-4xl"
-          positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
         />
-        <section className="relative z-10 mx-auto w-full max-w-6xl flex flex-col gap-4">
-          <Image
-            src="/scrapbook/abstract1.png"
-            alt="Abstract image"
-            width={1800}
-            height={1800}
-            className="h-auto w-full"
-          />
-          <Image
-            src="/scrapbook/abstract2.png"
-            alt="Abstract image"
-            width={1800}
-            height={1800}
-            className="h-auto w-full"
-          />
-          <Image
-            src="/scrapbook/abstract3.png"
-            alt="Abstract image"
-            width={1800}
-            height={1800}
-            className="h-auto w-full"
-          />
-        </section>
-        <section className="relative z-10 mx-auto max-w-6xl w-full py-10">
-          <div className="max-w-2xl">
-            <h1 className="text-3xl font-bold mb-4">Bespoke photography</h1>
-            <p className="pb-20 body-text">
-              We are able to do bespoke photography for your website or project.
-              We analyse the tone, style and messaging needed, then plan and
-              execute photography to high standards, tailoring to it&apos;s final use
-              case (e.g. website splash banner, social media post, brochure
-              etc.). With unique photography being increasingly important for
-              SEO and to appear in AI generated search results, we know you may
-              not have the time or expertise to achieve this. If you would like
-              to discuss how we can help, please send us an email.
-            </p>
-          </div>
-        </section>
+        <FadeInOnView>
+          <section className="relative z-10 mx-auto w-full max-w-6xl flex flex-col gap-4">
+            <Image
+              src="/scrapbook/abstract1.png"
+              alt="Abstract image"
+              width={1800}
+              height={1800}
+              className="h-auto w-full"
+            />
+            <Image
+              src="/scrapbook/abstract2.png"
+              alt="Abstract image"
+              width={1800}
+              height={1800}
+              className="h-auto w-full"
+            />
+            <Image
+              src="/scrapbook/abstract3.png"
+              alt="Abstract image"
+              width={1800}
+              height={1800}
+              className="h-auto w-full"
+            />
+          </section>
+          <section className="relative z-10 mx-auto max-w-6xl w-full py-10">
+            <div className="max-w-2xl">
+              <h1 className="text-3xl font-bold mb-4">Bespoke photography</h1>
+              <p className="pb-20 body-text">
+                We are able to do bespoke photography for your website or project.
+                We analyse the tone, style and messaging needed, then plan and
+                execute photography to high standards, tailoring to it&apos;s final use
+                case (e.g. website splash banner, social media post, brochure
+                etc.). With unique photography being increasingly important for
+                SEO and to appear in AI generated search results, we know you may
+                not have the time or expertise to achieve this. If you would like
+                to discuss how we can help, please send us an email.
+              </p>
+            </div>
+          </section>
+        </FadeInOnView>
       </main>
     </>
   );

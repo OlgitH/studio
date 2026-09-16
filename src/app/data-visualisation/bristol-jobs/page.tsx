@@ -3,6 +3,7 @@ import JobBarChart from './charts/JobBarChart';
 import JobFrictionScatter from './charts/JobFrictionScatter';
 import SalaryLineChart from './charts/SalaryLineChart';
 import { transformJobData } from './charts/jobDataUtils';
+import FadeInOnView from '../../components/FadeInOnView';
 
 // Force Next.js to revalidate this page on every request or at a specific interval
 export const revalidate = 3600; // Revalidate every hour
@@ -66,52 +67,53 @@ export default async function JobReportPage() {
     <>
       <ScrollHeader title="Bristol Job Market Analysis" />
       <main className="mx-auto max-w-4xl p-4 md:p-8">
+        <FadeInOnView>
+          {/* 1. D3 bar chart — vacancies per sector, colour-coded by friction */}
+          <h2 className='font-bold mb-6'>Are jobs like UX/UI really in demand?</h2>
+          <p className='mb-10 body-text'>We are told there is a skills shortage but are employers actually struggling to fill these roles? If they were would they not be offering jobs to people quicker? The frustration of people who have taken bootcamps and courses only to find they cannot be hired is clear.</p>
+          <JobBarChart data={data} />
+          <p className='mb-10 body-text'>It appears that design and construction roles are taking notably longer than other sectors to fill roles.</p>
+          <p className='mb-10 body-text'>It appears that green jobs are in high demand and are quickly filled, but there are not many green jobs on offer.</p>
 
-        {/* 1. D3 bar chart — vacancies per sector, colour-coded by friction */}
-        <h2 className='font-bold mb-6'>Are jobs like UX/UI really in demand?</h2>
-        <p className='mb-10 body-text'>We are told there is a skills shortage but are employers actually struggling to fill these roles? If they were would they not be offering jobs to people quicker? The frustration of people who have taken bootcamps and courses only to find they cannot be hired is clear.</p>
-        <JobBarChart data={data} />
-        <p className='mb-10 body-text'>It appears that design and construction roles are taking notably longer than other sectors to fill roles.</p>
-        <p className='mb-10 body-text'>It appears that green jobs are in high demand and are quickly filled, but there are not many green jobs on offer.</p>
 
+          <JobFrictionScatter data={data} />
 
-        <JobFrictionScatter data={data} />
+          <SalaryLineChart data={data} />
 
-        <SalaryLineChart data={data} />
+          {/* 2. Create a Dynamic Table from the JSON */}
+          <div className="w-full max-w-full overflow-x-auto overscroll-x-contain">
+            <table className="w-full table-fixed text-white">
+              <thead>
+                <tr className="font-normal">
+                  <th className="border p-3 w-[32%]">Category</th>
+                  <th className="border p-3 w-[18%]">Vacancies</th>
+                  <th className="border p-3 w-[25%]">Days to fill</th>
+                  <th className="border p-3 w-[25%]">Salary</th>
+                </tr>
+              </thead>
 
-        {/* 2. Create a Dynamic Table from the JSON */}
-        <div className="w-full max-w-full overflow-x-auto overscroll-x-contain">
-          <table className="w-full table-fixed text-white">
-            <thead>
-              <tr className="font-normal">
-                <th className="border p-3 w-[32%]">Category</th>
-                <th className="border p-3 w-[18%]">Vacancies</th>
-                <th className="border p-3 w-[25%]">Days to fill</th>
-                <th className="border p-3 w-[25%]">Salary</th>
-              </tr>
-            </thead>
-            
-            <tbody className="font-normal">
-              {data.map((row, index) => {
-                const averageSalary = getAverageSalary(row.jobs);
+              <tbody className="font-normal">
+                {data.map((row, index) => {
+                  const averageSalary = getAverageSalary(row.jobs);
 
-                return (
-                  <tr key={`${row.category}-${index}`} className="text-center">
-                    <td className="border p-3 font-semibold break-words">{row.category}</td>
-                    <td className="border p-3 break-words">{row.vacancies}</td>
-                    <td className="border p-3 break-words">{row.friction.toFixed(1)}d</td>
-                    <td className="border p-3 break-words">
-                      {averageSalary != null
-                        ? `£${Math.round(averageSalary).toLocaleString()}`
-                        : 'N/A'}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
+                  return (
+                    <tr key={`${row.category}-${index}`} className="text-center">
+                      <td className="border p-3 font-semibold break-words">{row.category}</td>
+                      <td className="border p-3 break-words">{row.vacancies}</td>
+                      <td className="border p-3 break-words">{row.friction.toFixed(1)}d</td>
+                      <td className="border p-3 break-words">
+                        {averageSalary != null
+                          ? `£${Math.round(averageSalary).toLocaleString()}`
+                          : 'N/A'}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
 
-          </table>
-        </div>
+            </table>
+          </div>
+        </FadeInOnView>
       </main>
     </>
   );

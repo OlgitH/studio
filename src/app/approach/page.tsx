@@ -6,16 +6,18 @@ export default function ApproachPage() {
 	return (
 		<>
 			<BackHomeLink />
-			<PageMain>
-				<section className="relative max-w-4xl font-light mb-10">
+			<PageMain
+				bgImage={
 					<PageBgImage
 						src="/bird-blur-3.png"
 						width={2000}
 						height={1000}
 						opacityClassName="opacity-40"
 						maxWidthClassName="max-w-4xl"
-						positionClassName="-translate-x-[40vw] -top-[10vh] md:translate-x-[20vw]"
 					/>
+				}
+			>
+				<section className="relative max-w-4xl font-light mb-10">
 					<div className="relative z-10">
 						<section className="mb-8">
 							<h1 className="text-3xl font-bold mb-4">Our approach</h1>

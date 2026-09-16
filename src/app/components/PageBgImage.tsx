@@ -21,7 +21,7 @@ const MAX_WIDTH_PX = {
 // Default placement: right-center on mobile (below VW_BREAKPOINT), top-right
 // from VW_BREAKPOINT up. Pass `positionClassName` to override per page.
 export const TOP_RIGHT_POSITION =
-	"top-[50vh] right-0 -translate-y-[50vh] -translate-x-[10vw] origin-top-right ";
+	"origin-top-right -translate-x-[40vw] -top-[20vh] md:translate-x-[48vw]";
 
 type PageBgImageProps = {
 	src: string;
@@ -47,17 +47,25 @@ export default function PageBgImage({
 	const vwCapBreakpoint = Math.round(maxWidthPx / VW_FRACTION);
 	const sizes = `(max-width: ${VW_BREAKPOINT - 1}px) ${mobilePx}px, (max-width: ${vwCapBreakpoint}px) ${VW_FRACTION * 100}vw, ${maxWidthPx}px`;
 
+	// Breaks out of whatever (possibly padded/centered) container this is
+	// rendered in so the image's un-translated position is anchored to the
+	// true viewport edges rather than the surrounding text column — this
+	// only works because every caller's container is itself horizontally
+	// centered (mx-auto) in the viewport, so left: 50% here lines up with
+	// the viewport's center regardless of the container's own width/padding.
 	return (
-		<Image
-			src={src}
-			alt=""
-			width={width}
-			height={height}
-			sizes={sizes}
-			quality={60}
-			priority={priority}
-			aria-hidden="true"
-			className={`absolute z-0 w-[788px] ${maxWidthClassName} h-auto object-contain ${opacityClassName} pointer-events-none ${positionClassName} min-[1051px]:w-full`}
-		/>
+		<div className="absolute top-0 left-1/2 w-screen -translate-x-1/2 pointer-events-none">
+			<Image
+				src={src}
+				alt=""
+				width={width}
+				height={height}
+				sizes={sizes}
+				quality={60}
+				priority={priority}
+				aria-hidden="true"
+				className={`absolute z-0 w-[788px] ${maxWidthClassName} h-auto object-contain ${opacityClassName} pointer-events-none ${positionClassName} min-[1051px]:w-full`}
+			/>
+		</div>
 	);
 }

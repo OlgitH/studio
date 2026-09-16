@@ -70,6 +70,28 @@ body {
   .body-text {
     @apply font-light max-w-[60ch];
   }
+
+  /* A hint of hovering movement on splash-section background photos, like a
+     hummingbird holding position rather than a slow cinematic pan. */
+  .splash-bg-motion {
+    animation: splash-bg-drift 8s ease-in-out infinite;
+  }
+}
+
+@keyframes splash-bg-drift {
+  0%,
+  100% {
+    transform: scale(1.12) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.16) translate3d(-1%, 1.2%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-bg-motion {
+    animation: none;
+  }
 }
 
 /* Unlayered: must win over Tailwind's utilities layer (e.g. text-foreground on
