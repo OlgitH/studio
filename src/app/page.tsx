@@ -89,6 +89,7 @@ export default function Home() {
 				heading="We build and maintain websites"
 				description="Turn an idea into a fully functioning website that works for you. Our experience and knowledge allows us to choose the right platform for your business and no overkill, which saves you money in the long term.  We also maintain it so you don't have to worry about downtime and can rest assured when things go wrong, someone is on hand to fix it for you before your customers know. All sites are set up with SEO in mind and to be monitored and improved on monthly, by you or by us."
 				href="/website-maintenance"
+				shapeImage={{ src: "/abstract-shape-2.jpg" }}
 				// image={{ src: "/splash/training.jpg" }}
 			/>
 			<ServiceSplash
@@ -96,7 +97,8 @@ export default function Home() {
 				heading="AI Business Processes"
 				description="Increasingly, we are setting up automated processes for businesses, such as automatically creating a blog post from your laptop, or getting an atomatic report of your customers social media posts. The possibility is endless and it is unique to your business what will help you and save you time. Let us analyse where you could make use of AI, with our intro AI packages."
 				href="/business-processes"
-
+				shapeImage={{ src: "/abstract-shape.jpg" }}
+				reverse
 				// image={{ src: "/splash/ai-processes.png" }}
 			/>
 			<ServiceSplash
@@ -104,6 +106,7 @@ export default function Home() {
 				heading="One-to-One training"
 				description="Prefer to learn to do it yourself? One-to-one sessions are tailored to what you need, so you leave able to do it again on your own."
 				href="/training"
+				shapeImage={{ src: "/abstract-shape-3.jpg" }}
 				// image={{ src: "/splash/websites.png" }}
 			/>
 		</>

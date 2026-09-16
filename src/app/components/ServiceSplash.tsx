@@ -16,6 +16,8 @@ type ServiceSplashProps = {
 	href: string;
 	linkLabel?: string;
 	image?: ServiceSplashImage;
+	shapeImage?: ServiceSplashImage;
+	reverse?: boolean;
 };
 
 const VARIANT_STYLES: Record<
@@ -55,6 +57,8 @@ export default function ServiceSplash({
 	href,
 	linkLabel = "Find out more",
 	image,
+	shapeImage,
+	reverse = false,
 }: ServiceSplashProps) {
 	const styles = VARIANT_STYLES[variant];
 
@@ -82,15 +86,32 @@ export default function ServiceSplash({
 					</div>
 				</div>
 			)}
-			<FadeInOnView className="relative z-10 mx-auto flex w-full flex-col items-start gap-4 p-[20px] xl:w-[1080px]">
-				<h2 className="text-2xl font-bold sm:text-2xl">{heading}</h2>
-				<p className="max-w-[50ch] text-lg font-light">{description}</p>
-				<Link
-					href={href}
-					className={`mt-4 inline-block rounded-full px-6 py-2 font-bold no-underline transition-colors ${styles.cta}`}
+			<FadeInOnView className="relative z-10 mx-auto flex w-full flex-col items-center gap-8 p-[20px] md:flex-row md:items-center md:justify-between xl:w-[1080px]">
+				{shapeImage && (
+					<div
+						className={`w-full max-w-[240px] md:w-2/5 md:max-w-none ${reverse ? "md:order-1" : "md:order-2"}`}
+					>
+						<Image
+							src={shapeImage.src}
+							alt={shapeImage.alt ?? ""}
+							width={505}
+							height={492}
+							className="h-auto w-full"
+						/>
+					</div>
+				)}
+				<div
+					className={`flex w-full flex-col items-start gap-4 md:flex-1 ${reverse ? "md:order-2" : "md:order-1"}`}
 				>
-					{linkLabel}
-				</Link>
+					<h2 className="text-2xl font-bold sm:text-2xl">{heading}</h2>
+					<p className="max-w-[50ch] text-lg font-light">{description}</p>
+					<Link
+						href={href}
+						className={`mt-4 inline-block rounded-full px-6 py-2 font-bold no-underline transition-colors ${styles.cta}`}
+					>
+						{linkLabel}
+					</Link>
+				</div>
 			</FadeInOnView>
 		</section>
 	);
