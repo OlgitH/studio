@@ -12,7 +12,10 @@ export default function Home() {
 		<>
 			<FloatingContactButtons />
 			<StickyHeaderNav />
-			<main className="home-main text-foreground min-h-svh w-full flex flex-col relative overflow-hidden">
+			<main
+				id="hero"
+				className="home-main text-foreground min-h-svh w-full flex flex-col relative overflow-hidden"
+			>
 				<PageBgImage
 					src="/bird-blur-3.png"
 					width={2000}

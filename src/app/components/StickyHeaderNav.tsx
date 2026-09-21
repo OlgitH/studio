@@ -6,14 +6,16 @@ import { useEffect, useState } from "react";
 import Logo from "@/../public/logo/logo-white-no-bird.svg";
 import AnchorNavLink from "./AnchorNavLink";
 
-// Fixed copy of the hero's logo + nav row, revealed once #hero-nav (the
-// hero's own copy) has scrolled out of view above the viewport, so the
-// links stay reachable while scrolling through the lower sections.
+// Fixed copy of the hero's logo + nav row, revealed once #hero (the
+// original hero viewport) has scrolled out of view above the viewport, so
+// the links stay reachable while scrolling through the lower sections. On
+// mobile the nav links are dropped (the burger menu covers those) and only
+// the logo shows, since #hero-nav itself is hidden below the sm breakpoint.
 export default function StickyHeaderNav() {
 	const [visible, setVisible] = useState(false);
 
 	useEffect(() => {
-		const target = document.getElementById("hero-nav");
+		const target = document.getElementById("hero");
 		if (!target) return;
 
 		const observer = new IntersectionObserver(([entry]) => {
@@ -26,7 +28,7 @@ export default function StickyHeaderNav() {
 
 	return (
 		<div
-			className={`fixed inset-x-0 top-0 z-40 hidden bg-white text-[#120d0d] shadow-[0_2px_12px_rgba(0,0,0,0.15)] transition-transform duration-300 sm:block ${
+			className={`fixed inset-x-0 top-0 z-40 bg-white text-[#120d0d] shadow-[0_2px_12px_rgba(0,0,0,0.15)] transition-transform duration-300 ${
 				visible ? "translate-y-0" : "pointer-events-none -translate-y-full"
 			}`}
 		>
@@ -37,7 +39,7 @@ export default function StickyHeaderNav() {
 					width={140}
 					className="h-auto w-36 invert"
 				/>
-				<nav aria-label="Primary" className="primary-nav">
+				<nav aria-label="Primary" className="primary-nav hidden sm:block">
 					<ul className="flex items-center gap-6 text-base font-light">
 						<li>
 							<Link href="/about">about</Link>

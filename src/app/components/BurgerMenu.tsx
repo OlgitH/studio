@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import MenuShape from "@/../public/SVG/menu-overlay.svg";
+import MobileMenuArtboard from "@/../public/2x/Artboard 2@2x.png";
 
 type NavEntry =
 	| { type: "link"; href: string; label: string }
@@ -14,76 +15,33 @@ type NavEntry =
 	  };
 
 const NAV_ENTRIES: NavEntry[] = [
-	{ type: "link", href: "/", label: "home" },
-	{ type: "link", href: "/about", label: "about" },
-	{ type: "link", href: "/approach", label: "approach" },
+	{ type: "link", href: "/", label: "Home" },
+	{ type: "link", href: "/about", label: "About" },
+	{ type: "link", href: "/approach", label: "Approach" },
 	{
 		type: "submenu",
 		label: "website maintenance",
 		links: [
-			{ href: "/website-maintenance", label: "website maintenance" },
-			{ href: "/website-maintenance/plan", label: "maintenance plan" },
-			{ href: "/website-maintenance/content", label: "content" },
+			{ href: "/website-maintenance", label: "Website maintenance" },
+			{ href: "/website-maintenance/plan", label: "Maintenance plan" },
+			{ href: "/website-maintenance/content", label: "Content" },
 			{
 				href: "/website-maintenance/monitoring-progress",
 				label: "monitoring progress",
 			},
-			{ href: "/website-maintenance/photography", label: "photography" },
+			// { href: "/website-maintenance/photography", label: "Photography" },
 		],
 	},
 	// { type: "link", href: "/data-visualisation", label: "data visualisation" },
 	{ type: "link", href: "/business-processes", label: "AI business processes" },
-	{ type: "link", href: "/training", label: "training" },
-	{ type: "link", href: "/blog", label: "blog" },
-	{ type: "link", href: "/contact", label: "contact" },
+	{ type: "link", href: "/training", label: "Training" },
+	{ type: "link", href: "/blog", label: "Blog" },
+	{ type: "link", href: "/contact", label: "Contact" },
 ];
 
 export default function BurgerMenu() {
 	const [open, setOpen] = useState(false);
 	const [maintenanceOpen, setMaintenanceOpen] = useState(false);
-	const [onLight, setOnLight] = useState(false);
-	const [overStickyBar, setOverStickyBar] = useState(false);
-
-	// On the homepage, StickyHeaderNav's opaque white bar sits behind the icon
-	// once #hero-nav has scrolled past — the icon needs to stay dark there
-	// regardless of onLight, or it goes white-on-white against the bar. Other
-	// pages have no #hero-nav, so this is a no-op.
-	useEffect(() => {
-		const target = document.getElementById("hero-nav");
-		if (!target) return;
-
-		const observer = new IntersectionObserver(([entry]) => {
-			setOverStickyBar(!entry.isIntersecting && entry.boundingClientRect.top < 0);
-		});
-		observer.observe(target);
-		return () => observer.disconnect();
-	}, []);
-
-	useEffect(() => {
-		const sections = document.querySelectorAll<HTMLElement>("[data-nav-light]");
-		if (sections.length === 0) return;
-
-		// The fixed icon sits within the first ~64px of the viewport (top-4/
-		// top-5 offset plus its own h-9 height) — shrink the observer's root
-		// to that band so it fires only when a light-background section's
-		// edge crosses it, not on every scroll frame.
-		const ICON_BAND = 64;
-		const intersecting = new Set<Element>();
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (entry.isIntersecting) intersecting.add(entry.target);
-					else intersecting.delete(entry.target);
-				}
-				setOnLight(intersecting.size > 0);
-			},
-			{ rootMargin: `0px 0px -${window.innerHeight - ICON_BAND}px 0px` },
-		);
-
-		sections.forEach((section) => observer.observe(section));
-		return () => observer.disconnect();
-	}, []);
 
 	useEffect(() => {
 		if (!open) return;
@@ -109,30 +67,25 @@ export default function BurgerMenu() {
 	const closeMenu = () => setOpen(false);
 
 	return (
-		<div className="fixed top-4 right-4 z-[60] xl:top-5 xl:right-5">
+		// Bled off the corner: the circle is bigger than the viewport slot it
+		// sits in, offset up and right so only a crescent shows. The icon is
+		// positioned off-centre within that crescent (not flex-centred) so it
+		// lines up with StickyHeaderNav's logo/nav row instead of sitting at
+		// the circle's own midpoint. z-60 keeps it above StickyHeaderNav
+		// (z-40) and the menu overlay/panel (z-10) at all times, open or
+		// closed, so it never disappears behind either.
+		<div className="fixed -top-12 -right-12 z-[60] xl:-top-16 xl:-right-16">
 			<button
 				type="button"
 				onClick={() => setOpen((value) => !value)}
 				aria-expanded={open}
 				aria-controls="site-menu"
 				aria-label={open ? "Close menu" : "Open menu"}
-				className={`relative cursor-pointer z-20 flex h-9 w-9 items-center justify-center transition-colors duration-300 ${
-					// Closed: dark once a light-background section (white/lime/
-					// mauve) is scrolled behind the icon, white otherwise — unless
-					// StickyHeaderNav's opaque white bar is covering it, which is
-					// always light, so the icon stays dark regardless. Open: the
-					// mobile overlay behind it is dark, the desktop panel is lime, so
-					// those are hardcoded per breakpoint instead.
-					open
-						? "text-white md:text-[#120d0d]"
-						: overStickyBar
-							? "text-[#120d0d]"
-							: onLight
-								? "text-[#120d0d]"
-								: "text-white"
+				className={`relative z-20 h-32 w-32 cursor-pointer rounded-full bg-[var(--color-highlight)] text-[#120d0d] xl:h-40 xl:w-40 ${
+					open ? "" : "shadow-[0_2px_12px_rgba(0,0,0,0.25)]"
 				}`}
 			>
-				<span className="relative block h-4 w-6">
+				<span className="absolute top-[74px] right-[68px] block h-4 w-6 xl:top-[94px] xl:right-[84px]">
 					<span
 						className={`absolute inset-x-0 top-0 h-0.5 bg-current transition-all duration-300 ${
 							open ? "top-1/2 -translate-y-1/2 rotate-45" : ""
@@ -151,19 +104,29 @@ export default function BurgerMenu() {
 				</span>
 			</button>
 
-			{/* Mobile: full-screen overlay menu, no shape — the lime silhouette
-			is desktop-only (see below). */}
+			{/* Mobile: full-screen overlay menu. The artboard PNG is transparent
+			over its top ~quarter, so the dark page background shows through
+			there before the lime shape takes over underneath it. */}
 			<div
-				className={`fixed inset-0 z-10 bg-[var(--page-background)] transition-opacity duration-300 md:hidden ${
+				className={`fixed inset-0 z-10 overflow-hidden bg-[var(--page-background)] transition-opacity duration-300 md:hidden ${
 					open ? "opacity-100" : "pointer-events-none opacity-0"
 				}`}
 			>
+				<Image
+					src={MobileMenuArtboard}
+					alt=""
+					aria-hidden="true"
+					fill
+					sizes="100vw"
+					className="object-cover object-bottom"
+					priority
+				/>
 				<nav
 					id="site-menu"
 					aria-label="Primary"
-					className="flex h-full w-full items-center justify-center"
+					className="relative flex h-full w-full items-center justify-center"
 				>
-					<ul className="flex flex-col items-center gap-6 text-2xl font-light">
+					<ul className="flex flex-col items-center gap-6 text-2xl font-semibold text-[#120d0d]">
 						{NAV_ENTRIES.map((entry, index) => {
 							const itemClassName = `transition-all duration-500 ease-out ${
 								open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
@@ -277,7 +240,11 @@ export default function BurgerMenu() {
 						open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
 					}`}
 				>
-					<div className="relative h-full w-[360px] xl:w-[420px]">
+					{/* drop-shadow (not box-shadow) follows the PNG's own alpha
+					silhouette instead of this div's rectangular edges, so the
+					shadow traces the curve rather than the invisible straight
+					sides of the box. */}
+					<div className="relative h-full w-[360px] drop-shadow-[-6px_6px_20px_rgba(0,0,0,0.35)] xl:w-[420px]">
 						<Image
 							src={MenuShape}
 							alt=""
@@ -288,7 +255,7 @@ export default function BurgerMenu() {
 							priority
 						/>
 					</div>
-					<ul className="absolute inset-0 flex flex-col items-end justify-center gap-2 px-10 py-8 text-lg font-light text-[#120d0d]">
+					<ul className="absolute inset-0 flex flex-col items-end justify-center gap-2 px-10 py-8 text-lg font-semibold text-[#120d0d]">
 						{NAV_ENTRIES.map((entry, index) => {
 							const itemClassName = `transition-all duration-500 ease-out ${
 								open ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"

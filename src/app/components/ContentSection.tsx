@@ -33,12 +33,7 @@ export default function ContentSection({
 	children: ReactNode;
 }) {
 	return (
-		// data-nav-light marks light-background sections so BurgerMenu can
-		// darken its icon while scrolled past one.
-		<section
-			data-nav-light={variant !== "standard" ? "" : undefined}
-			className={`w-full py-10 ${VARIANT_CLASSES[variant]} ${className}`}
-		>
+		<section className={`w-full py-10 ${VARIANT_CLASSES[variant]} ${className}`}>
 			<div className={WIDTH_CLASSES[width]}>{children}</div>
 		</section>
 	);
