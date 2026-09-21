@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import Analytics from "./components/Analytics";
 import BurgerMenu from "./components/BurgerMenu";
 import CookieConsent from "./components/CookieConsent";
-import Footer from "./components/Footer";
+import ConditionalFooter from "./components/ConditionalFooter";
 import "./globals.css";
 
 const univers = localFont({
@@ -73,7 +73,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <BurgerMenu />
         {children}
-        <Footer />
+        <ConditionalFooter />
         <CookieConsent />
       </body>
       {hasValidGaId ? <Analytics gaId={GA_MEASUREMENT_ID} /> : null}
