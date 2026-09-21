@@ -23,7 +23,7 @@ export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
 							<path d="M5 7.5L10 12.5L15 7.5" />
 						</svg>
 					</summary>
-					<div className="bg-[#1f1c1c] px-4 py-3">
+					<div className="bg-[#f7f0d4] px-4 py-3 text-[#120d0d]">
 						<p className="body-text">{faq.answer}</p>
 					</div>
 				</details>

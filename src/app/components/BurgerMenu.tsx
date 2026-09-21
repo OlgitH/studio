@@ -208,7 +208,7 @@ export default function BurgerMenu() {
 														<Link
 															href={link.href}
 															onClick={closeMenu}
-															className="font-light text-[#e3ffb3]"
+															className="font-normal text-[#120d0d]"
 														>
 															{link.label}
 														</Link>
@@ -341,7 +341,7 @@ export default function BurgerMenu() {
 														<Link
 															href={link.href}
 															onClick={closeMenu}
-															className="whitespace-nowrap font-light"
+															className="whitespace-nowrap font-normal"
 														>
 															{link.label}
 														</Link>
