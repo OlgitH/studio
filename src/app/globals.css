@@ -93,6 +93,14 @@ body {
     @apply mt-0;
   }
 
+  .blog-prose h3 {
+    @apply mt-6 mb-2 text-lg font-bold;
+  }
+
+  .blog-prose h3:first-child {
+    @apply mt-0;
+  }
+
   .blog-prose p {
     @apply mb-4 max-w-[60ch];
   }

@@ -77,13 +77,7 @@ export default function WebsiteMaintenancePage() {
 						</div>
 
 						<p className="mb-8 body-text">
-							<CtaButton
-								href="https://www.oliverberman.net"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Portfolio website
-							</CtaButton>
+							<CtaButton href="/case-studies">Case studies</CtaButton>
 						</p>
 					</div>
 				</PageContainer>

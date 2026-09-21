@@ -25,16 +25,10 @@ export default function AboutPage() {
 								work for you, instead of bringing noise and headaches.
 							</p>
 							<p className="mb-4 text-pretty body-text">
-								For examples of work take a look at Oliver Berman&apos;s website
+								Take a look at some of our recent work.
 							</p>
 							<p className="mb-4 body-text">
-								<CtaButton
-									href="https://www.oliverberman.net"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									Portfolio website
-								</CtaButton>
+								<CtaButton href="/case-studies">Case studies</CtaButton>
 							</p>
 						</div>
 						<div className="md:w-2/5">
