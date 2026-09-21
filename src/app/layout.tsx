@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Script from "next/script";
+import Analytics from "./components/Analytics";
 import BurgerMenu from "./components/BurgerMenu";
+import CookieConsent from "./components/CookieConsent";
+import Footer from "./components/Footer";
 import "./globals.css";
 
 const univers = localFont({
@@ -71,23 +73,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <BurgerMenu />
         {children}
+        <Footer />
+        <CookieConsent />
       </body>
-      {hasValidGaId ? (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            strategy="afterInteractive"
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_MEASUREMENT_ID}');
-            `}
-          </Script>
-        </>
-      ) : null}
+      {hasValidGaId ? <Analytics gaId={GA_MEASUREMENT_ID} /> : null}
     </html>
   );
 }

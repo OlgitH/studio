@@ -4,6 +4,7 @@ import PageMain from "../../components/PageMain";
 import CtaButton from "../../components/CtaButton";
 import FaqAccordion from "../../components/FaqAccordion";
 import PageBgImage from "../../components/PageBgImage";
+import PageContainer from "../../components/PageContainer";
 
 export const metadata: Metadata = {
 	title: "Website Maintenance Plan | Greencrown Studio",
@@ -114,7 +115,7 @@ export default function WebsiteMaintenancePlanPage() {
 					/>
 				}
 			>
-				<div className="relative z-10">
+				<PageContainer className="z-10">
 				<section className="mb-10 max-w-2xl" aria-labelledby="plan-heading">
 					<h1 id="plan-heading" className="text-3xl font-bold mb-4">
 						Website Maintenance Plan
@@ -220,7 +221,7 @@ export default function WebsiteMaintenancePlanPage() {
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
 				/>
-				</div>
+				</PageContainer>
 			</PageMain>
 		</>
 	);

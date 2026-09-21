@@ -3,6 +3,7 @@ import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
 import LinkBoxList from "../components/LinkBoxList";
 import PageBgImage from "../components/PageBgImage";
+import PageContainer from "../components/PageContainer";
 export default function WebsiteMaintenancePage() {
 	return (
 		<>
@@ -18,7 +19,7 @@ export default function WebsiteMaintenancePage() {
 					/>
 				}
 			>
-				<section className="relative max-w-4xl font-light mb-10">
+				<PageContainer className="font-light mb-10">
 					<div className="relative z-10">
 						<h1 className="text-3xl font-bold mb-4">Website maintenance</h1>
 						<p className="mb-4 body-text">
@@ -85,7 +86,7 @@ export default function WebsiteMaintenancePage() {
 							</CtaButton>
 						</p>
 					</div>
-				</section>
+				</PageContainer>
 			</PageMain>
 		</>
 	);

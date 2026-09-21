@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+// Chips are always lime — don't render this inside a ContentSection or
+// ServiceSplash with variant="lime", or the chip boundaries disappear
+// against the matching background.
 type LinkBoxItem = {
 	label: string;
 	href?: string;

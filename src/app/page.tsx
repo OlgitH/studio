@@ -4,9 +4,14 @@ import Logo from "@/../public/logo/logo-white-no-bird.svg";
 import PageBgImage from "./components/PageBgImage";
 import ServiceSplash from "./components/ServiceSplash";
 import FadeInOnView from "./components/FadeInOnView";
+import FloatingContactButtons from "./components/FloatingContactButtons";
+import StickyHeaderNav from "./components/StickyHeaderNav";
+import AnchorNavLink from "./components/AnchorNavLink";
 export default function Home() {
 	return (
 		<>
+			<FloatingContactButtons />
+			<StickyHeaderNav />
 			<main className="home-main text-foreground min-h-svh w-full flex flex-col relative overflow-hidden">
 				<PageBgImage
 					src="/bird-blur-3.png"
@@ -34,6 +39,7 @@ export default function Home() {
 							/>
 						</div>
 						<nav
+							id="hero-nav"
 							className="primary-nav hidden col-start-2 row-start-2 self-start justify-self-start sm:block xl:col-start-3 xl:col-span-2 xl:row-start-3 xl:self-start"
 							aria-label="Primary"
 						>
@@ -42,23 +48,23 @@ export default function Home() {
 									<Link href="/about">about</Link>
 								</li>
 								<li>
-									<Link
-										href="/website-maintenance"
+									<AnchorNavLink
+										targetId="website-maintenance"
 										className="whitespace-nowrap"
 									>
 										website maintenance
-									</Link>
+									</AnchorNavLink>
 								</li>
 								<li>
-									<Link
-										href="/business-processes"
+									<AnchorNavLink
+										targetId="business-processes"
 										className="whitespace-nowrap"
 									>
 										AI business processes
-									</Link>
+									</AnchorNavLink>
 								</li>
 								<li>
-									<Link href="/training">training</Link>
+									<AnchorNavLink targetId="training">training</AnchorNavLink>
 								</li>
 							</ul>
 						</nav>
@@ -69,7 +75,10 @@ export default function Home() {
 								simplifying your life and helping your business grow faster.
 							</p>
 						</div>
-						<section className="mt-10 row-start-4 xl:col-start-1 font-light">
+						<section
+							id="hero-contact"
+							className="mt-10 row-start-4 xl:col-start-1 font-light"
+						>
 							<p>
 								<a href="mailto:olly@greencrown.studio">
 									olly@greencrown.studio
@@ -85,6 +94,7 @@ export default function Home() {
 				</FadeInOnView>
 			</main>
 			<ServiceSplash
+				id="website-maintenance"
 				variant="white"
 				heading="We build and maintain websites"
 				description="Turn an idea into a fully functioning website that works for you. Our experience and knowledge allows us to choose the right platform for your business and no overkill, which saves you money in the long term.  We also maintain it so you don't have to worry about downtime and can rest assured when things go wrong, someone is on hand to fix it for you before your customers know. All sites are set up with SEO in mind and to be monitored and improved on monthly, by you or by us."
@@ -93,6 +103,7 @@ export default function Home() {
 				// image={{ src: "/splash/training.jpg" }}
 			/>
 			<ServiceSplash
+				id="business-processes"
 				variant="lime"
 				heading="AI Business Processes"
 				description="Increasingly, we are setting up automated processes for businesses, such as automatically creating a blog post from your laptop, or getting an atomatic report of your customers social media posts. The possibility is endless and it is unique to your business what will help you and save you time. Let us analyse where you could make use of AI, with our intro AI packages."
@@ -102,6 +113,7 @@ export default function Home() {
 				// image={{ src: "/splash/ai-processes.png" }}
 			/>
 			<ServiceSplash
+				id="training"
 				variant="black"
 				heading="One-to-One training"
 				description="Prefer to learn to do it yourself? One-to-one sessions are tailored to what you need, so you leave able to do it again on your own."

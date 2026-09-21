@@ -14,6 +14,7 @@ type ServiceSplashProps = {
 	heading: string;
 	description: string;
 	href: string;
+	id?: string;
 	linkLabel?: string;
 	image?: ServiceSplashImage;
 	shapeImage?: ServiceSplashImage;
@@ -55,6 +56,7 @@ export default function ServiceSplash({
 	heading,
 	description,
 	href,
+	id,
 	linkLabel = "Find out more",
 	image,
 	shapeImage,
@@ -63,8 +65,12 @@ export default function ServiceSplash({
 	const styles = VARIANT_STYLES[variant];
 
 	return (
+		// data-nav-light marks light-background variants so BurgerMenu can
+		// darken its icon while scrolled past one.
 		<section
-			className={`relative flex w-full items-center overflow-hidden py-20 md:py-28 ${styles.section}`}
+			id={id}
+			data-nav-light={variant !== "black" ? "" : undefined}
+			className={`relative flex w-full scroll-mt-[68px] items-center overflow-hidden py-20 md:py-28 xl:scroll-mt-[76px] ${styles.section}`}
 		>
 			{image && (
 				<div

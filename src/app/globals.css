@@ -17,6 +17,7 @@ html {
   min-height: 100%;
   background-color: var(--page-background);
   overflow-x: clip;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -38,6 +39,12 @@ body {
 
   .primary-nav a {
     text-decoration: none;
+  }
+
+  .primary-nav a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-highlight);
+    text-underline-offset: 2px;
   }
 
   .brand-icon,
@@ -76,6 +83,84 @@ body {
   .splash-bg-motion {
     animation: splash-bg-drift 8s ease-in-out infinite;
   }
+
+  /* Styles raw HTML rendered from blog post markdown (see src/app/lib/posts.ts). */
+  .blog-prose h2 {
+    @apply mt-10 mb-3 text-2xl font-bold;
+  }
+
+  .blog-prose h2:first-child {
+    @apply mt-0;
+  }
+
+  .blog-prose p {
+    @apply mb-4 max-w-[60ch];
+  }
+
+  .blog-prose ul,
+  .blog-prose ol {
+    @apply mb-4 max-w-[60ch] space-y-1 pl-5;
+  }
+
+  .blog-prose ul {
+    @apply list-disc;
+  }
+
+  .blog-prose ol {
+    @apply list-decimal;
+  }
+
+  .blog-prose a {
+    @apply underline decoration-[var(--color-highlight)] underline-offset-2 hover:text-[var(--color-highlight)];
+  }
+
+  .blog-prose strong {
+    @apply font-bold;
+  }
+
+  .blog-prose table {
+    @apply mb-6 w-full border-collapse text-left;
+  }
+
+  .blog-prose th,
+  .blog-prose td {
+    @apply border-b border-white/10 py-2 pr-4 align-top;
+  }
+
+  .blog-prose th {
+    @apply font-medium;
+  }
+
+  .blog-prose img {
+    @apply w-full h-auto rounded;
+  }
+
+  .blog-prose blockquote {
+    @apply border-l-2 border-current/30 pl-4 italic;
+  }
+
+  /* Applied by BlogSection on its white/lime variants, where the default
+     lime-underline link style (tuned for the dark page background) would
+     fail contrast against a light section background. */
+  .blog-prose--on-light a {
+    @apply text-[#120d0d] decoration-[#120d0d]/40 hover:text-[#120d0d] hover:decoration-[#120d0d];
+  }
+
+  /* Centred column, shared by ContentSection and the blog index page.
+     Matches the max-w-2xl content width used by every other page's text
+     sections (About, Pricing, Training, Contact, etc.) — max-w-4xl on those
+     pages is reserved for the outer hero wrapper that also holds a bg
+     image. */
+  .content-container {
+    @apply mx-auto max-w-2xl px-6 md:px-8;
+  }
+
+  /* Two-column text/image layout, used inside a section's markdown. Put
+     .blog-col-image first in the markup for an image-left/text-right
+     layout, or second for text-left/image-right. */
+  .blog-cols {
+    @apply grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-10;
+  }
 }
 
 @keyframes splash-bg-drift {
@@ -94,22 +179,3 @@ body {
   }
 }
 
-/* Unlayered: must win over Tailwind's utilities layer (e.g. text-foreground on
-   .home-main), which cascade layers otherwise let beat this regardless of
-   specificity. */
-@media (hover: hover) and (pointer: fine) {
-  body:has(.primary-nav a:hover) {
-    color: var(--page-background);
-  }
-
-  .home-main:has(.primary-nav a:hover) {
-    background-color: var(--color-highlight);
-    color: var(--page-background);
-  }
-
-  .home-main:has(.primary-nav a:hover) .brand-icon,
-  .home-main:has(.primary-nav a:hover) .brand-logo {
-    filter: brightness(0);
-    mix-blend-mode: normal;
-  }
-}

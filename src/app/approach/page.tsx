@@ -1,6 +1,7 @@
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import PageBgImage from "../components/PageBgImage";
+import PageContainer from "../components/PageContainer";
 
 export default function ApproachPage() {
 	return (
@@ -17,7 +18,7 @@ export default function ApproachPage() {
 					/>
 				}
 			>
-				<section className="relative max-w-4xl font-light mb-10">
+				<PageContainer className="font-light mb-10">
 					<div className="relative z-10">
 						<section className="mb-8">
 							<h1 className="text-3xl font-bold mb-4">Our approach</h1>
@@ -47,7 +48,7 @@ export default function ApproachPage() {
 							</p>
 						</section>
 					</div>
-				</section>
+				</PageContainer>
 			</PageMain>
 		</>
 	);

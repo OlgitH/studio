@@ -3,6 +3,7 @@ import PageMain from "../components/PageMain";
 import FaqAccordion from "../components/FaqAccordion";
 import CtaButton from "../components/CtaButton";
 import PageBgImage from "../components/PageBgImage";
+import PageContainer from "../components/PageContainer";
 
 const faqs = [
 	{
@@ -55,7 +56,7 @@ export default function BusinessProcessesPage() {
 					/>
 				}
 			>
-				<div className="relative z-10">
+				<PageContainer className="z-10">
 				<h1 className="text-3xl font-bold mb-4">AI business processes</h1>
 
 				<p className="mb-8 body-text">
@@ -113,7 +114,7 @@ export default function BusinessProcessesPage() {
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
 				/>
-				</div>
+				</PageContainer>
 			</PageMain>
 		</>
 	);

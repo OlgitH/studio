@@ -2,6 +2,7 @@ import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
 import PageBgImage from "../components/PageBgImage";
+import PageContainer from "../components/PageContainer";
 
 export default function DataVisualisationPage() {
 	return (
@@ -18,7 +19,7 @@ export default function DataVisualisationPage() {
 					/>
 				}
 			>
-				<div className="relative z-10">
+				<PageContainer className="z-10">
 				<h1 className="text-3xl font-bold mb-4">Data visualisation</h1>
 
 				<p className="mb-8 body-text">
@@ -40,7 +41,7 @@ export default function DataVisualisationPage() {
 						View Bristol job market analysis
 					</CtaButton>
 				</section>
-				</div>
+				</PageContainer>
 			</PageMain>
 		</>
 	);

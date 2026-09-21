@@ -9,10 +9,15 @@ export default function PageMain({
 	bgImage?: ReactNode;
 }) {
 	return (
+		// Full width, no cap: full-bleed children (ContentSection,
+		// ServiceSplash) can then sit alongside PageContainer-wrapped content
+		// and still share this one <main> landmark. Anything that wants the
+		// site's central hero width wraps itself in PageContainer instead.
+		//
 		// overflow-hidden stays on through 1050px to match PageBgImage's
 		// VW_BREAKPOINT — below that width the bg image is a fixed pixel size
 		// and can overflow horizontally, so it must stay clipped.
-		<main className="relative mx-auto flex w-full min-h-dvh max-w-4xl flex-col justify-end overflow-hidden px-6 pb-8 pt-40 md:min-h-0 md:justify-start md:px-8 md:pb-8 min-[1051px]:overflow-visible">
+		<main className="relative flex w-full min-h-dvh flex-col justify-end overflow-hidden pb-8 pt-40 md:min-h-0 md:justify-start min-[1051px]:overflow-visible">
 			{/* Rendered outside FadeInOnView: that wrapper carries a translate-y
 			transform for its fade/slide-in animation, which would otherwise
 			become the containing block for the bg image's absolute positioning

@@ -1,6 +1,7 @@
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import PageBgImage from "../components/PageBgImage";
+import PageContainer from "../components/PageContainer";
 
 export default function ContactPage() {
 	return (
@@ -17,7 +18,7 @@ export default function ContactPage() {
 					/>
 				}
 			>
-				<section className="relative max-w-4xl font-light">
+				<PageContainer className="font-light">
 					<div className="relative z-10 max-w-2xl">
 					<h1 className="text-3xl font-bold mb-4">Contact</h1>
 					<p className="mb-4">
@@ -38,7 +39,7 @@ export default function ContactPage() {
 						Bath BA1 2NH
 					</p>
 					</div>
-				</section>
+				</PageContainer>
 			</PageMain>
 		</>
 	);

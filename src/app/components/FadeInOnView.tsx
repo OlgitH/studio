@@ -12,7 +12,7 @@ type FadeInOnViewProps = {
 export default function FadeInOnView({
 	children,
 	className = "",
-	threshold = 0.2,
+	threshold = 0,
 }: FadeInOnViewProps) {
 	const ref = useRef<HTMLDivElement>(null);
 	const [isVisible, setIsVisible] = useState(false);

@@ -5,13 +5,15 @@ import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
 import LinkBoxList from "../components/LinkBoxList";
+import ContentSection from "../components/ContentSection";
+import PageContainer from "../components/PageContainer";
 
 export default function AboutPage() {
 	return (
 		<>
 			<BackHomeLink />
 			<PageMain>
-				<section className="relative z-10 max-w-4xl font-light mb-10 ">
+				<PageContainer className="font-light mb-10">
 					<h1 className="text-3xl font-bold mb-4">About</h1>
 					<div className="flex flex-col gap-4 md:flex-row md:items-start">
 						<div className="md:w-3/5">
@@ -55,21 +57,23 @@ export default function AboutPage() {
 						src="https://player.vimeo.com/api/player.js"
 						strategy="lazyOnload"
 					/>
-				</section>
-				<section className="relative z-10 max-w-2xl font-light">
-					<h2 className="mb-4 text-xl font-bold">Services</h2>
-					<LinkBoxList
-						items={[
-							{ label: "Website Design" },
-							{ label: "Website Development" },
-							{ label: "Website maintenance", href: "/website-maintenance" },
-							{ label: "SEO and marketing" },
-							{ label: "AI business processes", href: "/business-processes" },
-							{ label: "Graphic design" },
-							{ label: "Data visualisation", href: "/data-visualisation" },
-						]}
-					/>
-				</section>
+				</PageContainer>
+				<ContentSection variant="white" width="wide" className="font-light">
+					<div className="w-full">
+						<h2 className="mb-4 text-xl font-bold">Services</h2>
+						<LinkBoxList
+							items={[
+								{ label: "Website Design" },
+								{ label: "Website Development" },
+								{ label: "Website maintenance", href: "/website-maintenance" },
+								{ label: "SEO and marketing" },
+								{ label: "AI business processes", href: "/business-processes" },
+								{ label: "Graphic design" },
+								{ label: "Data visualisation", href: "/data-visualisation" },
+							]}
+						/>
+					</div>
+				</ContentSection>
 			</PageMain>
 		</>
 	);
