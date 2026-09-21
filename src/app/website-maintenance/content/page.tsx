@@ -108,7 +108,7 @@ export default function ContentGrowthPage() {
 					</section>
 				</ContentSection>
 
-				<PageContainer className="z-10">
+				<PageContainer className="z-10 pt-8">
 				<p className="mb-8 body-text">
 					<CtaButton href="/case-studies">Case studies</CtaButton>
 				</p>
