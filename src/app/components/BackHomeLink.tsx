@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Logo from "@/../public/logo/logo-white-no-bird.svg";
 
 // The corner mark is fixed and white, which disappears once a page scrolls a
 // white ContentSection underneath it. Past the scroll threshold we fade the
@@ -61,11 +62,10 @@ export default function BackHomeLink({
 						className="mx-auto flex w-full items-center gap-3 px-[20px] py-[22px] xl:w-[1080px] xl:py-[26px]"
 					>
 						<Image
-							src="/bird-icon.svg"
-							alt="Greencrown mark"
-							width={56}
-							height={28}
-							className="h-auto w-14 invert"
+							src={Logo}
+							alt="Greencrown Studio"
+							width={140}
+							className="h-auto w-32 invert"
 						/>
 					</Link>
 				</div>
