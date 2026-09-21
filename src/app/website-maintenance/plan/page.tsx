@@ -5,6 +5,7 @@ import CtaButton from "../../components/CtaButton";
 import FaqAccordion from "../../components/FaqAccordion";
 import PageBgImage from "../../components/PageBgImage";
 import PageContainer from "../../components/PageContainer";
+import ContentSection from "../../components/ContentSection";
 
 export const metadata: Metadata = {
 	title: "Website Maintenance Plan | Greencrown Studio",
@@ -210,13 +211,18 @@ export default function WebsiteMaintenancePlanPage() {
 					</p>
 				</section>
 
-				<section className="mb-8 max-w-2xl" aria-labelledby="faq-heading">
-					<h2 id="faq-heading" className="text-xl font-semibold mb-4">
-						Frequently asked questions
-					</h2>
-					<FaqAccordion faqs={faqs} />
-				</section>
+				</PageContainer>
 
+				<ContentSection variant="white" width="wide" className="font-light">
+					<section className="max-w-2xl" aria-labelledby="faq-heading">
+						<h2 id="faq-heading" className="text-xl font-semibold mb-4">
+							Frequently asked questions
+						</h2>
+						<FaqAccordion faqs={faqs} />
+					</section>
+				</ContentSection>
+
+				<PageContainer className="z-10">
 				<script
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

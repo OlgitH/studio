@@ -35,6 +35,7 @@ const NAV_ENTRIES: NavEntry[] = [
 	// { type: "link", href: "/data-visualisation", label: "data visualisation" },
 	{ type: "link", href: "/business-processes", label: "AI business processes" },
 	{ type: "link", href: "/training", label: "Training" },
+	{ type: "link", href: "/case-studies", label: "Case studies" },
 	{ type: "link", href: "/blog", label: "Blog" },
 	{ type: "link", href: "/contact", label: "Contact" },
 ];

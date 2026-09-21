@@ -4,6 +4,7 @@ import FaqAccordion from "../../components/FaqAccordion";
 import CtaButton from "../../components/CtaButton";
 import PageBgImage from "../../components/PageBgImage";
 import PageContainer from "../../components/PageContainer";
+import ContentSection from "../../components/ContentSection";
 
 const faqs = [
 	{
@@ -96,13 +97,18 @@ export default function MonitoringProgressPage() {
 					</p>
 				</section>
 
-				<section className="mb-8 max-w-2xl" aria-labelledby="faq-heading">
-					<h2 id="faq-heading" className="text-xl font-semibold mb-4">
-						Frequently asked questions
-					</h2>
-					<FaqAccordion faqs={faqs} />
-				</section>
+				</PageContainer>
 
+				<ContentSection variant="white" width="wide" className="font-light">
+					<section className="max-w-2xl" aria-labelledby="faq-heading">
+						<h2 id="faq-heading" className="text-xl font-semibold mb-4">
+							Frequently asked questions
+						</h2>
+						<FaqAccordion faqs={faqs} />
+					</section>
+				</ContentSection>
+
+				<PageContainer className="z-10">
 				<p className="mb-8 body-text">
 					<CtaButton href="/case-studies">Case studies</CtaButton>
 				</p>

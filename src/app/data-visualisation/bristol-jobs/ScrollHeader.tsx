@@ -16,7 +16,7 @@ export default function ScrollHeader({ title }: { title: string }) {
     <>
       {/* Static header — always in document flow */}
       <header className="px-6 pt-4 pb-6 md:px-8">
-        <BackHomeLink />
+        <BackHomeLink scrollBar={false} />
         <h1 className="mt-6 text-2xl font-bold md:text-3xl">{title}</h1>
       </header>
 
@@ -26,7 +26,7 @@ export default function ScrollHeader({ title }: { title: string }) {
           isFixed ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
-        <BackHomeLink />
+        <BackHomeLink scrollBar={false} />
         <span className="truncate text-sm font-semibold">{title}</span>
       </header>
     </>
