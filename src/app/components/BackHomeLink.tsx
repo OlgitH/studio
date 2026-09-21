@@ -45,7 +45,6 @@ export default function BackHomeLink({
 					height={94}
 					priority
 				/>
-				<span>back home</span>
 			</Link>
 
 			{scrollBar && (
@@ -68,7 +67,6 @@ export default function BackHomeLink({
 							height={28}
 							className="h-auto w-14 invert"
 						/>
-						<span className="text-sm font-light">back home</span>
 					</Link>
 				</div>
 			)}

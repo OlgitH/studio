@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import MenuShape from "@/../public/SVG/menu-overlay.svg";
-import MobileMenuArtboard from "@/../public/2x/Artboard 2@2x.png";
+import MobileMenuArtboard from "@/../public/2x/white-mobile-overlay@2x.png";
 
 type NavEntry =
 	| { type: "link"; href: string; label: string }
@@ -20,7 +20,7 @@ const NAV_ENTRIES: NavEntry[] = [
 	{ type: "link", href: "/approach", label: "Approach" },
 	{
 		type: "submenu",
-		label: "website maintenance",
+		label: "Website maintenance",
 		links: [
 			{ href: "/website-maintenance", label: "Website maintenance" },
 			{ href: "/website-maintenance/plan", label: "Maintenance plan" },
@@ -127,7 +127,7 @@ export default function BurgerMenu() {
 					aria-label="Primary"
 					className="relative flex h-full w-full items-center justify-center"
 				>
-					<ul className="flex flex-col items-center gap-6 text-2xl font-semibold text-[#120d0d]">
+					<ul className="flex flex-col items-center gap-6 text-xl font-semibold text-[#120d0d]">
 						{NAV_ENTRIES.map((entry, index) => {
 							const itemClassName = `transition-all duration-500 ease-out ${
 								open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
@@ -189,7 +189,7 @@ export default function BurgerMenu() {
 													maintenanceOpen ? "w-24 opacity-100" : "w-0 opacity-0"
 												}`}
 											/>
-											<ul className="mt-4 flex flex-col items-center gap-6">
+											<ul className="mt-4 mb-4 flex flex-col items-center gap-4 text-base">
 												{entry.links.map((link, subIndex) => (
 													<li
 														key={link.href}
