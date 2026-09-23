@@ -18,9 +18,15 @@ export default function StickyHeaderNav() {
 		const target = document.getElementById("hero");
 		if (!target) return;
 
-		const observer = new IntersectionObserver(([entry]) => {
-			setVisible(!entry.isIntersecting && entry.boundingClientRect.top < 0);
-		});
+		// Trigger slightly before #hero's bottom actually reaches the
+		// viewport top, so the slide-in finishes right as the black section
+		// ends, instead of visibly lagging behind it.
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				setVisible(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+			},
+			{ rootMargin: "-180px 0px 0px 0px" },
+		);
 
 		observer.observe(target);
 		return () => observer.disconnect();
@@ -28,7 +34,7 @@ export default function StickyHeaderNav() {
 
 	return (
 		<div
-			className={`fixed inset-x-0 top-0 z-40 bg-white text-[#120d0d] shadow-[0_2px_12px_rgba(0,0,0,0.15)] transition-transform duration-300 ${
+			className={`fixed inset-x-0 top-0 z-40 bg-white text-[#120d0d] shadow-[0_2px_12px_rgba(0,0,0,0.15)] transition-transform duration-150 ${
 				visible ? "translate-y-0" : "pointer-events-none -translate-y-full"
 			}`}
 		>

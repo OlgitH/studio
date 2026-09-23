@@ -109,7 +109,7 @@ export default function Home() {
 				id="business-processes"
 				variant="lime"
 				heading="AI Business Processes"
-				description="Increasingly, we are setting up automated processes for businesses, such as automatically creating a blog post from your laptop, or getting an atomatic report of your customers social media posts. The possibility is endless and it is unique to your business what will help you and save you time. Let us analyse where you could make use of AI, with our intro AI packages."
+				description="Increasingly, we are setting up automated processes for businesses, such as automatically creating a blog post from your laptop, or creating atomatic reports from your data. The possibility is endless and it is unique to your business what will help you and save you time. Let us analyse where you could make use of AI, with our intro AI packages."
 				href="/business-processes"
 				shapeImage={{ src: "/abstract-shape.jpg" }}
 				reverse
