@@ -8,7 +8,7 @@ import ContentSection from "../components/ContentSection";
 
 const faqs = [
 	{
-		question: "What counts as a \"business process\" here?",
+		question: 'What counts as a "business process" here?',
 		answer:
 			"Anything repetitive that eats up your time without needing your judgement every time — replying to routine enquiries, chasing quotes, logging orders, pulling together reports, or moving information between the tools you already use.",
 	},
@@ -58,42 +58,64 @@ export default function BusinessProcessesPage() {
 				}
 			>
 				<PageContainer className="z-10">
-				<h1 className="text-3xl font-bold mb-4">AI business processes</h1>
+					<h1 className="text-3xl font-bold mb-4">AI business processes</h1>
 
-				<p className="mb-8 body-text">
-					Small businesses lose a lot of hours to admin that doesn&apos;t need
-					a human eye every time &mdash; replying to the same enquiries,
-					chasing paperwork, updating spreadsheets, writing up reports. We use
-					AI and simple automation to take that repetitive work off your
-					plate, so you can spend your time on the parts of the business that
-					actually need you.
-				</p>
-
-				<section className="mb-6 max-w-2xl" aria-labelledby="what-we-help-with-heading">
-					<h2 id="what-we-help-with-heading" className="text-xl font-semibold mb-2">
-						What we help with
-					</h2>
-					<ul className="list-disc pl-5 space-y-1 font-light">
-						<li>Automating repetitive admin tasks and data entry</li>
-						<li>AI-assisted handling of routine customer enquiries</li>
-						<li>Streamlining reporting, so figures are ready without the chase</li>
-						<li>Connecting up the tools you already use, so information stops getting re-typed</li>
-						<li>Simple internal tools built around how your business actually works</li>
-					</ul>
-				</section>
-
-				<section className="mb-8 max-w-2xl" aria-labelledby="why-it-works-heading">
-					<h2 id="why-it-works-heading" className="text-xl font-semibold mb-2">
-						Why it works
-					</h2>
-					<p className="body-text">
-						Time-poor businesses don&apos;t need more software &mdash; they
-						need fewer manual steps. By automating the repetitive parts first,
-						you get time back straight away, and every process we streamline
-						compounds into hours saved every single week.
+					<p className="mb-8 body-text">
+						Small businesses lose a lot of hours to admin that doesn&apos;t need
+						a human eye every time &mdash; replying to the same enquiries,
+						chasing paperwork, updating spreadsheets, writing up reports. We
+						help you set up AI and simple automation to take that repetitive
+						work off your plate, so you can spend your time on the parts of the
+						business that you would rather spend time on.
 					</p>
-				</section>
 
+					<section
+						className="mb-6 max-w-2xl"
+						aria-labelledby="what-we-help-with-heading"
+					>
+						<h2
+							id="what-we-help-with-heading"
+							className="text-xl font-semibold mb-2"
+						>
+							Thoughtful and human-focussed approach
+						</h2>
+						<p className="mb-8 body-text">
+							We want to use AI thoughtfully and with purpose. Ideally, before
+							automating or handing some process over to AI we have to analyse
+							the conseqcuences, both on the product and the effect it is going
+							to have on humans. We should not blindly use AI. That said, it is
+							too powerful a tool to not use in some way - but let's not do it
+							if it's bad for us. The end product should have a human element so
+							a human needs to be involved in the process.
+						</p>
+					</section>
+
+					<section
+						className="mb-6 max-w-2xl"
+						aria-labelledby="what-we-help-with-heading"
+					>
+						<h2
+							id="what-we-help-with-heading"
+							className="text-xl font-semibold mb-2"
+						>
+							What we help with
+						</h2>
+						<ul className="list-disc pl-5 space-y-1 font-light">
+							<li>Automating repetitive admin tasks and data entry</li>
+							<li>AI-assisted handling of routine customer enquiries</li>
+							<li>
+								Streamlining reporting, so figures are ready without the chase
+							</li>
+							<li>
+								Connecting up the tools you already use, so information stops
+								getting re-typed
+							</li>
+							<li>
+								Simple internal tools built around how your business actually
+								works
+							</li>
+						</ul>
+					</section>
 				</PageContainer>
 
 				<ContentSection variant="white" width="wide" className="font-light">
@@ -106,14 +128,14 @@ export default function BusinessProcessesPage() {
 				</ContentSection>
 
 				<PageContainer className="z-10 pt-8">
-				<p className="mb-8 body-text">
-					<CtaButton href="/case-studies">Case studies</CtaButton>
-				</p>
+					<p className="mb-8 body-text">
+						<CtaButton href="/case-studies">Case studies</CtaButton>
+					</p>
 
-				<script
-					type="application/ld+json"
-					dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-				/>
+					<script
+						type="application/ld+json"
+						dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+					/>
 				</PageContainer>
 			</PageMain>
 		</>

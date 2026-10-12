@@ -1,6 +1,4 @@
-"use client";
-
-import Script from "next/script";
+import Image from "next/image";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
@@ -32,25 +30,18 @@ export default function AboutPage() {
 							</p>
 						</div>
 						<div className="md:w-2/5">
-							<div
-								className="relative aspect-[9/16] select-none before:content-[''] before:absolute before:inset-0 before:-translate-y-4 before:translate-x-4 before:bg-[var(--color-highlight)] before:pointer-events-none"
-								onContextMenu={(e) => e.preventDefault()}
-							>
-								<iframe
-									src="https://player.vimeo.com/video/1215538268?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0"
-									frameBorder="0"
-									allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-									referrerPolicy="strict-origin-when-cross-origin"
-									className="absolute inset-0 h-full w-full bg-[#333]"
-									title="intro_video"
+							<div className="relative aspect-square before:content-[''] before:absolute before:inset-0 before:-translate-y-4 before:translate-x-4 before:bg-[var(--color-highlight)] before:pointer-events-none">
+								<Image
+									src="/about-oliver.png"
+									alt="Oliver, founder of Green Crown Studio"
+									fill
+									sizes="(min-width: 768px) 40vw, 100vw"
+									className="object-cover"
+									priority
 								/>
 							</div>
 						</div>
 					</div>
-					<Script
-						src="https://player.vimeo.com/api/player.js"
-						strategy="lazyOnload"
-					/>
 				</PageContainer>
 				<ContentSection variant="white" width="wide" className="font-light">
 					<div className="w-full">
