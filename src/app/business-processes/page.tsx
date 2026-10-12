@@ -10,12 +10,12 @@ const faqs = [
 	{
 		question: 'What counts as a "business process" here?',
 		answer:
-			"Anything repetitive that eats up your time without needing your judgement every time — replying to routine enquiries, chasing quotes, logging orders, pulling together reports, or moving information between the tools you already use.",
+			"Anything repetitive that eats up your time would rather not have to do — chasing quotes, logging orders, pulling together reports, or moving information between the tools you already use.",
 	},
 	{
-		question: "Do I need to be technical to use this?",
+		question: "Do I need to be technical?",
 		answer:
-			"No. We handle the setup and explain it in plain terms, then hand over something you or your team can run day to day without needing to understand how it works under the hood.",
+			"No. We handle the setup and explain it in plain terms, then hand over something you or your team can run day to day without needing to understand how it works in the background.",
 	},
 	{
 		question: "Will this replace staff, or just save them time?",

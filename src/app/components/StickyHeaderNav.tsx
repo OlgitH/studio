@@ -10,7 +10,7 @@ import AnchorNavLink from "./AnchorNavLink";
 // original hero viewport) has scrolled out of view above the viewport, so
 // the links stay reachable while scrolling through the lower sections. On
 // mobile the nav links are dropped (the burger menu covers those) and only
-// the logo shows, since #hero-nav itself is hidden below the sm breakpoint.
+// the logo shows, since #hero-nav itself is hidden below the sm breakpoint. Right padding keeps the nav clear of the fixed burger button, and the nav only appears from lg up where it fits beside it.
 export default function StickyHeaderNav() {
 	const [visible, setVisible] = useState(false);
 
@@ -38,14 +38,14 @@ export default function StickyHeaderNav() {
 				visible ? "translate-y-0" : "pointer-events-none -translate-y-full"
 			}`}
 		>
-			<div className="mx-auto flex w-full items-center justify-between gap-8 px-[20px] py-[22px] xl:w-[1080px] xl:py-[26px]">
+			<div className="mx-auto flex w-full items-center justify-between gap-8 pl-[20px] pr-[20px] py-[22px] sm:pr-[110px] xl:w-[1080px] xl:pr-[20px] xl:py-[26px]">
 				<Image
 					src={Logo}
 					alt="Greencrown Studio"
 					width={140}
 					className="h-auto w-36 invert"
 				/>
-				<nav aria-label="Primary" className="primary-nav hidden sm:block">
+				<nav aria-label="Primary" className="primary-nav hidden lg:block">
 					<ul className="flex items-center gap-6 text-base font-light">
 						<li>
 							<Link href="/about">about</Link>
