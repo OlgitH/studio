@@ -127,7 +127,7 @@ export default function BurgerMenu() {
 					aria-label="Primary"
 					className="relative flex h-full w-full items-center justify-center"
 				>
-					<ul className="flex flex-col items-center gap-6 text-xl font-semibold text-[#120d0d]">
+					<ul className="flex flex-col items-center gap-6 text-xl font-light text-[#120d0d]">
 						{NAV_ENTRIES.map((entry, index) => {
 							const itemClassName = `transition-all duration-500 ease-out ${
 								open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
@@ -208,7 +208,7 @@ export default function BurgerMenu() {
 														<Link
 															href={link.href}
 															onClick={closeMenu}
-															className="font-normal text-[#120d0d]"
+															className="font-light text-[#120d0d]"
 														>
 															{link.label}
 														</Link>

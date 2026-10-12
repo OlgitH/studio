@@ -69,6 +69,11 @@ export default function StickyHeaderNav() {
 						<li>
 							<AnchorNavLink targetId="training">training</AnchorNavLink>
 						</li>
+						<li>
+							<Link href="/case-studies" className="whitespace-nowrap">
+								case studies
+							</Link>
+						</li>
 					</ul>
 				</nav>
 			</div>
