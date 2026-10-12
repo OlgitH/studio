@@ -61,8 +61,8 @@ export default function BusinessProcessesPage() {
 					<h1 className="text-3xl font-bold mb-4">AI business processes</h1>
 
 					<p className="mb-8 body-text">
-						Small businesses lose a lot of hours to admin that doesn&apos;t need
-						a human eye every time &mdash; replying to the same enquiries,
+						Small businesses lose a lot of hours to admin that can now be
+						automated in some way &mdash; replying to the same enquiries,
 						chasing paperwork, updating spreadsheets, writing up reports. We
 						help you set up AI and simple automation to take that repetitive
 						work off your plate, so you can spend your time on the parts of the
@@ -81,12 +81,12 @@ export default function BusinessProcessesPage() {
 						</h2>
 						<p className="mb-8 body-text">
 							We want to use AI thoughtfully and with purpose. Ideally, before
-							automating or handing some process over to AI we have to analyse
-							the conseqcuences, both on the product and the effect it is going
-							to have on humans. We should not blindly use AI. That said, it is
-							too powerful a tool to not use in some way - but let's not do it
-							if it's bad for us. The end product should have a human element so
-							a human needs to be involved in the process.
+							automating or handing some process over to AI we analyse the
+							potential consequences, both on the product and the effect it is
+							going to have on humans. We should not blindly use AI. That said,
+							it is too powerful a tool to not use in some way - let's just not
+							use it if it's bad for us. The end product should resonate with
+							humans so a human needs to be involved in the process.
 						</p>
 					</section>
 
