@@ -2,7 +2,7 @@
 title: "The Nursery"
 category: "Research agency — brand, logo & web app"
 summary: "A brand and logo developed from the ground up, plus a custom site with event sign-ups that track attendees, built on a data architecture designed around how the team works."
-image: "/case-studies/nursery.jpg"
+image: "/case-studies/nursery-feature-img.png"
 imageAlt: "The Nursery website homepage"
 liveUrl: "https://thenursery.greencrown.studio/"
 date: "2026-10-12"
