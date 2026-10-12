@@ -2,7 +2,7 @@
 title: "Marnie Therapy"
 category: "Psychotherapy practice — logo & website"
 summary: "A logo designed from scratch and a custom WordPress website built around her practice, with full control over every element and enquiries sent straight to her inbox."
-image: "/case-studies/marnie.jpg"
+image: "/case-studies/marnie.png"
 imageAlt: "Marnie Therapy website homepage"
 liveUrl: "https://marnietherapy.co.uk"
 date: "2026-10-05"
