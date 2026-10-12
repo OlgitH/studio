@@ -7,6 +7,7 @@ import FadeInOnView from "./components/FadeInOnView";
 import FloatingContactButtons from "./components/FloatingContactButtons";
 import StickyHeaderNav from "./components/StickyHeaderNav";
 import AnchorNavLink from "./components/AnchorNavLink";
+import HomeCaseStudies from "./components/HomeCaseStudies";
 export default function Home() {
 	return (
 		<>
@@ -124,6 +125,7 @@ export default function Home() {
 				shapeImage={{ src: "/abstract-shape-3.jpg" }}
 				// image={{ src: "/splash/websites.png" }}
 			/>
+			<HomeCaseStudies />
 		</>
 	);
 }
