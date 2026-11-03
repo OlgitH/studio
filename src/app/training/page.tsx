@@ -84,7 +84,7 @@ export default function TrainingPage() {
 						Pricing
 					</h2>
 					<p className="body-text">
-						Sessions run from £60 for an hour up to £360 for a full day. See
+						Sessions run from £60 for an hour up to £280 for a full day. See
 						the{" "}
 						<Link href="/pricing" className="underline">
 							full training pricing
