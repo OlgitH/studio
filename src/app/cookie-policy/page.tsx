@@ -18,13 +18,13 @@ export default function CookiePolicyPage() {
 				<PageContainer className="font-light pb-16">
 					<div className="blog-prose max-w-2xl">
 						<h1 className="text-3xl font-bold mb-4">Cookie Policy</h1>
-						<p className="text-white/60 mb-8">Last updated: 21 September 2026</p>
+						<p className="text-white/60 mb-8">Last updated: 20 November 2026</p>
 
 						<p>
 							This policy explains what cookies and similar technologies are,
 							which ones this website (greencrown.studio) uses, and how you can
-							control them. It&apos;s written to comply with the UK GDPR and
-							the Privacy and Electronic Communications Regulations (PECR).
+							control them. It&apos;s written to comply with the UK GDPR and the
+							Privacy and Electronic Communications Regulations (PECR).
 						</p>
 
 						<h2>1. What are cookies?</h2>
@@ -62,6 +62,21 @@ export default function CookiePolicyPage() {
 									<td>Strictly necessary</td>
 								</tr>
 								<tr>
+									<td>greencrown-task-board-v1</td>
+									<td>
+										Only if you use our private task board tool. Saves the board
+										you&apos;re working on so a refresh doesn&apos;t lose it.
+										Stored in your browser&apos;s local storage on your own
+										device and never sent to us. It holds whatever you put on
+										the board.
+									</td>
+									<td>
+										Until you click &ldquo;Clear board&rdquo; or clear your
+										browser&apos;s site data
+									</td>
+									<td>Functional (stores what you enter in the tool)</td>
+								</tr>
+								<tr>
 									<td>_ga, _ga_*</td>
 									<td>
 										Google Analytics — distinguishes visitors and tracks usage
@@ -74,8 +89,8 @@ export default function CookiePolicyPage() {
 								<tr>
 									<td>player, vuid and related</td>
 									<td>
-										Set by Vimeo when a video embedded on this site (e.g. on
-										the About page) is loaded, to support playback and gather
+										Set by Vimeo when a video embedded on this site (e.g. on the
+										About page) is loaded, to support playback and gather
 										aggregate viewing statistics.
 									</td>
 									<td>Up to 2 years</td>
@@ -84,12 +99,20 @@ export default function CookiePolicyPage() {
 							</tbody>
 						</table>
 
+						<p>
+							The task board is a private tool for people we&apos;ve invited to
+							use it, and it doesn&apos;t use analytics cookies. Because its
+							saved board stays on your device, you can remove it at any time
+							with the &ldquo;Clear board&rdquo; button or by clearing this
+							site&apos;s data in your browser settings.
+						</p>
+
 						<h2>3. Managing your preferences</h2>
 						<p>
-							When you first visit, a banner lets you accept all cookies,
-							reject everything beyond what&apos;s strictly necessary, or choose
-							exactly which categories to allow. You can change your mind at
-							any time — click below to reopen your preferences:
+							When you first visit, a banner lets you accept all cookies, reject
+							everything beyond what&apos;s strictly necessary, or choose
+							exactly which categories to allow. You can change your mind at any
+							time — click below to reopen your preferences:
 						</p>
 						<p>
 							<CookieSettingsButton className="underline underline-offset-2 hover:text-[var(--color-highlight)] font-normal" />
@@ -137,9 +160,7 @@ export default function CookiePolicyPage() {
 						<p>
 							If you have questions about this policy or how we handle your
 							data, contact us at{" "}
-							<a href="mailto:olly@greencrown.studio">
-								olly@greencrown.studio
-							</a>
+							<a href="mailto:olly@greencrown.studio">olly@greencrown.studio</a>
 							. If you&apos;re unhappy with how we&apos;ve handled your data,
 							you can also complain to the UK Information Commissioner&apos;s
 							Office at{" "}
