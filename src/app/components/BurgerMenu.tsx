@@ -37,19 +37,32 @@ const NAV_ENTRIES: NavEntry[] = [
 	{ type: "link", href: "/training", label: "Training" },
 	{ type: "link", href: "/case-studies", label: "Case studies" },
 	{ type: "link", href: "/blog", label: "Blog" },
+	{
+		type: "submenu",
+		label: "Tools",
+		links: [
+			{ href: "/tools", label: "Tools" },
+			{ href: "/tools/task-board", label: "Task board" },
+		],
+	},
 	{ type: "link", href: "/contact", label: "Contact" },
 ];
 
+// "Website maintenance" -> "website-maintenance" (used for aria-controls ids)
+const slug = (label: string) =>
+	label.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
 export default function BurgerMenu() {
 	const [open, setOpen] = useState(false);
-	const [maintenanceOpen, setMaintenanceOpen] = useState(false);
+	// Which submenu (by label) is expanded — only one at a time.
+	const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
-	// Closing the menu also collapses the "Website maintenance" submenu, so it
-	// always reopens collapsed. Done where the menu closes (not in an effect
+	// Closing the menu also collapses any open submenu, so it always reopens
+	// collapsed. Done where the menu closes (not in an effect
 	// reacting to `open`) to avoid an extra render pass.
 	const closeMenu = useCallback(() => {
 		setOpen(false);
-		setMaintenanceOpen(false);
+		setOpenSubmenu(null);
 	}, []);
 
 	useEffect(() => {
@@ -129,7 +142,7 @@ export default function BurgerMenu() {
 					aria-label="Primary"
 					className="relative flex h-full w-full items-center justify-center"
 				>
-					<ul className="flex flex-col items-center gap-6 text-xl font-light text-[#120d0d]">
+					<ul className="flex flex-col items-center gap-6 text-xl font-light text-[#120d0d] [@media(max-height:740px)]:gap-4">
 						{NAV_ENTRIES.map((entry, index) => {
 							const itemClassName = `transition-all duration-500 ease-out ${
 								open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
@@ -152,6 +165,7 @@ export default function BurgerMenu() {
 								);
 							}
 
+							const subOpen = openSubmenu === entry.label;
 							return (
 								<li
 									key={entry.label}
@@ -160,16 +174,20 @@ export default function BurgerMenu() {
 								>
 									<button
 										type="button"
-										onClick={() => setMaintenanceOpen((value) => !value)}
-										aria-expanded={maintenanceOpen}
-										aria-controls="website-maintenance-submenu-mobile"
+										onClick={() =>
+											setOpenSubmenu((current) =>
+												current === entry.label ? null : entry.label,
+											)
+										}
+										aria-expanded={subOpen}
+										aria-controls={`${slug(entry.label)}-submenu-mobile`}
 										className="flex items-center gap-2"
 									>
 										{entry.label}
 										<span className="relative block h-2 w-2">
 											<span
 												className={`absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-current transition-transform duration-300 ${
-													maintenanceOpen ? "rotate-90" : "rotate-0"
+													subOpen ? "rotate-90" : "rotate-0"
 												}`}
 											/>
 											<span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-current" />
@@ -177,9 +195,9 @@ export default function BurgerMenu() {
 									</button>
 
 									<div
-										id="website-maintenance-submenu-mobile"
+										id={`${slug(entry.label)}-submenu-mobile`}
 										className={`grid w-full justify-items-center overflow-hidden transition-all duration-500 ease-out ${
-											maintenanceOpen
+											subOpen
 												? "grid-rows-[1fr] opacity-100"
 												: "grid-rows-[0fr] opacity-0"
 										}`}
@@ -188,7 +206,7 @@ export default function BurgerMenu() {
 											<div
 												aria-hidden="true"
 												className={`h-px self-center bg-white transition-all duration-500 ease-out ${
-													maintenanceOpen ? "w-24 opacity-100" : "w-0 opacity-0"
+													subOpen ? "w-24 opacity-100" : "w-0 opacity-0"
 												}`}
 											/>
 											<ul className="mt-4 mb-4 flex flex-col items-center gap-4 text-base">
@@ -196,13 +214,13 @@ export default function BurgerMenu() {
 													<li
 														key={link.href}
 														className={`transition-all duration-500 ease-out ${
-															maintenanceOpen && open
+															subOpen && open
 																? "translate-x-0 opacity-100"
 																: "translate-x-8 opacity-0"
 														}`}
 														style={{
 															transitionDelay:
-																maintenanceOpen && open
+																subOpen && open
 																	? `${subIndex * 80 + 150}ms`
 																	: "0ms",
 														}}
@@ -285,6 +303,7 @@ export default function BurgerMenu() {
 								);
 							}
 
+							const subOpen = openSubmenu === entry.label;
 							return (
 								<li
 									key={entry.label}
@@ -293,16 +312,20 @@ export default function BurgerMenu() {
 								>
 									<button
 										type="button"
-										onClick={() => setMaintenanceOpen((value) => !value)}
-										aria-expanded={maintenanceOpen}
-										aria-controls="website-maintenance-submenu-desktop"
+										onClick={() =>
+											setOpenSubmenu((current) =>
+												current === entry.label ? null : entry.label,
+											)
+										}
+										aria-expanded={subOpen}
+										aria-controls={`${slug(entry.label)}-submenu-desktop`}
 										className="flex items-center gap-2 whitespace-nowrap"
 									>
 										{entry.label}
 										<span className="relative block h-2 w-2 shrink-0">
 											<span
 												className={`absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-current transition-transform duration-300 ${
-													maintenanceOpen ? "rotate-90" : "rotate-0"
+													subOpen ? "rotate-90" : "rotate-0"
 												}`}
 											/>
 											<span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-current" />
@@ -310,9 +333,9 @@ export default function BurgerMenu() {
 									</button>
 
 									<div
-										id="website-maintenance-submenu-desktop"
+										id={`${slug(entry.label)}-submenu-desktop`}
 										className={`grid w-full justify-items-end overflow-hidden transition-all duration-500 ease-out ${
-											maintenanceOpen
+											subOpen
 												? "grid-rows-[1fr] opacity-100"
 												: "grid-rows-[0fr] opacity-0"
 										}`}
@@ -321,7 +344,7 @@ export default function BurgerMenu() {
 											<div
 												aria-hidden="true"
 												className={`h-px self-end bg-[#120d0d]/30 transition-all duration-500 ease-out ${
-													maintenanceOpen ? "w-24 opacity-100" : "w-0 opacity-0"
+													subOpen ? "w-24 opacity-100" : "w-0 opacity-0"
 												}`}
 											/>
 											<ul className="mt-2 flex flex-col items-end gap-2">
@@ -329,13 +352,13 @@ export default function BurgerMenu() {
 													<li
 														key={link.href}
 														className={`transition-all duration-500 ease-out ${
-															maintenanceOpen && open
+															subOpen && open
 																? "translate-x-0 opacity-100"
 																: "translate-x-4 opacity-0"
 														}`}
 														style={{
 															transitionDelay:
-																maintenanceOpen && open
+																subOpen && open
 																	? `${subIndex * 80 + 150}ms`
 																	: "0ms",
 														}}

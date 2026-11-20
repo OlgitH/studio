@@ -54,6 +54,8 @@ const univers = localFont({
 });
 
 export const metadata: Metadata = {
+  // Lets pages give relative canonical / Open Graph URLs.
+  metadataBase: new URL("https://www.greencrown.studio"),
   title: "Greencrown Studio",
   description: "Creative website development in Bath, Somerset",
 };

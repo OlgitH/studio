@@ -14,8 +14,13 @@ import Logo from "@/../public/logo/logo-white-no-bird.svg";
 // bristol-jobs' ScrollHeader) pass scrollBar={false} to opt out.
 export default function BackHomeLink({
 	scrollBar = true,
+	dark = false,
 }: {
 	scrollBar?: boolean;
+	// Black corner mark, for pages with a light background (the default white
+	// mark disappears there). The scrolled bar is already white with a black
+	// logo, so it needs no change.
+	dark?: boolean;
 }) {
 	const [scrolled, setScrolled] = useState(false);
 
@@ -45,6 +50,7 @@ export default function BackHomeLink({
 					width={160}
 					height={94}
 					priority
+					className={dark ? "invert" : undefined}
 				/>
 			</Link>
 
