@@ -1,0 +1,200 @@
+.tb-root {
+	--tb-bg: #fff;
+	--tb-fg: #1a1a1a;
+	--tb-card: #fff;
+	--tb-col: #fff;
+	--tb-line: #e4e4df;
+	--tb-muted: #5c5c5c;
+	--tb-accent: #120d0d;
+	--tb-accent-fg: #fff;
+	--tb-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.04);
+	background: #fff;
+	color: var(--tb-fg);
+}
+
+/* White page behind the tool — the site's default is dark. */
+html:has(.tb-root),
+body:has(.tb-root) {
+	background-color: #fff;
+}
+
+.tb-box {
+	background: #fff;
+	border: 1px solid var(--tb-line);
+	box-shadow: var(--tb-shadow);
+}
+
+/* Cards are a warm off-white rather than pure white. */
+.tb-card {
+	background: #f6f4ee;
+}
+
+/* Kanban columns: dark grey panels, cards inside stay white. */
+.tb-colbox {
+	background: #333;
+	border-color: #333;
+}
+
+@page {
+	size: A4 portrait;
+	margin: 14mm 14mm 16mm;
+
+	@bottom-left {
+		content: "Greencrown Studio";
+		font: 8pt sans-serif;
+		color: #777;
+	}
+	@bottom-right {
+		content: "Page " counter(page) " of " counter(pages);
+		font: 8pt sans-serif;
+		color: #777;
+	}
+}
+
+@media print {
+	html,
+	body {
+		background: #fff !important;
+		color: #111 !important;
+		overflow: visible !important;
+		font-size: 10pt;
+	}
+
+	/* Hide site chrome (menu, footer, cookie banner) — keep only the board. */
+	body > *:not(.tb-root) {
+		display: none !important;
+	}
+
+	.tb-root {
+		--tb-line: #d6d6cf;
+		--tb-shadow: none;
+		display: block !important;
+		max-width: none !important;
+		padding: 0 !important;
+		min-height: 0 !important;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
+	.tb-root > * + * {
+		margin-top: 7mm;
+	}
+
+	.tb-head {
+		padding-bottom: 5mm;
+		border-bottom: 2px solid #120d0d;
+	}
+
+	.tb-head input {
+		font-size: 30pt !important;
+		line-height: 1.1;
+	}
+
+	/* Stack the status sections top-to-bottom instead of three tall columns,
+	   so long columns flow across pages without leaving the others empty. */
+	.tb-kanban {
+		display: block !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	.tb-kanban::before {
+		display: none !important;
+	}
+
+	.tb-colbox {
+		background: transparent !important;
+		border: 0 !important;
+		box-shadow: none !important;
+		padding: 0 !important;
+		margin-bottom: 7mm;
+		display: block !important;
+	}
+
+	/* Clear section headings: big coloured bar with the count. */
+	/* Done is left out of the PDF — it is for what is still outstanding. */
+	.tb-colbox.tb-done {
+		display: none !important;
+	}
+
+	.tb-colbox > h2,
+	.tb-notes > div > h2 {
+		break-after: avoid;
+		margin: 0 0 2mm !important;
+		border-radius: 1mm !important;
+		font-size: 14pt !important;
+		line-height: 1.2;
+	}
+
+	.tb-colbox > h2 > * {
+		padding: 2.5mm 4mm !important;
+	}
+
+	/* Simple rows, one per item — no boxes — never split across pages. */
+	.tb-list {
+		display: block !important;
+		min-height: 0 !important;
+	}
+
+	.tb-list > li {
+		break-inside: avoid;
+		display: block;
+	}
+
+	.tb-card {
+		box-shadow: none !important;
+		border: 0 !important;
+		border-bottom: 1px solid var(--tb-line) !important;
+		border-radius: 0 !important;
+		background: transparent !important;
+		padding: 2.5mm 1mm !important;
+		font-size: 10.5pt;
+	}
+
+	/* Labels become small coloured text instead of pills. */
+	.tb-card > span {
+		background: transparent !important;
+		padding: 0 !important;
+		margin-bottom: 0.5mm !important;
+		display: block !important;
+		font-size: 7.5pt !important;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	/* Screenshots stay small: a thumbnail, not the full image. */
+	.tb-card > button {
+		display: block !important;
+		width: 45mm !important;
+		border-radius: 1mm !important;
+	}
+
+	.tb-card img {
+		max-height: 30mm;
+		width: 100%;
+		object-fit: contain;
+		object-position: left top;
+	}
+
+	.tb-card a {
+		word-break: break-all;
+	}
+
+	.tb-notes {
+		break-inside: auto;
+		margin-bottom: 0 !important;
+		padding: 0 !important;
+		background: transparent !important;
+		border-top: 2px solid #120d0d;
+		padding-top: 5mm !important;
+	}
+
+	.tb-notes::before {
+		display: none !important;
+	}
+
+	.tb-notes > div {
+		max-width: none !important;
+	}
+
+}
