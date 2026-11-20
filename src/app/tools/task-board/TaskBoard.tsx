@@ -342,7 +342,7 @@ async function fileToShot(file: File): Promise<string> {
 const btn =
 	"rounded border border-[var(--tb-line)] px-3 py-1.5 text-sm transition-colors hover:border-[var(--tb-accent)] hover:text-[var(--tb-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--tb-accent)]";
 const btnPrimary =
-	"rounded bg-[var(--tb-accent)] px-3 py-1.5 text-sm font-bold text-[var(--tb-accent-fg)] transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--tb-accent)]";
+	"rounded bg-[var(--tb-accent)] px-3 py-1.5 text-sm font-bold text-[var(--tb-accent-fg)] transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--tb-accent)]";
 const field =
 	"w-full rounded border border-[var(--tb-line)] bg-transparent px-2.5 py-1.5 text-sm text-[var(--tb-fg)] placeholder:text-[var(--tb-muted)] focus-visible:outline-2 focus-visible:outline-[var(--tb-accent)]";
 
@@ -679,15 +679,29 @@ export default function TaskBoard() {
 	const [includeShots, setIncludeShots] = useState(true);
 
 	// Before the board leaves the browser (share, CSV, PDF) it's scanned for
-	// sensitive-looking content. Clean -> carry on. Flagged -> show a report.
+	// sensitive-looking text AND the person must confirm they've checked it —
+	// every time, even when the scan finds nothing, because screenshots (and
+	// plain-language secrets) can't be scanned.
+	type ExportKind = "csv" | "pdf" | "share";
 	const [scanReport, setScanReport] = useState<{
 		issues: BoardIssue[];
 		run: () => void;
+		kind: ExportKind;
+		shots: number; // screenshots that would be included
 	} | null>(null);
-	function gate(run: () => void) {
-		const issues = scanBoard(title, client, items);
-		if (issues.length === 0) run();
-		else setScanReport({ issues, run });
+	const [scanConfirmed, setScanConfirmed] = useState(false);
+	function gate(kind: ExportKind, run: () => void) {
+		setScanConfirmed(false);
+		setScanReport({
+			issues: scanBoard(title, client, items),
+			run,
+			kind,
+			// Share links never carry screenshots.
+			shots:
+				kind !== "share" && includeShots
+					? items.filter((i) => i.shot).length
+					: 0,
+		});
 	}
 
 	// Decode a share payload and (after confirming, if a board is already
@@ -1130,7 +1144,7 @@ export default function TaskBoard() {
 					<button
 						type="button"
 						className={btnPrimary}
-						onClick={() => gate(exportCsv)}
+						onClick={() => gate("csv", exportCsv)}
 					>
 						Export CSV
 					</button>
@@ -1154,7 +1168,7 @@ export default function TaskBoard() {
 					<button
 						type="button"
 						className={btn}
-						onClick={() => gate(() => window.print())}
+						onClick={() => gate("pdf", () => window.print())}
 					>
 						Save as PDF
 					</button>
@@ -1318,7 +1332,7 @@ export default function TaskBoard() {
 							<button
 								type="button"
 								className={btnPrimary}
-								onClick={() => gate(() => void copyShareLink())}
+								onClick={() => gate("share", () => void copyShareLink())}
 							>
 								Copy link
 							</button>
@@ -1516,59 +1530,101 @@ export default function TaskBoard() {
 				>
 					<div className="tb-box max-h-full w-full max-w-lg overflow-y-auto rounded-lg p-5">
 						{(() => {
-							const hardBlock = scanReport.issues.some((i) =>
+							const { issues, kind, shots } = scanReport;
+							const hardBlock = issues.some((i) =>
 								i.findings.some((f) => f.level === "block"),
 							);
+							const action = {
+								csv: "export the CSV",
+								pdf: "save the PDF",
+								share: "share this board",
+							}[kind];
 							return (
 								<>
 									<h3 className="text-lg font-bold">
 										{hardBlock
 											? "Can't continue — remove sensitive details first"
-											: "This board may contain sensitive information"}
+											: issues.length > 0
+												? "This board may contain sensitive information"
+												: `Before you ${action}`}
 									</h3>
 									<p className="mt-2 text-[15px] text-[var(--tb-muted)]">
 										Boards travel as links, CSV files and PDFs, which can be
 										forwarded or sit in email and chat history.
 									</p>
-									<ul className="mt-3 flex flex-col gap-2 text-[15px]">
-										{scanReport.issues.map((issue, n) => (
-											<li
-												key={n}
-												className="rounded border border-[var(--tb-line)] p-2.5"
-											>
-												<span className="font-bold [overflow-wrap:anywhere]">
-													{issue.where}
-												</span>
-												<br />
-												<span className="text-[var(--tb-muted)]">
-													Looks like{" "}
-													{issue.findings.map((f) => f.label).join(", ")}
-												</span>
-											</li>
-										))}
-									</ul>
+									{issues.length > 0 ? (
+										<ul className="mt-3 flex flex-col gap-2 text-[15px]">
+											{issues.map((issue, n) => (
+												<li
+													key={n}
+													className="rounded border border-[var(--tb-line)] p-2.5"
+												>
+													<span className="font-bold [overflow-wrap:anywhere]">
+														{issue.where}
+													</span>
+													<br />
+													<span className="text-[var(--tb-muted)]">
+														Looks like{" "}
+														{issue.findings.map((f) => f.label).join(", ")}
+													</span>
+												</li>
+											))}
+										</ul>
+									) : (
+										<p className="mt-3 text-[15px]">
+											The automatic check found nothing that looks like a
+											password, key, or card or bank detail. It can&apos;t catch
+											everything, so please check too.
+										</p>
+									)}
+									{shots > 0 && (
+										<p className="mt-3 rounded border border-amber-400 bg-amber-50 p-2.5 text-[15px] text-amber-950">
+											<strong>
+												{shots} screenshot{shots === 1 ? " is" : "s are"}{" "}
+												included.{" "}
+											</strong>
+											Images can&apos;t be scanned. Look at each one, or close
+											this and untick &ldquo;Include screenshots in CSV &amp;
+											PDF&rdquo;.
+										</p>
+									)}
+									{!hardBlock && (
+										<label className="mt-4 flex items-start gap-2 text-[15px]">
+											<input
+												type="checkbox"
+												className="mt-1"
+												checked={scanConfirmed}
+												onChange={(e) => setScanConfirmed(e.target.checked)}
+											/>
+											<span>
+												I&apos;ve checked this board and it doesn&apos;t contain
+												passwords, logins, or personal or financial details.
+											</span>
+										</label>
+									)}
 									<div className="mt-4 flex flex-wrap gap-2">
-										<button
-											type="button"
-											autoFocus
-											className={btnPrimary}
-											onClick={() => setScanReport(null)}
-										>
-											Go back and edit
-										</button>
 										{!hardBlock && (
 											<button
 												type="button"
-												className={btn}
+												className={btnPrimary}
+												disabled={!scanConfirmed}
 												onClick={() => {
 													const run = scanReport.run;
 													setScanReport(null);
 													run();
 												}}
 											>
-												Continue anyway
+												{issues.length > 0 ? "Continue anyway" : "Continue"}
 											</button>
 										)}
+										<button
+											type="button"
+											autoFocus
+											className={hardBlock ? btnPrimary : btn}
+											onClick={() => setScanReport(null)}
+										>
+											{hardBlock ? "Go back and edit" : "Cancel"}
+										</button>
 									</div>
 								</>
 							);
