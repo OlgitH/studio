@@ -5,18 +5,10 @@ import CtaButton from "../components/CtaButton";
 import PageBgImage from "../components/PageBgImage";
 import PageContainer from "../components/PageContainer";
 
+// Private, password-protected (see src/proxy.ts) and kept out of search.
 export const metadata: Metadata = {
-	title: "Free Tools for Website Projects | Greencrown Studio",
-	description:
-		"Free, private browser-based tools from Greencrown Studio, including a kanban task board for website changes. Nothing is uploaded or stored on our servers.",
-	alternates: { canonical: "/tools" },
-	openGraph: {
-		title: "Free Tools for Website Projects | Greencrown Studio",
-		description:
-			"Free, private browser-based tools from Greencrown Studio, including a kanban task board for tracking website changes.",
-		url: "/tools",
-		type: "website",
-	},
+	title: "Tools | Greencrown Studio",
+	robots: { index: false, follow: false, nocache: true },
 };
 
 export default function ToolsPage() {
@@ -35,12 +27,11 @@ export default function ToolsPage() {
 				}
 			>
 				<PageContainer className="z-10">
-					<h1 className="text-3xl font-bold mb-4">Free tools</h1>
+					<h1 className="text-3xl font-bold mb-4">Tools</h1>
 
 					<p className="mb-8 body-text">
-						Small, practical tools we&apos;ve built for our own client work and
-						made free for anyone to use. They run in your browser, so nothing
-						is uploaded or stored on our servers.
+						Private tools we use for client projects. They run in your
+						browser, so nothing is uploaded or stored on our servers.
 					</p>
 
 					<section className="mb-8 max-w-2xl" aria-labelledby="task-board-heading">

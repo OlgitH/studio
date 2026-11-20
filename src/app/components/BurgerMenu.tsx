@@ -37,14 +37,6 @@ const NAV_ENTRIES: NavEntry[] = [
 	{ type: "link", href: "/training", label: "Training" },
 	{ type: "link", href: "/case-studies", label: "Case studies" },
 	{ type: "link", href: "/blog", label: "Blog" },
-	{
-		type: "submenu",
-		label: "Tools",
-		links: [
-			{ href: "/tools", label: "Tools" },
-			{ href: "/tools/task-board", label: "Task board" },
-		],
-	},
 	{ type: "link", href: "/contact", label: "Contact" },
 ];
 
