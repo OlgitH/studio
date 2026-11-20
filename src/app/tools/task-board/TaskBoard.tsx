@@ -1,6 +1,8 @@
 "use client";
 
 import {
+	useCallback,
+	useMemo,
 	useEffect,
 	useRef,
 	useState,
@@ -9,6 +11,14 @@ import {
 } from "react";
 import { flushSync } from "react-dom";
 import { guardCell, parseCsv, toCsv, unguardCell } from "./csv";
+import {
+	MIN_PASSPHRASE_LENGTH,
+	decryptBytes,
+	encryptBytes,
+	generatePassphrase,
+} from "./shareCrypto";
+import { LIMITS, cleanText, imageFileProblem, safeShot } from "./validate";
+import { scanBoard, scanFields, type BoardIssue } from "./sensitive";
 import "./task-board.css";
 
 type Status = "todo" | "doing" | "done";
@@ -76,6 +86,25 @@ const donateHref = /^https:\/\//i.test(DONATE_URL) ? DONATE_URL : "";
 const STORAGE_KEY = "greencrown-task-board-v1";
 const DEFAULT_TITLE = "Website progress checklist";
 
+const str = (v: unknown) => (typeof v === "string" ? v : "");
+
+// Rebuild clean items from untrusted data (storage or a share link).
+function cleanItems(raw: unknown[]): Item[] {
+	return (raw as Item[])
+		.slice(0, LIMITS.items)
+		.filter((i) => i && (i.kind === "task" || i.kind === "note"))
+		.map((i) => ({
+			id: str(i.id).slice(0, 64) || newId(),
+			kind: i.kind,
+			status: COLUMNS.some((c) => c.id === i.status) ? i.status : "todo",
+			label: cleanText(i.label, LIMITS.label),
+			title: cleanText(i.title, LIMITS.title),
+			details: cleanText(i.details, LIMITS.details),
+			link: cleanText(i.link, LIMITS.link),
+			shot: safeShot(i.shot),
+		}));
+}
+
 // Pull a saved board back out of storage, tolerating anything odd in there.
 function readSaved(): { title: string; client: string; items: Item[] } | null {
 	try {
@@ -83,27 +112,147 @@ function readSaved(): { title: string; client: string; items: Item[] } | null {
 		if (!raw) return null;
 		const data = JSON.parse(raw);
 		if (!data || !Array.isArray(data.items)) return null;
-		const str = (v: unknown) => (typeof v === "string" ? v : "");
-		const items: Item[] = data.items
-			.filter((i: Item) => i && (i.kind === "task" || i.kind === "note"))
-			.map((i: Item) => ({
-				id: str(i.id) || newId(),
-				kind: i.kind,
-				status: COLUMNS.some((c) => c.id === i.status) ? i.status : "todo",
-				label: str(i.label),
-				title: str(i.title),
-				details: str(i.details),
-				link: str(i.link),
-				shot: str(i.shot),
-			}));
 		return {
-			title: str(data.title) || DEFAULT_TITLE,
-			client: str(data.client),
-			items,
+			title: cleanText(data.title, LIMITS.boardTitle) || DEFAULT_TITLE,
+			client: cleanText(data.client, LIMITS.client),
+			items: cleanItems(data.items),
 		};
 	} catch {
 		return null;
 	}
+}
+
+// ── Share links ──
+// The board is packed into the URL fragment (#b=…), which browsers never
+// send to a server. Text only: screenshots are too big for a URL.
+const SHARE_PREFIX = "#b=";
+const MAX_SHARE_PAYLOAD = 30000; // refuse absurdly long links on the way in
+const WARN_URL_LENGTH = 8000; // beyond this, chat apps tend to truncate
+
+const toB64Url = (bytes: Uint8Array) => {
+	let bin = "";
+	for (const b of bytes) bin += String.fromCharCode(b);
+	return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+};
+const fromB64Url = (text: string) => {
+	const bin = atob(text.replace(/-/g, "+").replace(/_/g, "/"));
+	return Uint8Array.from(bin, (c) => c.charCodeAt(0));
+};
+
+// Runs bytes through a (de)compression stream, aborting if the output would
+// pass `maxOut` — so a tiny crafted link can't balloon into gigabytes.
+async function pipe(
+	bytes: Uint8Array,
+	stream: CompressionStream | DecompressionStream,
+	maxOut: number = LIMITS.decompressedBytes,
+) {
+	const reader = new Blob([bytes as BlobPart])
+		.stream()
+		.pipeThrough(stream)
+		.getReader();
+	const chunks: Uint8Array[] = [];
+	let total = 0;
+	for (;;) {
+		const { done, value } = await reader.read();
+		if (done) break;
+		total += value.length;
+		if (total > maxOut) {
+			await reader.cancel();
+			throw new Error("too large");
+		}
+		chunks.push(value);
+	}
+	const out = new Uint8Array(total);
+	let at = 0;
+	for (const c of chunks) {
+		out.set(c, at);
+		at += c.length;
+	}
+	return out;
+}
+
+// Thrown when a link is passphrase-protected and none was supplied yet.
+class NeedsPassphraseError extends Error {}
+
+// Compress when the browser can (leading flag byte says which), so the same
+// bytes can sit inside an encrypted payload and be unpacked after decrypting.
+async function packBytes(bytes: Uint8Array): Promise<Uint8Array> {
+	const compressed =
+		typeof CompressionStream === "undefined"
+			? null
+			: await pipe(bytes, new CompressionStream("deflate-raw"));
+	const body = compressed ?? bytes;
+	const out = new Uint8Array(body.length + 1);
+	out[0] = compressed ? 1 : 0;
+	out.set(body, 1);
+	return out;
+}
+
+async function unpackBytes(packed: Uint8Array): Promise<Uint8Array> {
+	const body = packed.slice(1);
+	if (packed[0] !== 1) return body;
+	if (typeof DecompressionStream === "undefined")
+		throw new Error("unsupported");
+	return pipe(body, new DecompressionStream("deflate-raw"));
+}
+
+// Payload kinds: "e." encrypted with a passphrase, "z." compressed, "r." raw.
+async function encodeShare(
+	board: { title: string; client: string; items: Item[] },
+	passphrase?: string,
+): Promise<string> {
+	const json = JSON.stringify({
+		t: board.title,
+		c: board.client,
+		i: board.items.map((i) => [
+			i.kind === "task" ? "t" : "n",
+			i.status,
+			i.label,
+			i.title,
+			i.details,
+			i.link,
+		]),
+	});
+	const bytes = new TextEncoder().encode(json);
+	if (passphrase) {
+		return `e.${toB64Url(await encryptBytes(await packBytes(bytes), passphrase))}`;
+	}
+	if (typeof CompressionStream === "undefined") return `r.${toB64Url(bytes)}`;
+	return `z.${toB64Url(await pipe(bytes, new CompressionStream("deflate-raw")))}`;
+}
+
+async function decodeShare(payload: string, passphrase?: string) {
+	if (payload.length > MAX_SHARE_PAYLOAD) throw new Error("too long");
+	const kind = payload.slice(0, 2);
+	let bytes: Uint8Array = fromB64Url(payload.slice(2));
+	if (kind === "e.") {
+		if (!passphrase) throw new NeedsPassphraseError();
+		// Throws if the passphrase is wrong or the link was altered/cut off.
+		bytes = await unpackBytes(await decryptBytes(bytes, passphrase));
+	} else if (kind === "z.") {
+		if (typeof DecompressionStream === "undefined")
+			throw new Error("unsupported");
+		bytes = await pipe(bytes, new DecompressionStream("deflate-raw"));
+	} else if (kind !== "r.") {
+		throw new Error("bad link");
+	}
+	const data = JSON.parse(new TextDecoder().decode(bytes));
+	if (!data || !Array.isArray(data.i)) throw new Error("bad link");
+	const items = cleanItems(
+		data.i.map((r: unknown[]) => ({
+			kind: r[0] === "t" ? "task" : "note",
+			status: r[1],
+			label: r[2],
+			title: r[3],
+			details: r[4],
+			link: r[5],
+		})),
+	);
+	return {
+		title: cleanText(data.t, LIMITS.boardTitle) || DEFAULT_TITLE,
+		client: cleanText(data.c, LIMITS.client),
+		items,
+	};
 }
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -152,6 +301,8 @@ function statusFromText(text: string): Status {
 }
 
 async function fileToShot(file: File): Promise<string> {
+	const problem = imageFileProblem(file);
+	if (problem) throw new Error(problem);
 	const url = URL.createObjectURL(file);
 	try {
 		const img = await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -160,6 +311,10 @@ async function fileToShot(file: File): Promise<string> {
 			el.onerror = () => reject(new Error("Could not read that image."));
 			el.src = url;
 		});
+		// Guard against "decompression bomb" images that are tiny to download
+		// but enormous to decode.
+		if (img.naturalWidth * img.naturalHeight > LIMITS.imagePixels)
+			throw new Error("That image is too large to use.");
 		let maxW = 720;
 		let quality = 0.65;
 		let out = "";
@@ -215,6 +370,12 @@ function ItemForm({
 	const [shot, setShot] = useState(initial?.shot ?? "");
 	const [error, setError] = useState("");
 	const [busy, setBusy] = useState(false);
+	// Live check for passwords, keys, card/bank details as the person types.
+	const findings = useMemo(
+		() => scanFields([title, label, details, link]),
+		[title, label, details, link],
+	);
+	const blocked = findings.some((f) => f.level === "block");
 
 	async function onFile(file: File | undefined) {
 		if (!file) return;
@@ -231,7 +392,7 @@ function ItemForm({
 
 	function submit(e: FormEvent) {
 		e.preventDefault();
-		if (!title.trim()) return;
+		if (!title.trim() || blocked) return;
 		onSave({
 			label: label.trim(),
 			title: title.trim(),
@@ -252,6 +413,7 @@ function ItemForm({
 				value={title}
 				onChange={(e) => setTitle(e.target.value)}
 				aria-label="Title"
+				maxLength={LIMITS.title}
 				required
 				autoFocus
 			/>
@@ -261,6 +423,7 @@ function ItemForm({
 				value={label}
 				onChange={(e) => setLabel(e.target.value)}
 				aria-label="Label"
+				maxLength={LIMITS.label}
 				list="tb-labels"
 			/>
 			<datalist id="tb-labels">
@@ -275,6 +438,7 @@ function ItemForm({
 				value={details}
 				onChange={(e) => setDetails(e.target.value)}
 				aria-label="Details"
+				maxLength={LIMITS.details}
 			/>
 			<input
 				className={field}
@@ -282,6 +446,7 @@ function ItemForm({
 				value={link}
 				onChange={(e) => setLink(e.target.value)}
 				aria-label="Link"
+				maxLength={LIMITS.link}
 			/>
 			<div className="flex flex-col gap-2 text-sm">
 				{shot && (
@@ -320,8 +485,29 @@ function ItemForm({
 					</span>
 				)}
 			</div>
+			{findings.length > 0 && (
+				<div
+					role="alert"
+					className={`rounded border p-3 text-[15px] ${
+						blocked
+							? "border-red-400 bg-red-50 text-red-950"
+							: "border-amber-400 bg-amber-50 text-amber-950"
+					}`}
+				>
+					<strong>{blocked ? "This can't be saved. " : "Careful — "}</strong>
+					{blocked
+						? "It looks like it contains "
+						: "this looks like it may contain "}
+					{findings.map((f) => f.label).join(", ")}.{" "}
+					{blocked
+						? "Please remove it. "
+						: "If it's real, please don't put it on a board. "}
+					Share sensitive details another way, such as a password manager&apos;s
+					share feature or a phone call.
+				</div>
+			)}
 			<div className="flex gap-2">
-				<button type="submit" className={btnPrimary} disabled={busy}>
+				<button type="submit" className={btnPrimary} disabled={busy || blocked}>
 					{initial ? "Save" : "Add"}
 				</button>
 				<button type="button" className={btn} onClick={onCancel}>
@@ -454,6 +640,66 @@ export default function TaskBoard() {
 	// so server and client render the same HTML; `loaded` stops the empty
 	// starting board from overwriting what's saved before it has been read.
 	const [loaded, setLoaded] = useState(false);
+
+	// Share-link state. `pendingShare` holds a protected link's payload while
+	// we wait for the passphrase; `sharePanel` is the "Share this board" form.
+	const [pendingShare, setPendingShare] = useState<string | null>(null);
+	const [unlockPass, setUnlockPass] = useState("");
+	const [unlockError, setUnlockError] = useState("");
+	const [unlockBusy, setUnlockBusy] = useState(false);
+	const [sharePanel, setSharePanel] = useState(false);
+	const [protect, setProtect] = useState(true);
+	const [passphrase, setPassphrase] = useState("");
+	const [shareError, setShareError] = useState("");
+
+	// Before the board leaves the browser (share, CSV, PDF) it's scanned for
+	// sensitive-looking content. Clean -> carry on. Flagged -> show a report.
+	const [scanReport, setScanReport] = useState<{
+		issues: BoardIssue[];
+		run: () => void;
+	} | null>(null);
+	function gate(run: () => void) {
+		const issues = scanBoard(title, client, items);
+		if (issues.length === 0) run();
+		else setScanReport({ issues, run });
+	}
+
+	// Decode a share payload and (after confirming, if a board is already
+	// saved) load it. Throws NeedsPassphraseError for protected links.
+	const loadShared = useCallback(async (payload: string, pass?: string) => {
+		const shared = await decodeShare(payload, pass);
+		const current = readSaved();
+		if (
+			current &&
+			current.items.length > 0 &&
+			!window.confirm(
+				"This link contains a shared board. Load it? It will replace the board saved in this browser.",
+			)
+		) {
+			return;
+		}
+		setTitle(shared.title);
+		setClient(shared.client);
+		setItems(shared.items);
+		setMessage({ ok: true, text: "Loaded the shared board." });
+	}, []);
+
+	async function unlock(e: FormEvent) {
+		e.preventDefault();
+		if (!pendingShare || !unlockPass.trim()) return;
+		setUnlockBusy(true);
+		try {
+			await loadShared(pendingShare, unlockPass.trim());
+			setPendingShare(null);
+			setUnlockPass("");
+		} catch {
+			setUnlockError(
+				"That passphrase didn't work — or the link was cut off. Check it and try again.",
+			);
+		} finally {
+			setUnlockBusy(false);
+		}
+	}
 	useEffect(() => {
 		const saved = readSaved();
 		if (saved) {
@@ -462,7 +708,34 @@ export default function TaskBoard() {
 			setItems(saved.items);
 		}
 		setLoaded(true);
-	}, []);
+
+		// Opened from a share link? Take the payload and clear the hash right
+		// away (also keeps dev's double-run of effects from asking twice).
+		const takeShareLink = () => {
+			const { hash, pathname } = window.location;
+			if (!hash.startsWith(SHARE_PREFIX)) return;
+			const payload = hash.slice(SHARE_PREFIX.length);
+			// Drop the #… and the readable ?for=… too, leaving just the page URL.
+			window.history.replaceState(null, "", pathname);
+			loadShared(payload).catch((e) => {
+				if (e instanceof NeedsPassphraseError) {
+					// Protected link: ask for the passphrase (kept in memory only).
+					setPendingShare(payload);
+					setUnlockError("");
+				} else {
+					setMessage({
+						ok: false,
+						text: "That share link couldn't be read — it may have been cut off. Ask for a new one.",
+					});
+				}
+			});
+		};
+		takeShareLink();
+		// A link pasted into a tab that already has the tool open only changes
+		// the #, so the page doesn't reload — listen for that too.
+		window.addEventListener("hashchange", takeShareLink);
+		return () => window.removeEventListener("hashchange", takeShareLink);
+	}, [loadShared]);
 
 	useEffect(() => {
 		if (!loaded) return;
@@ -478,6 +751,87 @@ export default function TaskBoard() {
 			});
 		}
 	}, [loaded, title, client, items]);
+
+	async function buildShareUrl(pass?: string) {
+		const payload = await encodeShare({ title, client, items }, pass);
+		// Readable prefix (who it's for) ahead of the long code. Only that
+		// name reaches the server; the board stays after the #.
+		const slug = (client.trim() || title)
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, "-")
+			.replace(/^-+|-+$/g, "")
+			.slice(0, 40);
+		return `${window.location.origin}${window.location.pathname}${slug ? `?for=${slug}` : ""}${SHARE_PREFIX}${payload}`;
+	}
+
+	function openSharePanel() {
+		// Protection is on by default, with a ready-made passphrase.
+		setProtect(true);
+		setPassphrase(generatePassphrase());
+		setShareError("");
+		setSharePanel(true);
+	}
+
+	async function copyShareLink() {
+		if (protect && passphrase.trim().length < MIN_PASSPHRASE_LENGTH) {
+			setShareError(
+				`Use a passphrase of at least ${MIN_PASSPHRASE_LENGTH} characters, or press Generate.`,
+			);
+			return;
+		}
+		setShareError("");
+		try {
+			const urlPromise = buildShareUrl(protect ? passphrase.trim() : undefined);
+			const rich =
+				typeof ClipboardItem !== "undefined" && "write" in navigator.clipboard;
+			if (rich) {
+				// Copy as clickable words (for email) plus the plain URL (for
+				// WhatsApp/Slack/etc.). The ClipboardItem is created straight
+				// away with promised blobs, which Safari requires.
+				const esc = (t: string) =>
+					t
+						.replace(/&/g, "&amp;")
+						.replace(/</g, "&lt;")
+						.replace(/"/g, "&quot;");
+				const text = `Open “${title}”${client.trim() ? ` for ${client.trim()}` : ""}`;
+				await navigator.clipboard.write([
+					new ClipboardItem({
+						"text/html": urlPromise.then(
+							(u) =>
+								new Blob([`<a href="${esc(u)}">${esc(text)}</a>`], {
+									type: "text/html",
+								}),
+						),
+						"text/plain": urlPromise.then(
+							(u) => new Blob([u], { type: "text/plain" }),
+						),
+					}),
+				]);
+			} else {
+				await navigator.clipboard.writeText(await urlPromise);
+			}
+			const url = await urlPromise;
+			const notes = [
+				items.some((i) => i.shot) ? "screenshots aren't included" : "",
+				url.length > WARN_URL_LENGTH
+					? "it's long, so some apps may cut it off — send a CSV instead"
+					: "",
+			].filter(Boolean);
+			setMessage({
+				ok: true,
+				text: `Share link copied${notes.length ? ` (${notes.join("; ")})` : ""}. ${
+					protect
+						? "Send the passphrase separately — not in the same message."
+						: "It is NOT protected: anyone with it can read the board."
+				}`,
+			});
+		} catch {
+			setMessage({
+				ok: false,
+				text: "Couldn't copy the link — your browser blocked clipboard access.",
+			});
+		}
+	}
 
 	function clearBoard() {
 		if (
@@ -569,7 +923,14 @@ export default function TaskBoard() {
 	async function importCsv(file: File | undefined) {
 		if (!file) return;
 		try {
-			const rows = parseCsv(await file.text());
+			if (file.size > LIMITS.csvBytes)
+				throw new Error("That file is too large (10 MB max).");
+			const text = await file.text();
+			// Real CSVs are text. A NUL byte means a binary file (image, zip,
+			// spreadsheet…) that has just been renamed .csv.
+			if (text.includes("\u0000"))
+				throw new Error("That doesn't look like a CSV file.");
+			const rows = parseCsv(text);
 			if (rows.length < 2) throw new Error("That file has no rows.");
 			const header = rows[0].map((h) => h.trim().toLowerCase());
 			const col = (name: string) => header.indexOf(name);
@@ -580,6 +941,7 @@ export default function TaskBoard() {
 			}
 			const get = (r: string[], name: string) =>
 				(col(name) === -1 ? "" : (r[col(name)] ?? "")).trim();
+			let skipped = 0;
 
 			let boardTitle = "";
 			let clientName = "";
@@ -587,29 +949,36 @@ export default function TaskBoard() {
 			for (const r of rows.slice(1)) {
 				// No "type" column (or a blank cell) means a plain task.
 				const type = get(r, "type").toLowerCase() || "task";
-				const text = unguardCell(get(r, "title"));
+				const text = cleanText(unguardCell(get(r, "title")), LIMITS.title);
 				if (type === "board") {
-					boardTitle = text;
+					boardTitle = cleanText(text, LIMITS.boardTitle);
 					continue;
 				}
 				if (type === "client") {
-					clientName = text;
+					clientName = cleanText(text, LIMITS.client);
 					continue;
 				}
-				if ((type !== "task" && type !== "note") || !text) continue;
-				const shot = get(r, "screenshot");
+				// "exported" (timestamp) rows are expected; anything else
+				// unknown, or a row with no title, is skipped.
+				if (type === "exported") continue;
+				if ((type !== "task" && type !== "note") || !text) {
+					skipped++;
+					continue;
+				}
+				if (imported.length >= LIMITS.items) {
+					skipped++;
+					continue;
+				}
 				imported.push({
 					id: newId(),
 					kind: type,
 					status: type === "task" ? statusFromText(get(r, "status")) : "todo",
 					title: text,
-					label: unguardCell(get(r, "label")),
-					details: unguardCell(get(r, "details")),
-					link: unguardCell(get(r, "link")),
-					// Only accept inline images we could have produced ourselves.
-					shot: /^data:image\/(jpeg|png|webp|gif);base64,/i.test(shot)
-						? shot
-						: "",
+					label: cleanText(unguardCell(get(r, "label")), LIMITS.label),
+					details: cleanText(unguardCell(get(r, "details")), LIMITS.details),
+					link: cleanText(unguardCell(get(r, "link")), LIMITS.link),
+					// Only raster images our own compressor could have made.
+					shot: safeShot(get(r, "screenshot")),
 				});
 			}
 			if (
@@ -627,7 +996,9 @@ export default function TaskBoard() {
 			setEditingId(null);
 			setMessage({
 				ok: true,
-				text: `Imported ${imported.length} item${imported.length === 1 ? "" : "s"}.`,
+				text: `Imported ${imported.length} item${imported.length === 1 ? "" : "s"}${
+					skipped ? ` (${skipped} row${skipped === 1 ? "" : "s"} skipped)` : ""
+				}.`,
 			});
 		} catch (e) {
 			setMessage({
@@ -695,6 +1066,7 @@ export default function TaskBoard() {
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 					aria-label="Board title"
+					maxLength={LIMITS.boardTitle}
 					className="w-full border-b border-transparent bg-transparent text-3xl font-black leading-tight hover:border-[var(--tb-line)] focus-visible:border-[var(--tb-accent)] focus-visible:outline-none md:text-5xl"
 				/>
 				<label
@@ -705,6 +1077,7 @@ export default function TaskBoard() {
 						value={client}
 						onChange={(e) => setClient(e.target.value)}
 						placeholder="Client name"
+						maxLength={LIMITS.client}
 						className="w-full border-b border-[var(--tb-line)] bg-transparent text-[var(--tb-fg)] placeholder:text-[var(--tb-muted)] focus-visible:border-[var(--tb-accent)] focus-visible:outline-none md:max-w-md print:border-transparent print:placeholder:text-transparent"
 					/>
 				</label>
@@ -718,7 +1091,11 @@ export default function TaskBoard() {
 						.join(" · ")}
 				</p>
 				<div className="flex flex-wrap items-center gap-2 print:hidden">
-					<button type="button" className={btnPrimary} onClick={exportCsv}>
+					<button
+						type="button"
+						className={btnPrimary}
+						onClick={() => gate(exportCsv)}
+					>
 						Export CSV
 					</button>
 					<button
@@ -738,8 +1115,40 @@ export default function TaskBoard() {
 							e.target.value = "";
 						}}
 					/>
-					<button type="button" className={btn} onClick={() => window.print()}>
+					<button
+						type="button"
+						className={btn}
+						onClick={() => gate(() => window.print())}
+					>
 						Save as PDF
+					</button>
+					<button
+						type="button"
+						className={`${btn} inline-flex items-center gap-2`}
+						onClick={() =>
+							sharePanel ? setSharePanel(false) : openSharePanel()
+						}
+						aria-expanded={sharePanel}
+						aria-label="Copy share link"
+					>
+						<svg
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							aria-hidden="true"
+						>
+							<circle cx="18" cy="5" r="3" />
+							<circle cx="6" cy="12" r="3" />
+							<circle cx="18" cy="19" r="3" />
+							<line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+							<line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+						</svg>
+						Share
 					</button>
 					<button type="button" className={btn} onClick={clearBoard}>
 						Clear board
@@ -753,6 +1162,147 @@ export default function TaskBoard() {
 						</span>
 					)}
 				</div>
+				{pendingShare && (
+					<form
+						onSubmit={unlock}
+						className="tb-box flex max-w-xl flex-col gap-3 rounded-md border-[var(--tb-accent)] p-4 print:hidden"
+					>
+						<h3 className="font-bold">This board is protected</h3>
+						<p className="text-[15px] text-[var(--tb-muted)]">
+							Enter the passphrase you were sent along with the link.
+						</p>
+						<div className="flex gap-2">
+							<input
+								className={field}
+								value={unlockPass}
+								onChange={(e) => setUnlockPass(e.target.value)}
+								placeholder="Passphrase"
+								aria-label="Passphrase"
+								autoFocus
+								autoCapitalize="off"
+								autoCorrect="off"
+								spellCheck={false}
+							/>
+							<button
+								type="submit"
+								className={btnPrimary}
+								disabled={unlockBusy}
+							>
+								{unlockBusy ? "Opening…" : "Open"}
+							</button>
+						</div>
+						{unlockError && (
+							<p role="alert" className="text-sm text-red-600">
+								{unlockError}
+							</p>
+						)}
+						<button
+							type="button"
+							className="self-start text-sm underline"
+							onClick={() => {
+								setPendingShare(null);
+								setUnlockPass("");
+							}}
+						>
+							Cancel
+						</button>
+					</form>
+				)}
+
+				{sharePanel && (
+					<div className="tb-box flex max-w-xl flex-col gap-3 rounded-md p-4 print:hidden">
+						<h3 className="font-bold">Share this board</h3>
+						<label className="flex items-start gap-2 text-[15px]">
+							<input
+								type="checkbox"
+								className="mt-1"
+								checked={protect}
+								onChange={(e) => setProtect(e.target.checked)}
+							/>
+							<span>
+								<strong>Protect with a passphrase</strong> (recommended)
+								<span className="block text-[var(--tb-muted)]">
+									The link is scrambled, so it&apos;s useless without the
+									passphrase.
+								</span>
+							</span>
+						</label>
+						{protect ? (
+							<>
+								<div className="flex gap-2">
+									<input
+										className={field}
+										value={passphrase}
+										onChange={(e) => setPassphrase(e.target.value)}
+										aria-label="Passphrase"
+										autoCapitalize="off"
+										autoCorrect="off"
+										spellCheck={false}
+									/>
+									<button
+										type="button"
+										className={btn}
+										onClick={() => setPassphrase(generatePassphrase())}
+									>
+										Generate
+									</button>
+								</div>
+								<p className="text-[15px] text-[var(--tb-muted)]">
+									Send the passphrase separately from the link — by phone or
+									text, not in the same email or message.
+								</p>
+							</>
+						) : (
+							<p
+								role="alert"
+								className="rounded border border-amber-400 bg-amber-50 p-3 text-[15px] text-amber-950"
+							>
+								<strong>⚠ Not protected. </strong>Anyone who gets this link can
+								read the whole board — including if it&apos;s forwarded or sits
+								in someone&apos;s email or chat history. Only share it like this
+								if there&apos;s nothing sensitive on the board.
+							</p>
+						)}
+						{shareError && (
+							<p role="alert" className="text-sm text-red-600">
+								{shareError}
+							</p>
+						)}
+						<div className="flex gap-2">
+							<button
+								type="button"
+								className={btnPrimary}
+								onClick={() => gate(() => void copyShareLink())}
+							>
+								Copy link
+							</button>
+							{protect && (
+								<button
+									type="button"
+									className={btn}
+									onClick={() =>
+										void navigator.clipboard
+											.writeText(passphrase.trim())
+											.then(() =>
+												setMessage({ ok: true, text: "Passphrase copied." }),
+											)
+											.catch(() => {})
+									}
+								>
+									Copy passphrase
+								</button>
+							)}
+							<button
+								type="button"
+								className={btn}
+								onClick={() => setSharePanel(false)}
+							>
+								Close
+							</button>
+						</div>
+					</div>
+				)}
+
 				<p className="max-w-[70ch] text-[15px] leading-relaxed text-[var(--tb-muted)] print:hidden">
 					Your board saves automatically in this browser, so a refresh
 					won&apos;t lose it — but it isn&apos;t shared, so other people and
@@ -760,6 +1310,13 @@ export default function TaskBoard() {
 					backup, and import one to load it. Choose &ldquo;Save as PDF&rdquo; in
 					the print dialog for a shareable visual. Screenshots are compressed so
 					they fit in a spreadsheet cell.
+				</p>
+				<p className="max-w-[70ch] rounded border border-amber-400 bg-amber-50 p-3 text-[15px] leading-relaxed text-amber-950 print:hidden">
+					<strong>Security: </strong>don&apos;t put passwords, logins, API keys,
+					card or bank details, or other sensitive information on a board. The
+					tool warns about common patterns, but it can&apos;t catch everything —
+					and boards travel as links, CSV files and PDFs, which can be forwarded
+					or sit in email and chat history.
 				</p>
 			</header>
 
@@ -901,6 +1458,78 @@ export default function TaskBoard() {
 					)}
 				</div>
 			</section>
+
+			{/* Sensitive-content check before share / export / PDF */}
+			{scanReport && (
+				<div
+					role="dialog"
+					aria-modal="true"
+					aria-label="Sensitive information check"
+					onKeyDown={(e) => e.key === "Escape" && setScanReport(null)}
+					className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 print:hidden"
+				>
+					<div className="tb-box max-h-full w-full max-w-lg overflow-y-auto rounded-lg p-5">
+						{(() => {
+							const hardBlock = scanReport.issues.some((i) =>
+								i.findings.some((f) => f.level === "block"),
+							);
+							return (
+								<>
+									<h3 className="text-lg font-bold">
+										{hardBlock
+											? "Can't continue — remove sensitive details first"
+											: "This board may contain sensitive information"}
+									</h3>
+									<p className="mt-2 text-[15px] text-[var(--tb-muted)]">
+										Boards travel as links, CSV files and PDFs, which can be
+										forwarded or sit in email and chat history.
+									</p>
+									<ul className="mt-3 flex flex-col gap-2 text-[15px]">
+										{scanReport.issues.map((issue, n) => (
+											<li
+												key={n}
+												className="rounded border border-[var(--tb-line)] p-2.5"
+											>
+												<span className="font-bold [overflow-wrap:anywhere]">
+													{issue.where}
+												</span>
+												<br />
+												<span className="text-[var(--tb-muted)]">
+													Looks like{" "}
+													{issue.findings.map((f) => f.label).join(", ")}
+												</span>
+											</li>
+										))}
+									</ul>
+									<div className="mt-4 flex flex-wrap gap-2">
+										<button
+											type="button"
+											autoFocus
+											className={btnPrimary}
+											onClick={() => setScanReport(null)}
+										>
+											Go back and edit
+										</button>
+										{!hardBlock && (
+											<button
+												type="button"
+												className={btn}
+												onClick={() => {
+													const run = scanReport.run;
+													setScanReport(null);
+													run();
+												}}
+											>
+												Continue anyway
+											</button>
+										)}
+									</div>
+								</>
+							);
+						})()}
+					</div>
+				</div>
+			)}
 
 			{/* Screenshot lightbox */}
 			{preview && (
