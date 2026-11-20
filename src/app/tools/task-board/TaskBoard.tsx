@@ -368,6 +368,10 @@ function ItemForm({
 	const [details, setDetails] = useState(initial?.details ?? "");
 	const [link, setLink] = useState(initial?.link ?? "");
 	const [shot, setShot] = useState(initial?.shot ?? "");
+	// A newly attached screenshot has to be confirmed as free of passwords and
+	// personal/financial details — the tool can't read text inside images.
+	const [shotChecked, setShotChecked] = useState(false);
+	const needsShotCheck = shot !== "" && shot !== (initial?.shot ?? "");
 	const [error, setError] = useState("");
 	const [busy, setBusy] = useState(false);
 	// Live check for passwords, keys, card/bank details as the person types.
@@ -383,6 +387,7 @@ function ItemForm({
 		setBusy(true);
 		try {
 			setShot(await fileToShot(file));
+			setShotChecked(false);
 		} catch (e) {
 			setError(e instanceof Error ? e.message : "Could not add that image.");
 		} finally {
@@ -392,7 +397,7 @@ function ItemForm({
 
 	function submit(e: FormEvent) {
 		e.preventDefault();
-		if (!title.trim() || blocked) return;
+		if (!title.trim() || blocked || (needsShotCheck && !shotChecked)) return;
 		onSave({
 			label: label.trim(),
 			title: title.trim(),
@@ -478,6 +483,21 @@ function ItemForm({
 						Remove screenshot
 					</button>
 				)}
+				{needsShotCheck && (
+					<label className="flex items-start gap-2 rounded border border-amber-400 bg-amber-50 p-2.5 text-[15px] text-amber-950">
+						<input
+							type="checkbox"
+							className="mt-1"
+							checked={shotChecked}
+							onChange={(e) => setShotChecked(e.target.checked)}
+						/>
+						<span>
+							I&apos;ve checked this screenshot doesn&apos;t show passwords,
+							logins, or personal or financial details. (The tool can&apos;t
+							scan images, so this is down to you.)
+						</span>
+					</label>
+				)}
 				{busy && <span className="text-xs">Processing image…</span>}
 				{error && (
 					<span role="alert" className="text-xs text-red-600">
@@ -507,7 +527,11 @@ function ItemForm({
 				</div>
 			)}
 			<div className="flex gap-2">
-				<button type="submit" className={btnPrimary} disabled={busy || blocked}>
+				<button
+					type="submit"
+					className={btnPrimary}
+					disabled={busy || blocked || (needsShotCheck && !shotChecked)}
+				>
 					{initial ? "Save" : "Add"}
 				</button>
 				<button type="button" className={btn} onClick={onCancel}>
@@ -651,6 +675,8 @@ export default function TaskBoard() {
 	const [protect, setProtect] = useState(true);
 	const [passphrase, setPassphrase] = useState("");
 	const [shareError, setShareError] = useState("");
+	// Whether CSV exports and the PDF include screenshots (share links never do).
+	const [includeShots, setIncludeShots] = useState(true);
 
 	// Before the board leaves the browser (share, CSV, PDF) it's scanned for
 	// sensitive-looking content. Clean -> carry on. Flagged -> show a report.
@@ -898,7 +924,7 @@ export default function TaskBoard() {
 				guardCell(i.title),
 				guardCell(i.details),
 				guardCell(i.link),
-				i.shot,
+				includeShots ? i.shot : "",
 			]),
 		];
 		// BOM so Excel reads the file as UTF-8.
@@ -917,7 +943,14 @@ export default function TaskBoard() {
 		a.click();
 		a.remove();
 		setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-		setMessage({ ok: true, text: "CSV exported." });
+		setMessage({
+			ok: true,
+			text: `CSV exported${
+				!includeShots && items.some((i) => i.shot)
+					? " (without screenshots)"
+					: ""
+			}.`,
+		});
 	}
 
 	async function importCsv(file: File | undefined) {
@@ -1056,7 +1089,10 @@ export default function TaskBoard() {
 	}
 
 	return (
-		<main className="tb-root mx-auto flex min-h-dvh w-full max-w-[1400px] flex-col gap-8 px-4 pb-16 pt-32 md:px-8">
+		<main
+			data-no-shots={!includeShots || undefined}
+			className="tb-root mx-auto flex min-h-dvh w-full max-w-[1400px] flex-col gap-8 px-4 pb-16 pt-32 md:px-8"
+		>
 			{/* Header + toolbar */}
 			<header className="tb-head flex flex-col gap-4">
 				<p className="hidden text-sm font-bold uppercase tracking-widest text-[var(--tb-muted)] print:block">
@@ -1153,6 +1189,16 @@ export default function TaskBoard() {
 					<button type="button" className={btn} onClick={clearBoard}>
 						Clear board
 					</button>
+					{items.some((i) => i.shot) && (
+						<label className="flex items-center gap-2 text-sm text-[var(--tb-muted)]">
+							<input
+								type="checkbox"
+								checked={includeShots}
+								onChange={(e) => setIncludeShots(e.target.checked)}
+							/>
+							Include screenshots in CSV &amp; PDF
+						</label>
+					)}
 					{message && (
 						<span
 							role="status"

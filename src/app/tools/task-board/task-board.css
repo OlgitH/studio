@@ -169,6 +169,11 @@ body:has(.tb-root) {
 		border-radius: 1mm !important;
 	}
 
+	/* "Include screenshots" unticked: leave them out of the PDF. */
+	.tb-root[data-no-shots] .tb-card > button {
+		display: none !important;
+	}
+
 	.tb-card img {
 		max-height: 30mm;
 		width: 100%;
