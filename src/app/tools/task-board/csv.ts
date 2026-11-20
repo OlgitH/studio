@@ -73,12 +73,21 @@ export function parseCsv(input: string): string[][] {
 	return rows.filter((r) => r.some((c) => c.trim() !== ""));
 }
 
-// Spreadsheet apps execute cells that start with = + @ as formulas. Prefix
-// them with an apostrophe on export and strip it again on import.
+// Spreadsheet apps (Excel, Sheets, LibreOffice) run a cell as a formula when it
+// starts with = + - or @ (a leading tab/CR, or spaces before one of those,
+// can also fool them). A booby-trapped CSV can use that to run commands or
+// pull data out when someone opens it — this is the "CSV injection" attack, and
+// it works on anyone who opens the file, whatever site made it. So on export,
+// any such cell is prefixed with an apostrophe, which makes spreadsheets treat
+// it as plain text; on import the apostrophe is stripped again.
+const FORMULA_START = /^(?:\s*[=+\-@]|[\t\r])/;
+
 export function guardCell(value: string): string {
-	return /^[=+@\t\r]/.test(value) ? `'${value}` : value;
+	return FORMULA_START.test(value) ? `'${value}` : value;
 }
 
 export function unguardCell(value: string): string {
-	return /^'[=+@\t\r]/.test(value) ? value.slice(1) : value;
+	return value.startsWith("'") && FORMULA_START.test(value.slice(1))
+		? value.slice(1)
+		: value;
 }

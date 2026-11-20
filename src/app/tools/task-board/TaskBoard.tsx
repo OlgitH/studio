@@ -17,7 +17,17 @@ import {
 	encryptBytes,
 	generatePassphrase,
 } from "./shareCrypto";
-import { LIMITS, cleanText, imageFileProblem, safeShot } from "./validate";
+import ImportReviewDialog from "./ImportReviewDialog";
+import LinkPromptDialog from "./LinkPromptDialog";
+import { buildReview, type ImportReview } from "./importReview";
+import { btn, btnPrimary, field } from "./ui";
+import {
+	LIMITS,
+	cleanText,
+	imageFileProblem,
+	safeHref,
+	safeShot,
+} from "./validate";
 import { scanBoard, scanFields, type BoardIssue } from "./sensitive";
 import "./task-board.css";
 
@@ -33,6 +43,10 @@ type Item = {
 	details: string;
 	link: string;
 	shot: string; // JPEG data URL, or ""
+	// Came from outside (an imported file or a share link) rather than being
+	// typed here. Links on these cards ask before opening. Cleared if the
+	// person types a new link themselves.
+	ext?: boolean;
 };
 
 const COLUMNS: {
@@ -102,6 +116,7 @@ function cleanItems(raw: unknown[]): Item[] {
 			details: cleanText(i.details, LIMITS.details),
 			link: cleanText(i.link, LIMITS.link),
 			shot: safeShot(i.shot),
+			ext: i.ext === true,
 		}));
 }
 
@@ -267,24 +282,6 @@ const newId = () =>
 		? crypto.randomUUID()
 		: `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-// Only ever render http(s)/mailto links — imported CSVs are untrusted input
-// and a `javascript:` URL in the link column must not become a clickable href.
-function safeHref(raw: string): string | null {
-	const value = raw.trim();
-	if (!value) return null;
-	const withScheme = /^[a-z][a-z0-9+.-]*:/i.test(value)
-		? value
-		: `https://${value}`;
-	try {
-		const url = new URL(withScheme);
-		return ["http:", "https:", "mailto:"].includes(url.protocol)
-			? url.href
-			: null;
-	} catch {
-		return null;
-	}
-}
-
 function statusFromText(text: string): Status {
 	const key = text.toLowerCase().replace(/[^a-z]/g, "");
 	if (key === "done" || key === "complete" || key === "completed")
@@ -338,13 +335,6 @@ async function fileToShot(file: File): Promise<string> {
 		URL.revokeObjectURL(url);
 	}
 }
-
-const btn =
-	"rounded border border-[var(--tb-line)] px-3 py-1.5 text-sm transition-colors hover:border-[var(--tb-accent)] hover:text-[var(--tb-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--tb-accent)]";
-const btnPrimary =
-	"rounded bg-[var(--tb-accent)] px-3 py-1.5 text-sm font-bold text-[var(--tb-accent-fg)] transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--tb-accent)]";
-const field =
-	"w-full rounded border border-[var(--tb-line)] bg-transparent px-2.5 py-1.5 text-sm text-[var(--tb-fg)] placeholder:text-[var(--tb-muted)] focus-visible:outline-2 focus-visible:outline-[var(--tb-accent)]";
 
 // ─── Add / edit form ────────────────────────────────────────────────────────
 
@@ -548,6 +538,7 @@ function Card({
 	item,
 	onEdit,
 	onDelete,
+	onOpenLink,
 	onPreview,
 	onDragStart,
 	onDropBefore,
@@ -555,6 +546,8 @@ function Card({
 	item: Item;
 	onEdit: () => void;
 	onDelete: () => void;
+	// Cards that came from outside ask before opening their link.
+	onOpenLink: (raw: string) => void;
 	onPreview: (src: string) => void;
 	onDragStart?: () => void;
 	onDropBefore?: () => void;
@@ -613,6 +606,11 @@ function Card({
 							href={href}
 							target="_blank"
 							rel="noopener noreferrer"
+							onClick={(e) => {
+								if (!item.ext) return;
+								e.preventDefault();
+								onOpenLink(item.link);
+							}}
 							className="underline decoration-[var(--tb-accent)] underline-offset-2"
 						>
 							{item.link}
@@ -675,6 +673,18 @@ export default function TaskBoard() {
 	const [protect, setProtect] = useState(true);
 	const [passphrase, setPassphrase] = useState("");
 	const [shareError, setShareError] = useState("");
+
+	// The link on an outside-sourced card that someone has clicked (awaiting OK).
+	const [linkPrompt, setLinkPrompt] = useState<string | null>(null);
+
+	// A CSV that has been read and checked but not yet approved. Nothing on the
+	// board changes until the person reviews it and confirms.
+	const [pendingImport, setPendingImport] = useState<{
+		review: ImportReview;
+		items: Item[];
+		title: string;
+		client: string;
+	} | null>(null);
 	// Whether CSV exports and the PDF include screenshots (share links never do).
 	const [includeShots, setIncludeShots] = useState(true);
 
@@ -704,24 +714,27 @@ export default function TaskBoard() {
 		});
 	}
 
-	// Decode a share payload and (after confirming, if a board is already
-	// saved) load it. Throws NeedsPassphraseError for protected links.
+	// Decode a share payload and hand it to the review step. Nothing is shown
+	// on the board until the person has seen what's in it and approved it —
+	// a link is the easiest thing for someone else to put in front of you.
+	// Throws NeedsPassphraseError for protected links.
 	const loadShared = useCallback(async (payload: string, pass?: string) => {
 		const shared = await decodeShare(payload, pass);
-		const current = readSaved();
-		if (
-			current &&
-			current.items.length > 0 &&
-			!window.confirm(
-				"This link contains a shared board. Load it? It will replace the board saved in this browser.",
-			)
-		) {
-			return;
-		}
-		setTitle(shared.title);
-		setClient(shared.client);
-		setItems(shared.items);
-		setMessage({ ok: true, text: "Loaded the shared board." });
+		const items = shared.items.map((i) => ({ ...i, ext: true }));
+		setPendingImport({
+			items,
+			title: shared.title,
+			client: shared.client,
+			review: buildReview({
+				source: "link",
+				protectedLink: payload.startsWith("e."),
+				title: shared.title,
+				client: shared.client,
+				items,
+				skipped: 0,
+				currentItems: readSaved()?.items.length ?? 0,
+			}),
+		});
 	}, []);
 
 	async function unlock(e: FormEvent) {
@@ -755,7 +768,8 @@ export default function TaskBoard() {
 			const { hash, pathname } = window.location;
 			if (!hash.startsWith(SHARE_PREFIX)) return;
 			const payload = hash.slice(SHARE_PREFIX.length);
-			// Drop the #… and the readable ?for=… too, leaving just the page URL.
+			// Drop the #… (and any ?for=… from links made by older versions),
+			// leaving just the page URL.
 			window.history.replaceState(null, "", pathname);
 			loadShared(payload).catch((e) => {
 				if (e instanceof NeedsPassphraseError) {
@@ -794,14 +808,10 @@ export default function TaskBoard() {
 
 	async function buildShareUrl(pass?: string) {
 		const payload = await encodeShare({ title, client, items }, pass);
-		// Readable prefix (who it's for) ahead of the long code. Only that
-		// name reaches the server; the board stays after the #.
-		const slug = (client.trim() || title)
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, "-")
-			.replace(/^-+|-+$/g, "")
-			.slice(0, 40);
-		return `${window.location.origin}${window.location.pathname}${slug ? `?for=${slug}` : ""}${SHARE_PREFIX}${payload}`;
+		// Nothing about the board goes before the "#": the server (and its
+		// logs) only ever see the plain page address. In particular no client
+		// or board name is put in the URL.
+		return `${window.location.origin}${window.location.pathname}${SHARE_PREFIX}${payload}`;
 	}
 
 	function openSharePanel() {
@@ -992,6 +1002,7 @@ export default function TaskBoard() {
 
 			let boardTitle = "";
 			let clientName = "";
+			let exportedAt = "";
 			const imported: Item[] = [];
 			for (const r of rows.slice(1)) {
 				// No "type" column (or a blank cell) means a plain task.
@@ -1007,7 +1018,10 @@ export default function TaskBoard() {
 				}
 				// "exported" (timestamp) rows are expected; anything else
 				// unknown, or a row with no title, is skipped.
-				if (type === "exported") continue;
+				if (type === "exported") {
+					exportedAt = text;
+					continue;
+				}
 				if ((type !== "task" && type !== "note") || !text) {
 					skipped++;
 					continue;
@@ -1026,26 +1040,28 @@ export default function TaskBoard() {
 					link: cleanText(unguardCell(get(r, "link")), LIMITS.link),
 					// Only raster images our own compressor could have made.
 					shot: safeShot(get(r, "screenshot")),
+					ext: true,
 				});
 			}
-			if (
-				items.length > 0 &&
-				!window.confirm(
-					"Importing replaces everything currently on the board. Continue?",
-				)
-			) {
-				return;
-			}
-			setItems(imported);
-			if (boardTitle) setTitle(boardTitle);
-			setClient(clientName);
-			setAdding(null);
-			setEditingId(null);
-			setMessage({
-				ok: true,
-				text: `Imported ${imported.length} item${imported.length === 1 ? "" : "s"}${
-					skipped ? ` (${skipped} row${skipped === 1 ? "" : "s"} skipped)` : ""
-				}.`,
+			// Don't touch the board yet: hand the file's contents to the review
+			// step, which shows what's in it and waits for approval.
+			setPendingImport({
+				items: imported,
+				title: boardTitle,
+				client: clientName,
+				review: buildReview({
+					source: "file",
+					fileName: file.name.slice(0, 120),
+					fileSize: file.size,
+					fileModified: file.lastModified,
+					header,
+					exportedAt,
+					title: boardTitle || DEFAULT_TITLE,
+					client: clientName,
+					items: imported,
+					skipped,
+					currentItems: items.length,
+				}),
 			});
 		} catch (e) {
 			setMessage({
@@ -1053,6 +1069,31 @@ export default function TaskBoard() {
 				text: e instanceof Error ? e.message : "Could not read that CSV.",
 			});
 		}
+	}
+
+	// The person has reviewed the file and approved it: now apply it.
+	function approveImport(includeScreenshots: boolean) {
+		if (!pendingImport) return;
+		const next = includeScreenshots
+			? pendingImport.items
+			: pendingImport.items.map((i) => ({ ...i, shot: "" }));
+		setItems(next);
+		if (pendingImport.title) setTitle(pendingImport.title);
+		setClient(pendingImport.client);
+		setAdding(null);
+		setEditingId(null);
+		const { skipped } = pendingImport.review;
+		setMessage({
+			ok: true,
+			text: `${pendingImport.review.source === "link" ? "Opened the shared board:" : "Imported"} ${next.length} item${next.length === 1 ? "" : "s"}${
+				skipped ? ` (${skipped} row${skipped === 1 ? "" : "s"} skipped)` : ""
+			}${
+				!includeScreenshots && pendingImport.review.counts.shots
+					? ", without screenshots"
+					: ""
+			}.`,
+		});
+		setPendingImport(null);
 	}
 
 	function renderCard(item: Item, draggable: boolean) {
@@ -1065,7 +1106,11 @@ export default function TaskBoard() {
 						kind={item.kind}
 						onCancel={() => setEditingId(null)}
 						onSave={(v) => {
-							updateItem(item.id, v);
+							// Typing a new link yourself takes ownership of it.
+							updateItem(
+								item.id,
+								v.link === item.link ? v : { ...v, ext: false },
+							);
 							setEditingId(null);
 						}}
 					/>
@@ -1081,6 +1126,7 @@ export default function TaskBoard() {
 					setEditingId(item.id);
 				}}
 				onDelete={() => removeItem(item.id)}
+				onOpenLink={setLinkPrompt}
 				onPreview={setPreview}
 				onDragStart={
 					draggable
@@ -1377,6 +1423,11 @@ export default function TaskBoard() {
 					tool warns about common patterns, but it can&apos;t catch everything —
 					and boards travel as links, CSV files and PDFs, which can be forwarded
 					or sit in email and chat history.
+					<br />
+					<strong>Personal data: </strong>keep other people&apos;s personal
+					details off boards where you can, and never include children&apos;s
+					names, ages or photos. Boards are saved on this device until you clear
+					them.
 				</p>
 			</header>
 
@@ -1518,6 +1569,22 @@ export default function TaskBoard() {
 					)}
 				</div>
 			</section>
+
+			{linkPrompt && (
+				<LinkPromptDialog
+					raw={linkPrompt}
+					onClose={() => setLinkPrompt(null)}
+				/>
+			)}
+
+			{/* Review + approval before a CSV changes the board */}
+			{pendingImport && (
+				<ImportReviewDialog
+					review={pendingImport.review}
+					onCancel={() => setPendingImport(null)}
+					onApprove={approveImport}
+				/>
+			)}
 
 			{/* Sensitive-content check before share / export / PDF */}
 			{scanReport && (
