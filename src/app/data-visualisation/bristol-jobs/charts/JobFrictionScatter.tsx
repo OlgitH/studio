@@ -246,7 +246,7 @@ export default function JobFrictionScatter({ data }: JobFrictionScatterProps) {
           .duration(120)
           .attr('opacity', 1);
       })
-      .on('mousemove', function (event) {
+      .on('mousemove', function () {
         const dot = d3.select(this);
         const cx = Number(dot.attr('cx'));
         const cy = Number(dot.attr('cy'));

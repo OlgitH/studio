@@ -26,6 +26,26 @@ export function getStoredConsent(): CookieConsent | null {
 	}
 }
 
+// --- Reading the choice as an external store (for useSyncExternalStore) ---
+// A short string rather than an object so React can compare snapshots cheaply.
+export type ConsentState = "unset" | "analytics" | "necessary";
+
+export function subscribeConsent(onChange: () => void) {
+	window.addEventListener(COOKIE_CONSENT_EVENT, onChange);
+	return () => window.removeEventListener(COOKIE_CONSENT_EVENT, onChange);
+}
+
+export function getConsentState(): ConsentState {
+	const consent = getStoredConsent();
+	if (consent === null) return "unset";
+	return consent.analytics ? "analytics" : "necessary";
+}
+
+// What the server (and the first client render) assume: a choice has been
+// made and analytics is off. This keeps the banner and the analytics script
+// out of the server HTML; the real value takes over right after hydration.
+export const getServerConsentState = (): ConsentState => "necessary";
+
 export function storeConsent(analytics: boolean) {
 	if (typeof window === "undefined") return;
 	const consent: CookieConsent = { necessary: true, analytics };

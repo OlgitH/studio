@@ -2,8 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import Script from "next/script";
-import { useEffect, useState } from "react";
-import { COOKIE_CONSENT_EVENT, getStoredConsent } from "../lib/cookieConsent";
+import { useEffect, useSyncExternalStore } from "react";
+import {
+	getConsentState,
+	getServerConsentState,
+	subscribeConsent,
+} from "../lib/cookieConsent";
 
 // PECR requires analytics cookies to be opt-in, so Google Analytics is only
 // ever injected once the visitor has actively consented — never on load,
@@ -19,25 +23,17 @@ const NO_ANALYTICS_PREFIX = "/tools";
 export default function Analytics({ gaId }: { gaId: string }) {
 	const pathname = usePathname();
 	const excluded = pathname.startsWith(NO_ANALYTICS_PREFIX);
-	const [analyticsAllowed, setAnalyticsAllowed] = useState(false);
+	const analyticsAllowed =
+		useSyncExternalStore(
+			subscribeConsent,
+			getConsentState,
+			getServerConsentState,
+		) === "analytics";
 
 	useEffect(() => {
 		(window as unknown as Record<string, unknown>)[`ga-disable-${gaId}`] =
 			excluded;
 	}, [excluded, gaId]);
-
-	useEffect(() => {
-		setAnalyticsAllowed(getStoredConsent()?.analytics ?? false);
-
-		const onChange = (event: Event) => {
-			const consent = (event as CustomEvent<{ analytics: boolean } | null>)
-				.detail;
-			setAnalyticsAllowed(consent?.analytics ?? false);
-		};
-
-		window.addEventListener(COOKIE_CONSENT_EVENT, onChange);
-		return () => window.removeEventListener(COOKIE_CONSENT_EVENT, onChange);
-	}, []);
 
 	if (!analyticsAllowed || excluded) return null;
 

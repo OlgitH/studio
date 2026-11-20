@@ -1,28 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import {
 	COOKIE_CONSENT_EVENT,
-	getStoredConsent,
+	getConsentState,
+	getServerConsentState,
 	storeConsent,
+	subscribeConsent,
 } from "../lib/cookieConsent";
 
 export default function CookieConsent() {
-	const [visible, setVisible] = useState(false);
+	// The banner shows whenever no choice has been stored.
+	const visible =
+		useSyncExternalStore(
+			subscribeConsent,
+			getConsentState,
+			getServerConsentState,
+		) === "unset";
 	const [expanded, setExpanded] = useState(false);
 	// Off by default — an unchecked box left unchecked must never count as
 	// consent, so "Save preferences" only turns analytics on if the visitor
 	// actively ticks it themselves.
 	const [analyticsChecked, setAnalyticsChecked] = useState(false);
 
+	// When the choice is cleared ("Cookie settings"), reopen the banner fresh.
 	useEffect(() => {
-		setVisible(getStoredConsent() === null);
-
 		const onChange = (event: Event) => {
 			const consent = (event as CustomEvent<{ analytics: boolean } | null>)
 				.detail;
-			setVisible(consent === null);
 			if (consent === null) {
 				setExpanded(false);
 				setAnalyticsChecked(false);

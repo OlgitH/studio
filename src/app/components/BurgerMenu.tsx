@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MenuShape from "@/../public/SVG/menu-overlay.svg";
 import MobileMenuArtboard from "@/../public/2x/white-mobile-overlay@2x.png";
 
@@ -44,11 +44,19 @@ export default function BurgerMenu() {
 	const [open, setOpen] = useState(false);
 	const [maintenanceOpen, setMaintenanceOpen] = useState(false);
 
+	// Closing the menu also collapses the "Website maintenance" submenu, so it
+	// always reopens collapsed. Done where the menu closes (not in an effect
+	// reacting to `open`) to avoid an extra render pass.
+	const closeMenu = useCallback(() => {
+		setOpen(false);
+		setMaintenanceOpen(false);
+	}, []);
+
 	useEffect(() => {
 		if (!open) return;
 
 		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === "Escape") setOpen(false);
+			if (event.key === "Escape") closeMenu();
 		};
 
 		document.addEventListener("keydown", onKeyDown);
@@ -59,13 +67,7 @@ export default function BurgerMenu() {
 			document.removeEventListener("keydown", onKeyDown);
 			document.body.style.overflow = previousOverflow;
 		};
-	}, [open]);
-
-	useEffect(() => {
-		if (!open) setMaintenanceOpen(false);
-	}, [open]);
-
-	const closeMenu = () => setOpen(false);
+	}, [open, closeMenu]);
 
 	return (
 		// Bled off the corner: the circle is bigger than the viewport slot it
@@ -78,7 +80,7 @@ export default function BurgerMenu() {
 		<div className="fixed -top-12 -right-12 z-[60] xl:-top-16 xl:-right-16">
 			<button
 				type="button"
-				onClick={() => setOpen((value) => !value)}
+				onClick={() => (open ? closeMenu() : setOpen(true))}
 				aria-expanded={open}
 				aria-controls="site-menu"
 				aria-label={open ? "Close menu" : "Open menu"}

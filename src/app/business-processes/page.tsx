@@ -84,8 +84,8 @@ export default function BusinessProcessesPage() {
 							automating or handing some process over to AI we analyse the
 							potential consequences, both on the product and the effect it is
 							going to have on humans. We should not blindly use AI. That said,
-							it is too powerful a tool to not use in some way - let's just not
-							use it if it's bad for us. The end product should resonate with
+							it is too powerful a tool to not use in some way - let&apos;s just not
+							use it if it&apos;s bad for us. The end product should resonate with
 							humans so a human needs to be involved in the process.
 						</p>
 					</section>

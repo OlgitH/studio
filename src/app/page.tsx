@@ -28,9 +28,12 @@ export default function Home() {
 				<FadeInOnView className="relative z-10 mx-auto flex flex-1 flex-col w-full p-[20px] xl:w-[1080px]">
 					<div className="flex-1 grid grid-cols-[max-content_max-content] gap-x-10 gap-y-8 grid-rows-[auto_1fr_auto] xl:gap-x-[32px] xl:gap-y-0 xl:grid-cols-10 xl:grid-rows-[auto_1fr_auto]">
 						<div className="col-start-1 col-span-4 row-start-1 self-start xl:col-start-1 xl:row-start- xl:self-start">
-							<img
+							<Image
 								src="/bird-icon.svg"
 								alt="Greencrown mark"
+								width={160}
+								height={94}
+								priority
 								className="brand-icon h-auto w-40 xl:w-86"
 							/>
 						</div>

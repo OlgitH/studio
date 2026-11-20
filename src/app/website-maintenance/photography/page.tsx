@@ -1,28 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import BackHomeLink from "../../components/BackHomeLink";
-import BrandFooter from "../../components/BrandFooter";
 import PageBgImage from "../../components/PageBgImage";
 import FadeInOnView from "../../components/FadeInOnView";
 
 export default function Photography() {
-  const [showFooter, setShowFooter] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      setShowFooter(window.scrollY > 200);
-    };
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
   return (
     <>
       <BackHomeLink />
