@@ -153,10 +153,68 @@ export function scanText(text: string): Finding[] {
 	}));
 }
 
-// Merge findings from several fields, keeping each kind once.
+// --- Password-like strings, judged across a whole card ---
+// A password is often split from its label: the title says "Password for DB"
+// and the value sits in the details. So these checks look at all of a card's
+// fields together, and at individual "words" (whitespace-separated tokens).
+
+// Words that say a credential is being talked about.
+const CREDENTIAL_WORD =
+	/\b(?:pass(?:word|wd|code|phrase)?|pwd|credentials?|secret|pin|login|token|api[ _-]?key)\b/i;
+
+// Symbols that are common in passwords but rare in ordinary words, URLs and
+// file names (so "-", "_", ".", ":" and "," don't count).
+const PASSWORD_SYMBOLS = /[!@#$%^&*()+=£€?<>~|\\{}[\]]/;
+
+function tokensOf(text: string): string[] {
+	return text
+		.split(/\s+/)
+		.map((t) => t.replace(/^["'“‘(\[]+/, "").replace(/[.,;:)\]"'”’]+$/, ""))
+		.filter(Boolean);
+}
+
+// Does this single token look like a password?
+//  strict:  8+ characters with a symbol and at least 3 kinds of character
+//           (lower / upper / digit / symbol) — e.g. 3343jij9ji230po!@3£@
+//  loose:   (only used when the card talks about a password) 8+ characters
+//           mixing letters and digits — e.g. hunter22abc
+function looksLikePassword(token: string, loose: boolean): boolean {
+	if (token.length < 8 || token.length > 80) return false;
+	if (/:\/\/|^www\.|\//.test(token)) return false; // web addresses, paths
+	if (/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(token)) return false; // emails
+	if (/^[#@]\w+$/.test(token)) return false; // #hashtags and @handles
+	if (!/[a-z]/i.test(token)) return false; // phone numbers, ISBNs, prices
+	const kinds = [/[a-z]/, /[A-Z]/, /\d/, PASSWORD_SYMBOLS].filter((re) =>
+		re.test(token),
+	).length;
+	const strict = PASSWORD_SYMBOLS.test(token) && kinds >= 3;
+	return loose ? strict || (/\d/.test(token) && kinds >= 2) : strict;
+}
+
+// Merge findings from several fields (one card), keeping each kind once.
 export function scanFields(fields: string[]): Finding[] {
 	const found = new Map<string, Finding>();
 	for (const f of fields) for (const x of scanText(f)) found.set(x.id, x);
+
+	const joined = fields.join("\n");
+	const tokens = tokensOf(joined);
+	const talksAboutPasswords = CREDENTIAL_WORD.test(joined);
+	const strictHit = tokens.some((t) => looksLikePassword(t, false));
+	const looseHit =
+		talksAboutPasswords && tokens.some((t) => looksLikePassword(t, true));
+	if (strictHit || looseHit) {
+		// A password-like string on a card that mentions a password/login is
+		// near-certain, so it blocks; on its own it's a warning.
+		const level: Finding["level"] =
+			strictHit && talksAboutPasswords ? "block" : "warn";
+		const existing = found.get("password");
+		found.set("password", {
+			id: "password",
+			level:
+				existing?.level === "block" || level === "block" ? "block" : "warn",
+			label: "a password or login",
+		});
+	}
 	return [...found.values()];
 }
 
