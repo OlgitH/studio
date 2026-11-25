@@ -73,6 +73,14 @@ export default function Home() {
 								<li>
 									<AnchorNavLink targetId="training">training</AnchorNavLink>
 								</li>
+								<li>
+									<AnchorNavLink
+										targetId="case-studies"
+										className="text-[var(--color-highlight)]"
+									>
+										case studies
+									</AnchorNavLink>
+								</li>
 							</ul>
 						</nav>
 						<div className="col-span-2 max-w-[400px] row-start-3 self-end text-base leading-tight xl:col-start-5 xl:row-start-3 xl:col-span-6 xl:self-start">

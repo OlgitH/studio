@@ -25,15 +25,17 @@ export default function ContentSection({
 	variant,
 	width = "narrow",
 	className = "",
+	id,
 	children,
 }: {
+	id?: string;
 	variant: ContentSectionVariant;
 	width?: ContentSectionWidth;
 	className?: string;
 	children: ReactNode;
 }) {
 	return (
-		<section className={`w-full py-10 ${VARIANT_CLASSES[variant]} ${className}`}>
+		<section id={id} className={`w-full py-10 ${VARIANT_CLASSES[variant]} ${className}`}>
 			<div className={WIDTH_CLASSES[width]}>{children}</div>
 		</section>
 	);

@@ -8,6 +8,7 @@ export default function HomeCaseStudies() {
 
 	return (
 		<ContentSection
+			id="case-studies"
 			variant="mauve"
 			width="wide"
 			className="py-20 md:py-28"
