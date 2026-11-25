@@ -8,6 +8,7 @@ import FloatingContactButtons from "./components/FloatingContactButtons";
 import StickyHeaderNav from "./components/StickyHeaderNav";
 import AnchorNavLink from "./components/AnchorNavLink";
 import HomeCaseStudies from "./components/HomeCaseStudies";
+import SocialLinks from "./components/SocialLinks";
 export default function Home() {
 	return (
 		<>
@@ -106,6 +107,11 @@ export default function Home() {
 							</p>
 						</section>
 					</div>
+					<SocialLinks
+						size="md"
+						tone="lime"
+						className="hero-socials absolute right-[20px] bottom-[20px]"
+					/>
 				</FadeInOnView>
 			</main>
 			<ServiceSplash

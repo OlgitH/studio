@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CookieSettingsButton from "./CookieSettingsButton";
+import SocialLinks from "./SocialLinks";
 
 export default function Footer() {
 	const year = new Date().getFullYear();
@@ -49,6 +50,7 @@ export default function Footer() {
 						<br />
 						Bath BA1 2NH
 					</address>
+					<SocialLinks size="md" className="mt-2" />
 				</div>
 			</div>
 

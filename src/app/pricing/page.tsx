@@ -9,26 +9,11 @@ import PageContainer from "../components/PageContainer";
 export const metadata: Metadata = {
 	title: "Pricing | Greencrown Studio",
 	description:
-		"How much does a website cost? Fixed, time-based pricing for builds from £280/day, monthly care plans from £15 (WordPress) or £60 (Payload), and one-to-one training.",
+		"How much does a website cost? Fixed, time-based pricing for website builds, monthly care and growth plans, and one-to-one training, all tailored to your business. Contact us for a quote.",
 };
-
-const buildPricing = [
-	{ days: "1 day", cost: "£280", notes: "Standard rate (£280/day)" },
-	{ days: "2 days", cost: "£560", notes: "Standard rate (£280/day)" },
-	{ days: "3 days", cost: "£825", notes: "£275/day" },
-	{ days: "4 days", cost: "£1,080", notes: "£270/day" },
-	{ days: "5 days", cost: "£1,325", notes: "£265/day" },
-	{ days: "6 days", cost: "£1,560", notes: "£260/day" },
-	{ days: "8 days", cost: "£2,000", notes: "£250/day" },
-	{ days: "9 days", cost: "£2,205", notes: "£245/day" },
-	{ days: "10 days", cost: "£2,400", notes: "£240/day" },
-	{ days: "12 days", cost: "£2,760", notes: "£230/day" },
-	{ days: "15 days", cost: "£3,300", notes: "£220/day (max discount)" },
-];
 
 type Plan = {
 	name: string;
-	price: string;
 	hours: string;
 	included: string;
 	recommended?: boolean;
@@ -37,28 +22,24 @@ type Plan = {
 const wordpressPlans: Plan[] = [
 	{
 		name: "Basic",
-		price: "£15",
 		hours: "—",
 		included:
-			"Hosting, one backup a month and automatic WordPress core security updates. Plugin updates, fixes, changes and recovering a hacked or broken site are not included (£30/hour).",
+			"Hosting, one backup a month and automatic WordPress core security updates. Plugin updates, fixes, changes and recovering a hacked or broken site are charged separately at our hourly rate.",
 	},
 	{
 		name: "Care",
-		price: "£60",
 		hours: "1",
 		included:
-			"Everything in Basic, plus weekly backups, plugin updates, and restoring your site from backup if it breaks or is hacked. Extra clean-up uses your monthly hour first, then £30/hour.",
+			"Everything in Basic, plus weekly backups, plugin updates, and restoring your site from backup if it breaks or is hacked. Extra clean-up uses your monthly hour first, then our hourly rate.",
 	},
 	{
 		name: "Plus",
-		price: "£150",
 		hours: "4",
 		included:
 			"Everything in Care, with 4 hours a month for changes, a blog post or a small feature.",
 	},
 	{
 		name: "Growth",
-		price: "£240",
 		hours: "7",
 		included:
 			"Everything in Plus, with 7 hours a month for design changes, new features and SEO content.",
@@ -66,14 +47,12 @@ const wordpressPlans: Plan[] = [
 	},
 	{
 		name: "Pro",
-		price: "£450",
 		hours: "16",
 		included:
 			"Everything in Growth, plus priority turnaround (within 2 working days) and a monthly check-in call.",
 	},
 	{
 		name: "Partner",
-		price: "£800",
 		hours: "32",
 		included:
 			"Everything in Pro, plus same-week delivery of larger features and a quarterly strategy and SEO review.",
@@ -83,21 +62,18 @@ const wordpressPlans: Plan[] = [
 const payloadPlans: Plan[] = [
 	{
 		name: "Care",
-		price: "£60",
 		hours: "1",
 		included:
 			"Vercel hosting and database, database backups, Payload and security updates (tested before release) and 1 hour of changes.",
 	},
 	{
 		name: "Plus",
-		price: "£150",
 		hours: "4",
 		included:
 			"Everything in Care, with 4 hours a month for changes, a blog post or a small feature.",
 	},
 	{
 		name: "Growth",
-		price: "£240",
 		hours: "7",
 		included:
 			"Everything in Plus, with 7 hours a month for design changes, new features and SEO content.",
@@ -105,36 +81,28 @@ const payloadPlans: Plan[] = [
 	},
 	{
 		name: "Pro",
-		price: "£450",
 		hours: "16",
 		included:
 			"Everything in Growth, plus priority turnaround (within 2 working days) and a monthly check-in call.",
 	},
 	{
 		name: "Partner",
-		price: "£800",
 		hours: "32",
 		included:
 			"Everything in Pro, plus same-week delivery of larger features and a quarterly strategy and SEO review.",
 	},
 ];
 
-const trainingPricing = [
-	{ session: "1 hour training session", cost: "£60" },
-	{ session: "2 hour training session", cost: "£120" },
-	{ session: "Full day training session", cost: "£280" },
-];
-
 const faqs = [
 	{
 		question: "How much does a website cost?",
 		answer:
-			"Honestly? Nobody can say up front — it's a bit like asking how long a piece of string is, since every business needs something different. What we can tell you is how we price it: a fixed, time-based cost for building your site, agreed before any work starts, followed by a monthly care plan from £15 (WordPress) or £60 (Payload) if you want your site looked after and kept evolving.",
+			"Honestly? Nobody can say up front — it's a bit like asking how long a piece of string is, since every business needs something different. What we can tell you is how we price it: a fixed, time-based cost for building your site, agreed before any work starts, followed by a monthly plan if you want your site looked after and kept evolving. Contact us and we'll put together a tailored quote.",
 	},
 	{
 		question: "How is a website build priced?",
 		answer:
-			"On a simple day rate of £280 for the first two days, then a discount that increases by £5 for every extra day booked, down to a maximum discount of £220/day. For example, 5 days works out at £1,325 (£265/day), and 15 days works out at £3,300 (£220/day), a £900 saving over the standard rate.",
+			"On a day rate. We scope how many days your build needs and agree the total upfront, and the more days booked, the lower the day rate. Get in touch for a tailored quote.",
 	},
 	{
 		question: "Is the price agreed before you start work?",
@@ -144,12 +112,12 @@ const faqs = [
 	{
 		question: "What happens after the site is built?",
 		answer:
-			"Most clients move on to a monthly plan. Plans run from £15 to £800 a month depending on how many hours of changes, content and SEO work you want each month. Growth (£240 for 7 hours) is the one we recommend for most businesses.",
+			"Most clients move on to a monthly plan. Plans range from simple hosting and security through to several days a month of changes, content and SEO work. Growth is the one we recommend for most businesses. Contact us and we'll tailor a plan to your site.",
 	},
 	{
 		question: "What's the difference between WordPress and Payload plans?",
 		answer:
-			"WordPress sites can be kept secure with automatic core updates, so there's a low-cost Basic tier for hosting and security. Payload sites need regular tested updates to avoid breaking on the next deploy, so Care (£60) is the minimum. Features on Payload are built rather than installed as plugins, so they come out of your plan hours or are quoted at £30/hour.",
+			"WordPress sites can be kept secure with automatic core updates, so there's a low-cost Basic tier for hosting and security. Payload sites need regular tested updates to avoid breaking on the next deploy, so Care is the minimum. Features on Payload are built rather than installed as plugins, so they come out of your plan hours or are quoted separately.",
 	},
 	{
 		question: "Do unused hours roll over?",
@@ -159,17 +127,17 @@ const faqs = [
 	{
 		question: "What if I need more than my plan includes?",
 		answer:
-			"Anything outside your plan is charged at £30/hour. On WordPress Basic, if your site is hacked or breaks, getting it working again is charged at £30/hour, and a hack clean-up typically takes 2 to 4 hours. Care and above include restoring from backup.",
+			"Anything outside your plan is charged at our hourly rate. On WordPress Basic, if your site is hacked or breaks, getting it working again is charged by the hour, and a hack clean-up typically takes 2 to 4 hours. Care and above include restoring from backup.",
 	},
 	{
 		question: "Can you move my site from WordPress to Payload?",
 		answer:
-			"Yes. On a Pro or Partner plan, your monthly hours can cover a migration over a couple of months instead of a one-off rebuild fee. If you ever want to take a Payload site elsewhere, we hand over the code repository and transfer the Vercel project. Support after handover is £30/hour.",
+			"Yes. On a Pro or Partner plan, your monthly hours can cover a migration over a couple of months instead of a one-off rebuild fee. If you ever want to take a Payload site elsewhere, we hand over the code repository and transfer the Vercel project. Support after handover is charged by the hour.",
 	},
 	{
 		question: "Do you offer training as well as building sites?",
 		answer:
-			"Yes, one-to-one training is available if you'd rather learn to do certain tasks yourself, such as updating content or basic coding. Sessions are tailored to what you need, from £60 for an hour up to £280 for a full day.",
+			"Yes, one-to-one training is available if you'd rather learn to do certain tasks yourself, such as updating content or basic coding. Sessions run from an hour to a full day and are tailored to what you need. Contact us to arrange one.",
 	},
 ];
 
@@ -196,42 +164,31 @@ const serviceSchema = {
 		url: "https://www.greencrown.studio",
 	},
 	areaServed: "GB",
+	// No prices: everything is quoted per client, so each offer just
+	// describes the service.
 	offers: [
 		{
 			"@type": "Offer",
 			name: "Website build (time-based)",
-			priceCurrency: "GBP",
-			priceSpecification: {
-				"@type": "UnitPriceSpecification",
-				price: "280",
-				priceCurrency: "GBP",
-				unitText: "DAY",
-			},
 			description:
-				"Fixed, time-based pricing for website builds from £280 per day, with volume discounts for larger projects.",
+				"Fixed, time-based pricing for website builds, agreed upfront, with lower day rates for larger projects.",
 		},
 		{
 			"@type": "Offer",
 			name: "WordPress website care plans",
-			priceCurrency: "GBP",
-			price: "15",
 			description:
-				"Monthly WordPress hosting, backups and maintenance plans from £15 per month, up to £800 per month with 32 hours of changes, content and SEO work.",
+				"Monthly WordPress hosting, backups and maintenance plans, up to 32 hours a month of changes, content and SEO work.",
 		},
 		{
 			"@type": "Offer",
 			name: "Payload website care plans",
-			priceCurrency: "GBP",
-			price: "60",
 			description:
-				"Monthly Payload CMS hosting, backups, tested updates and development hours from £60 per month, up to £800 per month with 32 hours.",
+				"Monthly Payload CMS hosting, backups, tested updates and development hours, up to 32 hours a month.",
 		},
 		{
 			"@type": "Offer",
 			name: "One-to-one training",
-			priceCurrency: "GBP",
-			price: "60",
-			description: "One-to-one training sessions, from £60 per hour, tailored to your needs.",
+			description: "One-to-one training sessions tailored to your needs.",
 		},
 	],
 };
@@ -252,9 +209,6 @@ function PlanTable({ plans, caption }: { plans: Plan[]; caption: string }) {
 							Plan
 						</th>
 						<th scope="col" className="py-2 pr-4 font-medium">
-							Price / month
-						</th>
-						<th scope="col" className="py-2 pr-4 font-medium">
 							Hours / month
 						</th>
 						<th scope="col" className="py-2 font-medium">
@@ -269,7 +223,6 @@ function PlanTable({ plans, caption }: { plans: Plan[]; caption: string }) {
 								{plan.name}
 								{plan.recommended && <span className="block text-sm font-medium">Recommended</span>}
 							</th>
-							<td className="py-2 pr-4">{plan.price}</td>
 							<td className="py-2 pr-4">{plan.hours}</td>
 							<td className="py-2">{plan.included}</td>
 						</tr>
@@ -311,6 +264,13 @@ export default function PricingPage() {
 						site to keep evolving and take advantage of website marketing &mdash; an ongoing
 						maintenance package to match.
 					</p>
+					<p className="mb-4 body-text">
+						Every quote is tailored to your business, so tell us what you need and
+						we&apos;ll come back with a clear, fixed price.
+					</p>
+					<p className="body-text">
+						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
+					</p>
 				</section>
 
 				<section className="mb-10 max-w-2xl" aria-labelledby="build-pricing-heading">
@@ -318,38 +278,13 @@ export default function PricingPage() {
 						Website builds &mdash; fixed, time-based pricing
 					</h2>
 					<p className="mb-4 body-text">
-						We scope how many days your build needs and agree the total upfront. The more days
-						booked, the lower the day rate.
+						We scope how many days your build needs and agree the total upfront, so
+						there are no surprises once work begins. The more days booked, the lower
+						the day rate.
 					</p>
-					<div className="overflow-x-auto">
-						<table className="w-full border-collapse text-left font-light">
-							<caption className="sr-only">Website build pricing by days of work</caption>
-							<thead>
-								<tr className="border-b border-white/20">
-									<th scope="col" className="py-2 pr-4 font-medium">
-										Build time
-									</th>
-									<th scope="col" className="py-2 pr-4 font-medium">
-										Total cost
-									</th>
-									<th scope="col" className="py-2 font-medium">
-										Notes
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								{buildPricing.map((row) => (
-									<tr key={row.days} className="border-b border-white/10">
-										<th scope="row" className="py-2 pr-4 font-normal">
-											{row.days}
-										</th>
-										<td className="py-2 pr-4">{row.cost}</td>
-										<td className="py-2">{row.notes}</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
+					<p className="body-text">
+						<CtaButton href="/contact">Contact us for a tailored quote</CtaButton>
+					</p>
 				</section>
 
 				<section className="mb-10 max-w-2xl" aria-labelledby="maintenance-heading">
@@ -370,28 +305,33 @@ export default function PricingPage() {
 					<p className="mb-2 body-text">
 						There&apos;s no Basic tier for Payload: a site that isn&apos;t kept updated is likely
 						to break on the next deploy, so Care is the minimum. Features are built rather than
-						installed, so they come out of your plan hours or are quoted at £30/hour.
+						installed, so they come out of your plan hours or are quoted separately.
 					</p>
 					<PlanTable plans={payloadPlans} caption="Payload monthly plan pricing" />
 
 					<h3 className="text-lg font-bold mt-8 mb-2">Good to know</h3>
 					<ul className="list-disc pl-5 space-y-1 mb-4 font-light">
-						<li>Prices are per month. All plans can be cancelled at any time.</li>
+						<li>Plans are billed monthly. All plans can be cancelled at any time.</li>
 						<li>Unused hours don&apos;t roll over.</li>
-						<li>Anything outside your plan is charged at £30/hour.</li>
+						<li>Anything outside your plan is charged at our hourly rate.</li>
 						<li>
 							Moving from WordPress to Payload: Pro or Partner hours can cover the migration over
 							a couple of months instead of a one-off rebuild fee.
 						</li>
 						<li>
 							Payload handover: we hand over the code repository and transfer the Vercel project.
-							Support after handover is £30/hour.
+							Support after handover is charged by the hour.
 						</li>
 					</ul>
-					<p className="body-text">
-						<CtaButton href="/website-maintenance">
+					<p className="mb-4 body-text">
+						Every site is different, so we&apos;ll recommend the right plan for yours and
+						tailor it to what you need.
+					</p>
+					<p className="flex flex-wrap items-center gap-x-6 gap-y-3 body-text">
+						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
+						<Link href="/website-maintenance" className="underline">
 							See what&apos;s included in website maintenance
-						</CtaButton>
+						</Link>
 					</p>
 				</section>
 
@@ -407,31 +347,12 @@ export default function PricingPage() {
 						</Link>
 						.
 					</p>
-					<div className="overflow-x-auto">
-						<table className="w-full border-collapse text-left font-light">
-							<caption className="sr-only">One-to-one training session pricing</caption>
-							<thead>
-								<tr className="border-b border-white/20">
-									<th scope="col" className="py-2 pr-4 font-medium">
-										Session
-									</th>
-									<th scope="col" className="py-2 font-medium">
-										Cost
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								{trainingPricing.map((row) => (
-									<tr key={row.session} className="border-b border-white/10">
-										<th scope="row" className="py-2 pr-4 font-normal">
-											{row.session}
-										</th>
-										<td className="py-2">{row.cost}</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
+					<p className="mb-4 body-text">
+						Sessions run from an hour to a full day.
+					</p>
+					<p className="body-text">
+						<CtaButton href="/contact">Contact us to arrange training</CtaButton>
+					</p>
 				</section>
 
 				

@@ -7,7 +7,7 @@ const VARIANT_CLASSES: Record<ContentSectionVariant, string> = {
 	standard: "",
 	white: "bg-white text-[#120d0d]",
 	lime: "bg-[var(--color-highlight)] text-[#120d0d]",
-	mauve: "bg-[#f7f0d4] text-[#120d0d]",
+	mauve: "bg-[#faf4df] text-[#120d0d]",
 };
 
 // "narrow" is the .content-container text-column width (max-w-2xl), used by

@@ -5,12 +5,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "@/../public/logo/logo-white-no-bird.svg";
 import AnchorNavLink from "./AnchorNavLink";
+import SocialLinks from "./SocialLinks";
 
 // Fixed copy of the hero's logo + nav row, revealed once #hero (the
 // original hero viewport) has scrolled out of view above the viewport, so
 // the links stay reachable while scrolling through the lower sections. On
 // mobile the nav links are dropped (the burger menu covers those) and only
-// the logo shows, since #hero-nav itself is hidden below the sm breakpoint. Right padding keeps the nav clear of the fixed burger button, and the nav only appears from lg up where it fits beside it.
+// the logo shows, since #hero-nav itself is hidden below the sm breakpoint
+// (the social buttons are in the burger menu there instead). Right padding
+// keeps the nav clear of the fixed burger button, and the nav only appears from lg up where it fits beside it.
 export default function StickyHeaderNav() {
 	const [visible, setVisible] = useState(false);
 
@@ -79,6 +82,7 @@ export default function StickyHeaderNav() {
 						</li>
 					</ul>
 				</nav>
+				<SocialLinks size="sm" className="hidden sm:flex" />
 			</div>
 		</div>
 	);

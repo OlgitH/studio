@@ -56,6 +56,27 @@ body {
     mix-blend-mode: soft-light;
   } */
 
+  /* Hero social buttons: arrive last, after FadeInOnView's 700ms hero
+  fade, popping in one by one so the eye lands on them. */
+  .hero-socials > li {
+    animation: social-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: 1000ms;
+  }
+
+  .hero-socials > li:nth-child(2) {
+    animation-delay: 1120ms;
+  }
+
+  .hero-socials > li:nth-child(3) {
+    animation-delay: 1240ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-socials > li {
+      animation: none;
+    }
+  }
+
   .back-home-link {
     @apply fixed top-4 left-4 z-50 flex flex-col items-start gap-2 text-sm xl:top-5 xl:left-5;
   }
@@ -186,3 +207,13 @@ body {
   }
 }
 
+@keyframes social-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

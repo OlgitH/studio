@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import MenuShape from "@/../public/SVG/menu-overlay.svg";
 import MobileMenuArtboard from "@/../public/2x/white-mobile-overlay@2x.png";
+import SocialLinks from "./SocialLinks";
 
 type NavEntry =
 	| { type: "link"; href: string; label: string }
@@ -232,6 +233,21 @@ export default function BurgerMenu() {
 								</li>
 							);
 						})}
+						{/* Social buttons as the last item, staggered in after the
+						links. On mobile they live here rather than in the scroll
+						header, which has no room beside the burger. */}
+						<li
+							className={`mt-2 transition-all duration-500 ease-out ${
+								open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
+							}`}
+							style={{
+								transitionDelay: open
+									? `${NAV_ENTRIES.length * 80 + 150}ms`
+									: "0ms",
+							}}
+						>
+							<SocialLinks size="lg" />
+						</li>
 					</ul>
 				</nav>
 			</div>

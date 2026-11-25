@@ -2,6 +2,7 @@ import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import PageBgImage from "../components/PageBgImage";
 import PageContainer from "../components/PageContainer";
+import SocialLinks from "../components/SocialLinks";
 
 export default function ContactPage() {
 	return (
@@ -38,6 +39,8 @@ export default function ContactPage() {
 						<br />
 						Bath BA1 2NH
 					</p>
+					<h2 className="mt-8 mb-4 text-xl font-bold">Follow us</h2>
+					<SocialLinks size="lg" />
 					</div>
 				</PageContainer>
 			</PageMain>

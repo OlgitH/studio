@@ -10,7 +10,7 @@ import ContentSection from "../../components/ContentSection";
 export const metadata: Metadata = {
 	title: "Website Maintenance Plan | Greencrown Studio",
 	description:
-		"Your website, looked after — technically, visually and strategically — for one monthly fee. From £280/month for your first 6 months.",
+		"Your website, looked after — technically, visually and strategically — for one monthly fee, tailored to your business. Contact us for a tailored plan.",
 };
 
 const whatsIncluded = [
@@ -77,9 +77,9 @@ const faqs = [
 			"The core plan (server management, monitoring, reporting) is the foundation. Content and photography can be added on as much or as little as you need, month to month.",
 	},
 	{
-		question: "How is the £280 introductory rate different from the £320 rate?",
+		question: "How much does the plan cost?",
 		answer:
-			"It's the same plan — the reduced rate is simply to make the first 6 months easier while we build up the data and momentum that make the reporting most valuable.",
+			"It depends on your site and how much content and SEO work you want each month, so every plan is tailored. Contact us and we'll put together a fixed monthly price for your site.",
 	},
 	{
 		question: "Is there a contract?",
@@ -129,12 +129,8 @@ export default function WebsiteMaintenancePlanPage() {
 						is always keeping an eye on it, acting on what the data shows, and
 						reporting back — so you don&apos;t have to think about it.
 					</p>
-					<p className="mb-4 body-text">
-						<strong>From £280/month for your first 6 months</strong> (£320/month
-						thereafter).
-					</p>
 					<p className="body-text">
-						<CtaButton href="/contact">Get in touch</CtaButton>
+						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
 					</p>
 				</section>
 
@@ -192,11 +188,12 @@ export default function WebsiteMaintenancePlanPage() {
 						Pricing
 					</h2>
 					<p className="mb-4 body-text">
-						<strong>£280/month</strong> for the first 6 months, then{" "}
-						<strong>£320/month</strong> ongoing.
+						Every site is different, so every plan is tailored. Tell us about your
+						site and what you&apos;d like it to achieve, and we&apos;ll come back
+						with a fixed monthly price.
 					</p>
 					<p className="mb-4 body-text">
-						This covers the core plan: server management, monthly SEO analysis
+						The core plan covers server management, monthly SEO analysis
 						and reporting, and content guidance. Larger content production —
 						video, photography shoots, in-depth case studies — is scoped and
 						quoted separately, so your monthly fee stays predictable.
@@ -205,9 +202,7 @@ export default function WebsiteMaintenancePlanPage() {
 						No lock-in contracts. Cancel with 30 days&apos; notice.
 					</p>
 					<p className="body-text">
-						<CtaButton href="/contact">
-							Get in touch to tailor a plan for your site
-						</CtaButton>
+						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
 					</p>
 				</section>
 
