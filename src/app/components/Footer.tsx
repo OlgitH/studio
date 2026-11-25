@@ -50,7 +50,7 @@ export default function Footer() {
 						<br />
 						Bath BA1 2NH
 					</address>
-					<SocialLinks size="md" className="mt-2" />
+					<SocialLinks size="md" shape="plain" className="mt-2 -ml-2" />
 				</div>
 			</div>
 

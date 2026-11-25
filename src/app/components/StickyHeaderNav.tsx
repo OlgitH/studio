@@ -82,7 +82,7 @@ export default function StickyHeaderNav() {
 						</li>
 					</ul>
 				</nav>
-				<SocialLinks size="sm" className="hidden sm:flex" />
+				<SocialLinks size="sm" shape="slant" className="hidden sm:flex" />
 			</div>
 		</div>
 	);

@@ -24,6 +24,11 @@ type SocialLinksProps = {
 	size?: "sm" | "md" | "lg";
 	/** "lime" for dark backgrounds (e.g. the black hero), where black circles would vanish. */
 	tone?: "black" | "lime";
+	/**
+	 * "slant" = slanted squares (flat top and bottom, 4px apart), used on the hero.
+	 * "plain" = bare icons in the surrounding text colour, divided by pipes (footer).
+	 */
+	shape?: "circle" | "slant" | "plain";
 	className?: string;
 };
 
@@ -38,34 +43,49 @@ const SIZES = {
 	lg: { button: "h-10 w-10", icon: "h-4 w-4" },
 };
 
+const SHAPES = {
+	circle: { list: "gap-2", button: "rounded-full", icon: "" },
+	// Skew the box (flat top and bottom, leaning sides) and skew the icon
+	// back so the glyph stays upright.
+	slant: { list: "gap-[4px]", button: "-skew-x-12 rounded-[3px]", icon: "skew-x-12" },
+	plain: { list: "items-center", button: "", icon: "" },
+};
 export default function SocialLinks({
 	direction = "row",
 	size = "md",
 	tone = "black",
+	shape = "circle",
 	className = "",
 }: SocialLinksProps) {
 	const { button, icon } = SIZES[size];
+	const plain = shape === "plain";
+	const shapeClasses = SHAPES[shape];
 
 	return (
 		<ul
 			aria-label="Greencrown Studio on social media"
-			className={`flex gap-2 ${direction === "column" ? "flex-col" : "flex-row flex-wrap"} ${className}`}
+			className={`flex ${shapeClasses.list} ${direction === "column" ? "flex-col" : "flex-row flex-wrap"} ${className}`}
 		>
-			{SOCIAL_LINKS.map(({ id, label, href }) => (
-				<li key={id}>
+			{SOCIAL_LINKS.map(({ id, label, href }, index) => (
+				<li key={id} className={plain ? "flex items-center" : undefined}>
+					{plain && index > 0 && (
+						<span aria-hidden="true" className="mx-1 opacity-40">
+							|
+						</span>
+					)}
 					<a
 						href={href}
 						target="_blank"
 						rel="noopener noreferrer"
 						aria-label={`${label} (opens in a new tab)`}
 						title={label}
-						className={`${button} flex items-center justify-center rounded-full ${TONES[tone]} transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-highlight)]`}
+						className={`${button} flex items-center justify-center ${shapeClasses.button} ${plain ? "text-current hover:text-white" : TONES[tone]} transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-highlight)]`}
 					>
 						<svg
 							viewBox={ICONS[id].viewBox}
 							fill="currentColor"
 							aria-hidden="true"
-							className={icon}
+							className={`${icon} ${shapeClasses.icon}`}
 						>
 							<path d={ICONS[id].path} />
 						</svg>

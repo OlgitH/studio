@@ -246,7 +246,7 @@ export default function BurgerMenu() {
 									: "0ms",
 							}}
 						>
-							<SocialLinks size="lg" />
+							<SocialLinks size="lg" shape="slant" />
 						</li>
 					</ul>
 				</nav>
