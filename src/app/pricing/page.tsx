@@ -3,6 +3,7 @@ import Link from "next/link";
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
+import BookCallButton from "../components/BookCallButton";
 import PageBgImage from "../components/PageBgImage";
 import PageContainer from "../components/PageContainer";
 
@@ -268,8 +269,9 @@ export default function PricingPage() {
 						Every quote is tailored to your business, so tell us what you need and
 						we&apos;ll come back with a clear, fixed price.
 					</p>
-					<p className="body-text">
+					<p className="flex flex-wrap items-center gap-3 body-text">
 						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
+						<BookCallButton variant="outline" />
 					</p>
 				</section>
 

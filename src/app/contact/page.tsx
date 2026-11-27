@@ -3,6 +3,7 @@ import PageMain from "../components/PageMain";
 import PageBgImage from "../components/PageBgImage";
 import PageContainer from "../components/PageContainer";
 import SocialLinks from "../components/SocialLinks";
+import BookCallButton from "../components/BookCallButton";
 
 export default function ContactPage() {
 	return (
@@ -22,6 +23,13 @@ export default function ContactPage() {
 				<PageContainer className="font-light">
 					<div className="relative z-10 max-w-2xl">
 					<h1 className="text-3xl font-bold mb-4">Contact</h1>
+					<p className="mb-4 body-text">
+						Pick a time that suits you for a website analysis call, or get in
+						touch directly below.
+					</p>
+					<p className="mb-8">
+						<BookCallButton />
+					</p>
 					<p className="mb-4">
 						<a href="mailto:olly@greencrown.studio" className="underline">
 							olly@greencrown.studio
