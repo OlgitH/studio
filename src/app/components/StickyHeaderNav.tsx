@@ -5,15 +5,17 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "@/../public/logo/logo-white-no-bird.svg";
 import AnchorNavLink from "./AnchorNavLink";
-import SocialLinks from "./SocialLinks";
+import { SocialIcon } from "./SocialLinks";
+import { SOCIAL_LINKS } from "../lib/social";
 
 // Fixed copy of the hero's logo + nav row, revealed once #hero (the
 // original hero viewport) has scrolled out of view above the viewport, so
 // the links stay reachable while scrolling through the lower sections. On
 // mobile the nav links are dropped (the burger menu covers those) and only
-// the logo shows, since #hero-nav itself is hidden below the sm breakpoint
-// (the social buttons are in the burger menu there instead). Right padding
-// keeps the nav clear of the fixed burger button, and the nav only appears from lg up where it fits beside it.
+// the logo shows, since #hero-nav itself is hidden below the sm breakpoint.
+// The social icons sit at the end of the row (from sm up; on mobile they're
+// in the burger menu). Right padding keeps the row clear of the fixed burger
+// button, and the nav only appears from lg up where it fits beside it.
 export default function StickyHeaderNav() {
 	const [visible, setVisible] = useState(false);
 
@@ -82,7 +84,25 @@ export default function StickyHeaderNav() {
 						</li>
 					</ul>
 				</nav>
-				<SocialLinks size="sm" shape="slant" className="hidden sm:flex" />
+				<ul
+					aria-label="Greencrown Studio on social media"
+					className="hidden items-center gap-3 sm:flex"
+				>
+					{SOCIAL_LINKS.map(({ id, label, href }) => (
+						<li key={id}>
+							<a
+								href={href}
+								target="_blank"
+								rel="noopener noreferrer"
+								aria-label={`${label} (opens in a new tab)`}
+								title={label}
+								className="flex h-7 items-center transition-opacity hover:opacity-60"
+							>
+								<SocialIcon id={id} className="h-[18px] w-auto" />
+							</a>
+						</li>
+					))}
+				</ul>
 			</div>
 		</div>
 	);

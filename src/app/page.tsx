@@ -110,7 +110,7 @@ export default function Home() {
 					<SocialLinks
 						size="md"
 						tone="lime"
-						shape="slant"
+						shape="bare"
 						className="hero-socials absolute right-[20px] bottom-[20px]"
 					/>
 				</FadeInOnView>

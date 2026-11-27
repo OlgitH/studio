@@ -18,6 +18,26 @@ const ICONS: Record<SocialId, { viewBox: string; path: string }> = {
 	},
 };
 
+/** A single social glyph, for layouts that place icons themselves. */
+export function SocialIcon({
+	id,
+	className = "",
+}: {
+	id: SocialId;
+	className?: string;
+}) {
+	return (
+		<svg
+			viewBox={ICONS[id].viewBox}
+			fill="currentColor"
+			aria-hidden="true"
+			className={className}
+		>
+			<path d={ICONS[id].path} />
+		</svg>
+	);
+}
+
 type SocialLinksProps = {
 	/** "column" stacks the buttons, matching the hero's vertical nav list. */
 	direction?: "row" | "column";
@@ -27,8 +47,9 @@ type SocialLinksProps = {
 	/**
 	 * "slant" = slanted squares (flat top and bottom, 4px apart), used on the hero.
 	 * "plain" = bare icons in the surrounding text colour, divided by pipes (footer).
+	 * "bare" = no shape behind; the icon itself takes the tone colour (lime on the hero).
 	 */
-	shape?: "circle" | "slant" | "plain";
+	shape?: "circle" | "slant" | "plain" | "bare";
 	className?: string;
 };
 
@@ -37,10 +58,21 @@ const TONES = {
 	lime: "bg-[var(--color-highlight)] text-black",
 };
 
+// For "bare": no background, so the tone colours the glyph itself.
+const BARE_TONES = {
+	black: "text-black",
+	lime: "text-[var(--color-highlight)]",
+};
+
+// `bareIcon` is larger since, with no shape behind it, the glyph is the
+// whole button. Shapeless buttons ("bare", "plain") use only the height
+// (`row`) and let each glyph keep its natural width, so the list gap sets
+// equal visible space between glyphs; a fixed square box would leave the
+// narrow Facebook "f" with extra space around it.
 const SIZES = {
-	sm: { button: "h-7 w-7", icon: "h-3 w-3" },
-	md: { button: "h-8 w-8", icon: "h-3.5 w-3.5" },
-	lg: { button: "h-10 w-10", icon: "h-4 w-4" },
+	sm: { button: "h-7 w-7", row: "h-7", icon: "h-3 w-3", bareIcon: "h-4" },
+	md: { button: "h-8 w-8", row: "h-8", icon: "h-3.5 w-3.5", bareIcon: "h-5" },
+	lg: { button: "h-10 w-10", row: "h-10", icon: "h-4 w-4", bareIcon: "h-6" },
 };
 
 const SHAPES = {
@@ -49,7 +81,9 @@ const SHAPES = {
 	// back so the glyph stays upright.
 	slant: { list: "gap-[4px]", button: "-skew-x-12 rounded-[3px]", icon: "skew-x-12" },
 	plain: { list: "items-center", button: "", icon: "" },
+	bare: { list: "gap-3", button: "", icon: "" },
 };
+
 export default function SocialLinks({
 	direction = "row",
 	size = "md",
@@ -57,8 +91,15 @@ export default function SocialLinks({
 	shape = "circle",
 	className = "",
 }: SocialLinksProps) {
-	const { button, icon } = SIZES[size];
+	const bare = shape === "bare";
 	const plain = shape === "plain";
+	const shapeless = bare || plain;
+	const button = shapeless ? SIZES[size].row : SIZES[size].button;
+	const icon = bare
+		? `${SIZES[size].bareIcon} w-auto`
+		: plain
+			? `${SIZES[size].icon.split(" ")[0]} w-auto`
+			: SIZES[size].icon;
 	const shapeClasses = SHAPES[shape];
 
 	return (
@@ -69,7 +110,7 @@ export default function SocialLinks({
 			{SOCIAL_LINKS.map(({ id, label, href }, index) => (
 				<li key={id} className={plain ? "flex items-center" : undefined}>
 					{plain && index > 0 && (
-						<span aria-hidden="true" className="mx-1 opacity-40">
+						<span aria-hidden="true" className="mx-3 opacity-40">
 							|
 						</span>
 					)}
@@ -79,7 +120,7 @@ export default function SocialLinks({
 						rel="noopener noreferrer"
 						aria-label={`${label} (opens in a new tab)`}
 						title={label}
-						className={`${button} flex items-center justify-center ${shapeClasses.button} ${plain ? "text-current hover:text-white" : TONES[tone]} transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-highlight)]`}
+						className={`${button} flex items-center justify-center ${shapeClasses.button} ${plain ? "text-current hover:text-white" : bare ? BARE_TONES[tone] : TONES[tone]} transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-highlight)]`}
 					>
 						<svg
 							viewBox={ICONS[id].viewBox}
