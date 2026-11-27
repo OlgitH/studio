@@ -40,21 +40,19 @@ export default async function PlanYourWebsitePage({
 				<strong className="font-bold">
 					{plan.name} ({plan.price} {plan.priceNote})
 				</strong>
-				. Book a free call with Olly, a web designer based in Bath, and
-				we&apos;ll check it&apos;s the right fit for your site before anything
-				starts.
+				. Book a free call with Olly at Greencrown Studio, and we&apos;ll check
+				it&apos;s the right fit for your site before anything starts.
 			</>
 		) : plan ? (
 			<>
-				A free call with Olly, a web designer based in Bath. Tell us about your
-				site and what you need, and we&apos;ll put together a plan tailored to
-				it.
+				A free call with Olly at Greencrown Studio. Tell us about your site and
+				what you need, and we&apos;ll put together a plan tailored to it.
 			</>
 		) : (
 			<>
-				A free call with Olly, a web designer based in Bath, to talk through
-				what you need: a new website, a move off a website builder, or keeping
-				an existing site looked after.
+				A free call with Olly at Greencrown Studio, to talk through what you
+				need: a new website, a move off a website builder, or keeping an
+				existing site looked after.
 			</>
 		);
 
