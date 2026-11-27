@@ -75,7 +75,7 @@ export default function PhotographyFooter({
 								</a>
 							</p>
 							<p>
-								<a href="tel:+01225699150">+44 1225 699150</a>
+								<a href="tel:+441225699150">+44 1225 699150</a>
 							</p>
 						</section>
 					</div>
@@ -85,7 +85,7 @@ export default function PhotographyFooter({
 						<a href="mailto:olly@greencrown.studio">olly@greencrown.studio</a>
 					</p>
 					<p>
-						<a href="tel:+01225699150">+44 1225 699150</a>
+						<a href="tel:+441225699150">+44 1225 699150</a>
 					</p>
 				</section>
 			</div>

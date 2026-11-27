@@ -24,11 +24,14 @@ export default function ContactPage() {
 					<div className="relative z-10 max-w-2xl">
 					<h1 className="text-3xl font-bold mb-4">Contact</h1>
 					<p className="mb-4 body-text">
-						Pick a time that suits you for a free website review, or get in
-						touch directly below.
+						Book a free review of your current website, or a call to plan a new
+						one. Or get in touch directly below.
 					</p>
-					<p className="mb-8">
-						<BookCallButton />
+					<p className="mb-8 flex flex-wrap gap-3">
+						<BookCallButton variant="charcoal" />
+						<BookCallButton variant="charcoal" href="/plan-your-website">
+							Plan your website
+						</BookCallButton>
 					</p>
 					<p className="mb-4">
 						<a href="mailto:olly@greencrown.studio" className="underline">
@@ -36,7 +39,7 @@ export default function ContactPage() {
 						</a>
 					</p>
 					<p className="mb-4">
-						<a href="tel:+01225699150" className="underline">
+						<a href="tel:+441225699150" className="underline">
 							+44 1225 699150
 						</a>
 					</p>
@@ -47,8 +50,20 @@ export default function ContactPage() {
 						<br />
 						Bath BA1 2NH
 					</p>
-					<h2 className="mt-8 mb-4 text-xl font-bold">Follow us</h2>
-					<SocialLinks size="lg" />
+					{/* Heading and icons on one line: bare lime icons as on the
+					homepage hero, a size smaller (16px) so they sit within the
+					heading's capitals. gap-3 matches the gap between the icons; the
+					3px lift centres them on the capitals rather than the heading's
+					full line box (which includes descender room). Measured. */}
+					<div className="mt-8 flex items-center gap-3">
+						<h2 className="text-xl font-bold">Follow us</h2>
+						<SocialLinks
+							size="sm"
+							shape="bare"
+							tone="lime"
+							className="-translate-y-[3px]"
+						/>
+					</div>
 					</div>
 				</PageContainer>
 			</PageMain>

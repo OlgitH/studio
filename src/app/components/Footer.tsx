@@ -40,7 +40,7 @@ export default function Footer() {
 					<a href="mailto:olly@greencrown.studio" className="hover:text-white">
 						olly@greencrown.studio
 					</a>
-					<a href="tel:+01225699150" className="hover:text-white">
+					<a href="tel:+441225699150" className="hover:text-white">
 						+44 1225 699150
 					</a>
 					<address className="not-italic">

@@ -9,7 +9,6 @@ import StickyHeaderNav from "./components/StickyHeaderNav";
 import AnchorNavLink from "./components/AnchorNavLink";
 import HomeCaseStudies from "./components/HomeCaseStudies";
 import SocialLinks from "./components/SocialLinks";
-import BookCallButton from "./components/BookCallButton";
 export default function Home() {
 	return (
 		<>
@@ -100,17 +99,11 @@ export default function Home() {
 									</a>
 								</p>
 								<p>
-									<a href="tel:+01225699150" className="whitespace-nowrap">
+									<a href="tel:+441225699150" className="whitespace-nowrap">
 										+44 1225 699150
 									</a>
 								</p>
 							</section>
-						</div>
-						<div className="mt-10 row-start-4 xl:col-start-1 xl:col-span-4">
-							<BookCallButton
-								variant="charcoal"
-								className="text-sm sm:text-base"
-							/>
 						</div>
 					</div>
 					<SocialLinks

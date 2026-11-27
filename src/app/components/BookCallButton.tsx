@@ -1,6 +1,7 @@
-// Cal.com booking link for a free website review call. Kept here so every
-// button on the site points at the same event.
-export const BOOKING_URL = "https://cal.com/olly-berman/website-review";
+// Booking buttons go to our own pages with the Cal.com calendar embedded
+// (not straight to cal.com), so every booking fires a tracked conversion
+// event (see CalInlineEmbed). Default: the free website review.
+export const REVIEW_PAGE = "/free-website-review";
 
 type BookCallButtonProps = {
 	/**
@@ -11,16 +12,21 @@ type BookCallButtonProps = {
 	 * background (the homepage hero).
 	 */
 	variant?: "solid" | "outline" | "link" | "charcoal";
+	/** Defaults to the free website review page. An external URL opens in a
+	 * new tab; an internal path (starting "/") in the same tab. */
+	href?: string;
 	children?: React.ReactNode;
 	className?: string;
 };
 
 export default function BookCallButton({
 	variant = "solid",
+	href = REVIEW_PAGE,
 	children = "Book a free website review",
 	className = "",
 }: BookCallButtonProps) {
 	const link = variant === "link";
+	const external = !href.startsWith("/");
 	const iconless = link || variant === "charcoal";
 	const variantClasses = {
 		solid:
@@ -34,9 +40,8 @@ export default function BookCallButton({
 
 	return (
 		<a
-			href={BOOKING_URL}
-			target="_blank"
-			rel="noopener noreferrer"
+			href={href}
+			{...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
 			className={`inline-flex items-center gap-2 font-bold transition-colors ${link ? "" : "no-underline"} ${variantClasses} ${className}`}
 		>
 			{!iconless && (
@@ -57,7 +62,7 @@ export default function BookCallButton({
 				</svg>
 			)}
 			{children}
-			<span className="sr-only"> (opens in a new tab)</span>
+			{external && <span className="sr-only"> (opens in a new tab)</span>}
 		</a>
 	);
 }

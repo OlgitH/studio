@@ -1,6 +1,7 @@
 import BackHomeLink from "../components/BackHomeLink";
 import PageMain from "../components/PageMain";
 import CtaButton from "../components/CtaButton";
+import CarePlanCards from "../components/CarePlanCards";
 import LinkBoxList from "../components/LinkBoxList";
 import PageBgImage from "../components/PageBgImage";
 import PageContainer from "../components/PageContainer";
@@ -49,6 +50,10 @@ export default function WebsiteMaintenancePage() {
 							improvements we make over time. Get in touch if you would like to
 							discuss a package tailored to your site.
 						</p>
+
+						<div className="mb-12">
+							<CarePlanCards />
+						</div>
 
 						<h2 className="text-2xl font-semibold mb-4">
 							Website maintenance services

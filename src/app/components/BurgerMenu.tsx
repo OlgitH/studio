@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import MenuShape from "@/../public/SVG/menu-overlay.svg";
 import MobileMenuArtboard from "@/../public/2x/white-mobile-overlay@2x.png";
 import SocialLinks from "./SocialLinks";
+import { isLandingPage } from "../lib/landingPages";
 
 type NavEntry =
 	| { type: "link"; href: string; label: string }
@@ -74,6 +76,10 @@ export default function BurgerMenu() {
 			document.body.style.overflow = previousOverflow;
 		};
 	}, [open, closeMenu]);
+
+	// Ad landing pages have no menu: nothing to click away to.
+	const pathname = usePathname();
+	if (isLandingPage(pathname)) return null;
 
 	return (
 		// Bled off the corner: the circle is bigger than the viewport slot it

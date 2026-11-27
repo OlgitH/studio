@@ -38,77 +38,79 @@ export default function StickyHeaderNav() {
 	}, []);
 
 	return (
-		<div
-			className={`fixed inset-x-0 top-0 z-40 bg-white text-[#120d0d] shadow-[0_2px_12px_rgba(0,0,0,0.15)] transition-transform duration-150 ${
-				visible ? "translate-y-0" : "pointer-events-none -translate-y-full"
-			}`}
-		>
-			<div className="mx-auto flex w-full items-center justify-between gap-8 pl-[20px] pr-[20px] py-[22px] sm:pr-[110px] xl:w-[1080px] xl:pr-[20px] xl:py-[26px]">
-				<Image
-					src={Logo}
-					alt="Greencrown Studio"
-					width={140}
-					className="h-auto w-36 invert"
-				/>
-				<nav aria-label="Primary" className="primary-nav hidden lg:block">
-					<ul className="flex items-center gap-6 text-base font-light">
-						<li>
-							<Link href="/about">about</Link>
-						</li>
-						<li>
-							<AnchorNavLink
-								targetId="website-maintenance"
-								className="whitespace-nowrap"
-							>
-								website maintenance
-							</AnchorNavLink>
-						</li>
-						<li>
-							<AnchorNavLink
-								targetId="business-processes"
-								className="whitespace-nowrap"
-							>
-								AI business processes
-							</AnchorNavLink>
-						</li>
-						<li>
-							<AnchorNavLink targetId="training">training</AnchorNavLink>
-						</li>
-						<li>
-							<AnchorNavLink
-								targetId="case-studies"
-								className="whitespace-nowrap"
-							>
-								case studies
-							</AnchorNavLink>
-						</li>
+		<>
+			<div
+				className={`fixed inset-x-0 top-0 z-40 bg-white text-[#120d0d] shadow-[0_2px_12px_rgba(0,0,0,0.15)] transition-transform duration-150 ${
+					visible ? "translate-y-0" : "pointer-events-none -translate-y-full"
+				}`}
+			>
+				<div className="mx-auto flex w-full items-center justify-between gap-8 pl-[20px] pr-[20px] py-[22px] sm:pr-[110px] xl:w-[1080px] xl:pr-[20px] xl:py-[26px]">
+					<Image
+						src={Logo}
+						alt="Greencrown Studio"
+						width={140}
+						className="h-auto w-36 invert"
+					/>
+					<nav aria-label="Primary" className="primary-nav hidden lg:block">
+						<ul className="flex items-center gap-6 text-base font-light">
+							<li>
+								<Link href="/about">about</Link>
+							</li>
+							<li>
+								<AnchorNavLink
+									targetId="website-maintenance"
+									className="whitespace-nowrap"
+								>
+									website maintenance
+								</AnchorNavLink>
+							</li>
+							<li>
+								<AnchorNavLink
+									targetId="business-processes"
+									className="whitespace-nowrap"
+								>
+									AI business processes
+								</AnchorNavLink>
+							</li>
+							<li>
+								<AnchorNavLink targetId="training">training</AnchorNavLink>
+							</li>
+							<li>
+								<AnchorNavLink
+									targetId="case-studies"
+									className="whitespace-nowrap"
+								>
+									case studies
+								</AnchorNavLink>
+							</li>
+						</ul>
+					</nav>
+					<ul
+						aria-label="Greencrown Studio on social media"
+						className="hidden items-center gap-3 sm:flex"
+					>
+						{SOCIAL_LINKS.map(({ id, label, href }) => (
+							<li key={id}>
+								<a
+									href={href}
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label={`${label} (opens in a new tab)`}
+									title={label}
+									className="flex h-7 items-center transition-opacity hover:opacity-60"
+								>
+									<SocialIcon id={id} className="h-[18px] w-auto" />
+								</a>
+							</li>
+						))}
 					</ul>
-				</nav>
-				<ul
-					aria-label="Greencrown Studio on social media"
-					className="hidden items-center gap-3 sm:flex"
-				>
-					{SOCIAL_LINKS.map(({ id, label, href }) => (
-						<li key={id}>
-							<a
-								href={href}
-								target="_blank"
-								rel="noopener noreferrer"
-								aria-label={`${label} (opens in a new tab)`}
-								title={label}
-								className="flex h-7 items-center transition-opacity hover:opacity-60"
-							>
-								<SocialIcon id={id} className="h-[18px] w-auto" />
-							</a>
-						</li>
-					))}
-				</ul>
+				</div>
 			</div>
-			{/* Back to top: a small charcoal quarter circle (same #2a2424 as the hero
-			booking pill) hanging off the left
-			edge just under this bar (top-full), with a lime arrow. It rides
-			along with the header's slide, and fades out with it, since the
-			slide alone would leave it on screen. */}
+
+			{/* Back to top: a small white quarter circle in the bottom-left
+			corner with a dark arrow, shown and hidden along with this header.
+			It's outside the header div because the header's translate would
+			otherwise make "fixed" relative to the header, not the screen. */}
 			<button
 				type="button"
 				onClick={() =>
@@ -123,8 +125,8 @@ export default function StickyHeaderNav() {
 				aria-label="Back to top"
 				title="Back to top"
 				tabIndex={visible ? undefined : -1}
-				className={`absolute top-full left-0 h-[40px] w-[40px] cursor-pointer rounded-br-full bg-[#2a2424] text-[var(--color-highlight)] transition-opacity duration-150 hover:text-white ${
-					visible ? "opacity-100" : "opacity-0"
+				className={`fixed bottom-0 left-0 z-40 h-[40px] w-[40px] cursor-pointer rounded-tr-full bg-white text-[#120d0d] shadow-[0_0_12px_rgba(0,0,0,0.15)] transition-opacity duration-150 hover:text-black/60 ${
+					visible ? "opacity-100" : "pointer-events-none opacity-0"
 				}`}
 			>
 				<svg
@@ -135,12 +137,12 @@ export default function StickyHeaderNav() {
 					strokeLinecap="round"
 					strokeLinejoin="round"
 					aria-hidden="true"
-					className="absolute top-[8px] left-[8px] h-3.5 w-3.5"
+					className="absolute bottom-[8px] left-[8px] h-3.5 w-3.5"
 				>
 					<line x1="12" y1="19" x2="12" y2="5" />
 					<polyline points="5 12 12 5 19 12" />
 				</svg>
 			</button>
-		</div>
+		</>
 	);
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import BackHomeLink from "../../components/BackHomeLink";
 import PageMain from "../../components/PageMain";
-import CtaButton from "../../components/CtaButton";
+import StickyCtaButton from "../../components/StickyCtaButton";
 import FaqAccordion from "../../components/FaqAccordion";
 import PageBgImage from "../../components/PageBgImage";
 import PageContainer from "../../components/PageContainer";
@@ -130,7 +130,9 @@ export default function WebsiteMaintenancePlanPage() {
 						reporting back — so you don&apos;t have to think about it.
 					</p>
 					<p className="body-text">
-						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
+						<StickyCtaButton href="/contact">
+							Contact us for a tailored plan
+						</StickyCtaButton>
 					</p>
 				</section>
 
@@ -198,11 +200,8 @@ export default function WebsiteMaintenancePlanPage() {
 						video, photography shoots, in-depth case studies — is scoped and
 						quoted separately, so your monthly fee stays predictable.
 					</p>
-					<p className="mb-4 body-text">
-						No lock-in contracts. Cancel with 30 days&apos; notice.
-					</p>
 					<p className="body-text">
-						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
+						No lock-in contracts. Cancel with 30 days&apos; notice.
 					</p>
 				</section>
 

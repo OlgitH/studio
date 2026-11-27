@@ -6,104 +6,28 @@ import CtaButton from "../components/CtaButton";
 import BookCallButton from "../components/BookCallButton";
 import PageBgImage from "../components/PageBgImage";
 import PageContainer from "../components/PageContainer";
+import CarePlanCards from "../components/CarePlanCards";
+import FaqAccordion from "../components/FaqAccordion";
 
 export const metadata: Metadata = {
 	title: "Pricing | Greencrown Studio",
 	description:
-		"How much does a website cost? Fixed, time-based pricing for website builds, monthly care and growth plans, and one-to-one training, all tailored to your business. Contact us for a quote.",
+		"How much does a website cost? Fixed, time-based quotes for website builds, and WordPress care plans from £60 a month, with tailored plans for custom-built sites. Book a free website review.",
+	alternates: { canonical: "/pricing" },
 };
 
-type Plan = {
-	name: string;
-	hours: string;
-	included: string;
-	recommended?: boolean;
-};
-
-const wordpressPlans: Plan[] = [
-	{
-		name: "Basic",
-		hours: "—",
-		included:
-			"Hosting, one backup a month and automatic WordPress core security updates. Plugin updates, fixes, changes and recovering a hacked or broken site are charged separately at our hourly rate.",
-	},
-	{
-		name: "Care",
-		hours: "1",
-		included:
-			"Everything in Basic, plus weekly backups, plugin updates, and restoring your site from backup if it breaks or is hacked. Extra clean-up uses your monthly hour first, then our hourly rate.",
-	},
-	{
-		name: "Plus",
-		hours: "4",
-		included:
-			"Everything in Care, with 4 hours a month for changes, a blog post or a small feature.",
-	},
-	{
-		name: "Growth",
-		hours: "7",
-		included:
-			"Everything in Plus, with 7 hours a month for design changes, new features and SEO content.",
-		recommended: true,
-	},
-	{
-		name: "Pro",
-		hours: "16",
-		included:
-			"Everything in Growth, plus priority turnaround (within 2 working days) and a monthly check-in call.",
-	},
-	{
-		name: "Partner",
-		hours: "32",
-		included:
-			"Everything in Pro, plus same-week delivery of larger features and a quarterly strategy and SEO review.",
-	},
-];
-
-const payloadPlans: Plan[] = [
-	{
-		name: "Care",
-		hours: "1",
-		included:
-			"Vercel hosting and database, database backups, Payload and security updates (tested before release) and 1 hour of changes.",
-	},
-	{
-		name: "Plus",
-		hours: "4",
-		included:
-			"Everything in Care, with 4 hours a month for changes, a blog post or a small feature.",
-	},
-	{
-		name: "Growth",
-		hours: "7",
-		included:
-			"Everything in Plus, with 7 hours a month for design changes, new features and SEO content.",
-		recommended: true,
-	},
-	{
-		name: "Pro",
-		hours: "16",
-		included:
-			"Everything in Growth, plus priority turnaround (within 2 working days) and a monthly check-in call.",
-	},
-	{
-		name: "Partner",
-		hours: "32",
-		included:
-			"Everything in Pro, plus same-week delivery of larger features and a quarterly strategy and SEO review.",
-	},
-];
-
+// Shown on the page (FaqAccordion) as well as in the FAQ structured data:
+// Google expects structured data to match content visitors can see.
 const faqs = [
 	{
 		question: "How much does a website cost?",
 		answer:
-			"Honestly? Nobody can say up front — it's a bit like asking how long a piece of string is, since every business needs something different. What we can tell you is how we price it: a fixed, time-based cost for building your site, agreed before any work starts, followed by a monthly plan if you want your site looked after and kept evolving. Contact us and we'll put together a tailored quote.",
+			"Honestly? Nobody can say up front — it's a bit like asking how long a piece of string is, since every business needs something different. What we can tell you is how we price it: a fixed, time-based cost for building your site, agreed before any work starts, then a monthly care plan from £60 a month if you want your site looked after and kept evolving.",
 	},
 	{
 		question: "How is a website build priced?",
 		answer:
-			"On a day rate. We scope how many days your build needs and agree the total upfront, and the more days booked, the lower the day rate. Get in touch for a tailored quote.",
+			"On a day rate. We scope how many days your build needs and agree the total upfront, and the more days booked, the lower the day rate. Book a free website review and we'll put together a quote.",
 	},
 	{
 		question: "Is the price agreed before you start work?",
@@ -113,12 +37,12 @@ const faqs = [
 	{
 		question: "What happens after the site is built?",
 		answer:
-			"Most clients move on to a monthly plan. Plans range from simple hosting and security through to several days a month of changes, content and SEO work. Growth is the one we recommend for most businesses. Contact us and we'll tailor a plan to your site.",
+			"Most clients move on to a monthly care plan: Care (£60 a month, 1 hour), Growth (£240 a month, 7 hours) or Pro (£450 a month, 14 hours). Growth is the one we recommend for most businesses. Plus (£150, 4 hours) and Partner (£800, 28 hours) plans are also available, as is hosting-only Basic from £15 a month.",
 	},
 	{
-		question: "What's the difference between WordPress and Payload plans?",
+		question: "Do you look after sites that aren't built on WordPress?",
 		answer:
-			"WordPress sites can be kept secure with automatic core updates, so there's a low-cost Basic tier for hosting and security. Payload sites need regular tested updates to avoid breaking on the next deploy, so Care is the minimum. Features on Payload are built rather than installed as plugins, so they come out of your plan hours or are quoted separately.",
+			"Yes. We look after custom-built sites and other platforms on a plan tailored to the site, and can move you off website builders such as Wix, Squarespace or Ionos.",
 	},
 	{
 		question: "Do unused hours roll over?",
@@ -128,12 +52,12 @@ const faqs = [
 	{
 		question: "What if I need more than my plan includes?",
 		answer:
-			"Anything outside your plan is charged at our hourly rate. On WordPress Basic, if your site is hacked or breaks, getting it working again is charged by the hour, and a hack clean-up typically takes 2 to 4 hours. Care and above include restoring from backup.",
+			"Work outside your plan is charged at £60 an hour. On Basic, if your site is hacked or breaks, getting it working again is charged by the hour, and a hack clean-up typically takes 2 to 4 hours. Care and above include restoring from backup.",
 	},
 	{
-		question: "Can you move my site from WordPress to Payload?",
+		question: "Can you move my site to a new platform?",
 		answer:
-			"Yes. On a Pro or Partner plan, your monthly hours can cover a migration over a couple of months instead of a one-off rebuild fee. If you ever want to take a Payload site elsewhere, we hand over the code repository and transfer the Vercel project. Support after handover is charged by the hour.",
+			"Yes. On a Pro or Partner plan, your monthly hours can cover a migration over a couple of months instead of a one-off rebuild fee. If you ever leave a custom-built site, we hand over the code and hosting, and support after handover is £60 an hour.",
 	},
 	{
 		question: "Do you offer training as well as building sites?",
@@ -165,26 +89,37 @@ const serviceSchema = {
 		url: "https://www.greencrown.studio",
 	},
 	areaServed: "GB",
-	// No prices: everything is quoted per client, so each offer just
-	// describes the service.
+	// Care plan prices match the cards on the page (CarePlanCards); builds,
+	// tailored plans and training are quoted per client, so no price.
 	offers: [
+		...[
+			{ name: "Care", price: "60", hours: 1 },
+			{ name: "Growth", price: "240", hours: 7 },
+			{ name: "Pro", price: "450", hours: 14 },
+		].map((plan) => ({
+			"@type": "Offer",
+			name: `WordPress care plan: ${plan.name}`,
+			description: `Monthly WordPress hosting, backups, updates and ${plan.hours} hour${plan.hours === 1 ? "" : "s"} of changes, content and SEO work.`,
+			priceCurrency: "GBP",
+			price: plan.price,
+			priceSpecification: {
+				"@type": "UnitPriceSpecification",
+				price: plan.price,
+				priceCurrency: "GBP",
+				unitText: "MONTH",
+			},
+		})),
+		{
+			"@type": "Offer",
+			name: "Tailored care plan",
+			description:
+				"Care plans for custom-built sites and other platforms, tailored to the site.",
+		},
 		{
 			"@type": "Offer",
 			name: "Website build (time-based)",
 			description:
 				"Fixed, time-based pricing for website builds, agreed upfront, with lower day rates for larger projects.",
-		},
-		{
-			"@type": "Offer",
-			name: "WordPress website care plans",
-			description:
-				"Monthly WordPress hosting, backups and maintenance plans, up to 32 hours a month of changes, content and SEO work.",
-		},
-		{
-			"@type": "Offer",
-			name: "Payload website care plans",
-			description:
-				"Monthly Payload CMS hosting, backups, tested updates and development hours, up to 32 hours a month.",
 		},
 		{
 			"@type": "Offer",
@@ -198,41 +133,6 @@ const structuredData = {
 	"@context": "https://schema.org",
 	"@graph": [faqSchema, serviceSchema],
 };
-
-function PlanTable({ plans, caption }: { plans: Plan[]; caption: string }) {
-	return (
-		<div className="overflow-x-auto">
-			<table className="w-full border-collapse text-left font-light">
-				<caption className="sr-only">{caption}</caption>
-				<thead>
-					<tr className="border-b border-white/20">
-						<th scope="col" className="py-2 pr-4 font-medium">
-							Plan
-						</th>
-						<th scope="col" className="py-2 pr-4 font-medium">
-							Hours / month
-						</th>
-						<th scope="col" className="py-2 font-medium">
-							What&apos;s included
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					{plans.map((plan) => (
-						<tr key={plan.name} className="border-b border-white/10 align-top">
-							<th scope="row" className="py-2 pr-4 font-normal">
-								{plan.name}
-								{plan.recommended && <span className="block text-sm font-medium">Recommended</span>}
-							</th>
-							<td className="py-2 pr-4">{plan.hours}</td>
-							<td className="py-2">{plan.included}</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-	);
-}
 
 export default function PricingPage() {
 	return (
@@ -266,12 +166,12 @@ export default function PricingPage() {
 						maintenance package to match.
 					</p>
 					<p className="mb-4 body-text">
-						Every quote is tailored to your business, so tell us what you need and
-						we&apos;ll come back with a clear, fixed price.
+						Care plans start at £60 a month. For a build, book a free website
+						review and we&apos;ll come back with a clear, fixed price.
 					</p>
 					<p className="flex flex-wrap items-center gap-3 body-text">
-						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
-						<BookCallButton variant="outline" />
+						<BookCallButton />
+						<CtaButton href="/contact">Contact us</CtaButton>
 					</p>
 				</section>
 
@@ -285,52 +185,37 @@ export default function PricingPage() {
 						the day rate.
 					</p>
 					<p className="body-text">
-						<CtaButton href="/contact">Contact us for a tailored quote</CtaButton>
+						<BookCallButton href="/plan-your-website?plan=build">
+							Plan your website
+						</BookCallButton>
 					</p>
 				</section>
 
-				<section className="mb-10 max-w-2xl" aria-labelledby="maintenance-heading">
-					<h2 id="maintenance-heading" className="text-xl font-bold mb-2">
-						Ongoing maintenance &amp; growth
-					</h2>
-					<p className="mb-4 body-text">
-						Once your site is live, a monthly plan keeps it fast, secure and up to date. Higher
-						plans add hours each month for changes, new features, content and SEO, with
-						monitoring and reporting on traffic and engagement so you can see your site&apos;s
-						real-world impact over time. Choose the plan that matches how your site is built.
-					</p>
-
-					<h3 className="text-lg font-bold mt-6 mb-2">WordPress sites</h3>
-					<PlanTable plans={wordpressPlans} caption="WordPress monthly plan pricing" />
-
-					<h3 className="text-lg font-bold mt-8 mb-2">Payload sites</h3>
-					<p className="mb-2 body-text">
-						There&apos;s no Basic tier for Payload: a site that isn&apos;t kept updated is likely
-						to break on the next deploy, so Care is the minimum. Features are built rather than
-						installed, so they come out of your plan hours or are quoted separately.
-					</p>
-					<PlanTable plans={payloadPlans} caption="Payload monthly plan pricing" />
-
-					<h3 className="text-lg font-bold mt-8 mb-2">Good to know</h3>
+				{/* Same cards as /website-maintenance, so prices match site-wide.
+				Wider than the text sections so the four cards fit. */}
+				<div className="mb-6">
+					<CarePlanCards />
+				</div>
+				<section className="mb-10 max-w-2xl" aria-labelledby="care-notes-heading">
+					<h3 id="care-notes-heading" className="text-lg font-bold mb-2">
+						Good to know
+					</h3>
 					<ul className="list-disc pl-5 space-y-1 mb-4 font-light">
-						<li>Plans are billed monthly. All plans can be cancelled at any time.</li>
-						<li>Unused hours don&apos;t roll over.</li>
-						<li>Anything outside your plan is charged at our hourly rate.</li>
 						<li>
-							Moving from WordPress to Payload: Pro or Partner hours can cover the migration over
-							a couple of months instead of a one-off rebuild fee.
+							Higher plans include monitoring and reporting on traffic and
+							engagement, so you can see the real-world impact over time.
 						</li>
 						<li>
-							Payload handover: we hand over the code repository and transfer the Vercel project.
-							Support after handover is charged by the hour.
+							Custom-built sites are looked after on a tailored plan: features
+							are built for your site rather than installed as plugins, and if
+							you ever leave, we hand over the code and hosting.
+						</li>
+						<li>
+							Moving to a new platform: Pro or Partner hours can cover the
+							migration over a couple of months instead of a one-off rebuild fee.
 						</li>
 					</ul>
-					<p className="mb-4 body-text">
-						Every site is different, so we&apos;ll recommend the right plan for yours and
-						tailor it to what you need.
-					</p>
-					<p className="flex flex-wrap items-center gap-x-6 gap-y-3 body-text">
-						<CtaButton href="/contact">Contact us for a tailored plan</CtaButton>
+					<p className="body-text">
 						<Link href="/website-maintenance" className="underline">
 							See what&apos;s included in website maintenance
 						</Link>
@@ -358,6 +243,13 @@ export default function PricingPage() {
 				</section>
 
 				
+
+				<section className="mb-10 max-w-2xl" aria-labelledby="faq-heading">
+					<h2 id="faq-heading" className="text-xl font-bold mb-4">
+						Frequently asked questions
+					</h2>
+					<FaqAccordion faqs={faqs} />
+				</section>
 
 				<script
 					type="application/ld+json"
