@@ -62,10 +62,6 @@ export default function WebsiteMaintenancePage() {
 							<LinkBoxList
 								items={[
 									{
-										label: "Maintenance Plan",
-										href: "/website-maintenance/plan",
-									},
-									{
 										label: "Fresh content",
 										href: "/website-maintenance/content",
 									},

@@ -52,6 +52,19 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Retired pages. Permanent (308) so search engines move any ranking and
+  // old links across to the replacement.
+  async redirects() {
+    return [
+      {
+        // The single "Maintenance Plan" page, replaced by the plan cards on
+        // the main website maintenance page.
+        source: "/website-maintenance/plan",
+        destination: "/website-maintenance",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

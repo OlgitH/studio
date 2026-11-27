@@ -26,7 +26,6 @@ const NAV_ENTRIES: NavEntry[] = [
 		label: "Website maintenance",
 		links: [
 			{ href: "/website-maintenance", label: "Website maintenance" },
-			{ href: "/website-maintenance/plan", label: "Maintenance plan" },
 			{ href: "/website-maintenance/content", label: "Content" },
 			{
 				href: "/website-maintenance/monitoring-progress",
