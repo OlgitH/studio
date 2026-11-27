@@ -38,10 +38,11 @@ export default function CarePlanCards() {
 							</span>
 						)}
 						<h3 className="text-xl font-bold">{plan.name}</h3>
-						<p className="mb-4 text-sm opacity-70">{plan.tagline}</p>
-						<p className="mb-4">
+						<p className="mt-6 mb-6">
 							<span className="text-3xl font-bold">{plan.price}</span>{" "}
-							<span className="text-sm opacity-70">{plan.priceNote}</span>
+							{plan.priceNote && (
+								<span className="text-sm opacity-70">{plan.priceNote}</span>
+							)}
 						</p>
 						<ul className="mb-6 flex-1 space-y-2 text-sm">
 							{plan.features.map((feature) => (

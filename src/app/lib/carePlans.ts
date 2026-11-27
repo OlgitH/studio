@@ -6,7 +6,6 @@ export type CarePlan = {
 	/** Used in links: /plan-your-website?plan=<slug> */
 	slug: string;
 	name: string;
-	tagline: string;
 	price: string;
 	priceNote: string;
 	features: string[];
@@ -21,7 +20,6 @@ export const CARE_PLANS: CarePlan[] = [
 		slug: "care",
 		grey: true,
 		name: "Care",
-		tagline: "Kept safe",
 		price: "£60",
 		priceNote: "per month",
 		features: [
@@ -35,7 +33,6 @@ export const CARE_PLANS: CarePlan[] = [
 	{
 		slug: "growth",
 		name: "Growth",
-		tagline: "Kept improving",
 		price: "£240",
 		priceNote: "per month",
 		features: [
@@ -51,7 +48,6 @@ export const CARE_PLANS: CarePlan[] = [
 		slug: "pro",
 		grey: true,
 		name: "Pro",
-		tagline: "Your web department",
 		price: "£450",
 		priceNote: "per month",
 		features: [
@@ -65,9 +61,8 @@ export const CARE_PLANS: CarePlan[] = [
 	{
 		slug: "tailored",
 		name: "Tailored",
-		tagline: "Built around you",
 		price: "Let's talk",
-		priceNote: "custom plan",
+		priceNote: "",
 		features: [
 			"Custom-built sites and other platforms",
 			"Moving off Wix, Squarespace or Ionos",

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import CtaButton from "./CtaButton";
+import { useVisibleBottomInset } from "../lib/useVisibleBottomInset";
 
 type StickyCtaButtonProps = {
 	href: string;
@@ -22,6 +23,8 @@ export default function StickyCtaButton({
 }: StickyCtaButtonProps) {
 	const ref = useRef<HTMLSpanElement>(null);
 	const [stuck, setStuck] = useState(false);
+	// Lifts it clear of mobile browser toolbars (see the hook).
+	const bottomInset = useVisibleBottomInset();
 	// The portal target only exists in the browser: false on the server and
 	// during hydration, true after, so server and client HTML match.
 	const mounted = useSyncExternalStore(
@@ -57,6 +60,7 @@ export default function StickyCtaButton({
 				createPortal(
 					<span
 						aria-hidden={!stuck}
+						style={{ marginBottom: bottomInset }}
 						className={`fixed right-4 bottom-4 z-50 block transition-all duration-300 xl:right-5 xl:bottom-5 ${
 							stuck
 								? "translate-y-0 opacity-100"

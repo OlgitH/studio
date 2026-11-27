@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useVisibleBottomInset } from "../lib/useVisibleBottomInset";
 
 // Appears once the hero's contact details (#hero-contact) have scrolled out
 // of view above the viewport, so these shortcuts are only offered once the
@@ -9,6 +10,8 @@ import { useEffect, useState } from "react";
 // contact page.
 export default function FloatingContactButtons() {
 	const [visible, setVisible] = useState(false);
+	// Lifts it clear of mobile browser toolbars (see the hook).
+	const bottomInset = useVisibleBottomInset();
 
 	useEffect(() => {
 		const target = document.getElementById("hero-contact");
@@ -24,6 +27,7 @@ export default function FloatingContactButtons() {
 
 	return (
 		<div
+			style={{ marginBottom: bottomInset }}
 			className={`fixed right-4 bottom-4 z-50 flex flex-col items-end gap-3 transition-all duration-300 xl:right-5 xl:bottom-5 ${
 				visible
 					? "translate-y-0 opacity-100"

@@ -7,6 +7,7 @@ import Logo from "@/../public/logo/logo-white-no-bird.svg";
 import AnchorNavLink from "./AnchorNavLink";
 import { SocialIcon } from "./SocialLinks";
 import { SOCIAL_LINKS } from "../lib/social";
+import { useVisibleBottomInset } from "../lib/useVisibleBottomInset";
 
 // Fixed copy of the hero's logo + nav row, revealed once #hero (the
 // original hero viewport) has scrolled out of view above the viewport, so
@@ -18,6 +19,8 @@ import { SOCIAL_LINKS } from "../lib/social";
 // button, and the nav only appears from lg up where it fits beside it.
 export default function StickyHeaderNav() {
 	const [visible, setVisible] = useState(false);
+	// Lifts it clear of mobile browser toolbars (see the hook).
+	const bottomInset = useVisibleBottomInset();
 
 	useEffect(() => {
 		const target = document.getElementById("hero");
@@ -125,6 +128,7 @@ export default function StickyHeaderNav() {
 				aria-label="Back to top"
 				title="Back to top"
 				tabIndex={visible ? undefined : -1}
+				style={{ marginBottom: bottomInset }}
 				className={`fixed bottom-0 left-0 z-40 h-[40px] w-[40px] cursor-pointer rounded-tr-full bg-white text-[#120d0d] shadow-[0_0_12px_rgba(0,0,0,0.15)] transition-opacity duration-150 hover:text-black/60 ${
 					visible ? "opacity-100" : "pointer-events-none opacity-0"
 				}`}
