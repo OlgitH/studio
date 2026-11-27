@@ -9,6 +9,7 @@ import StickyHeaderNav from "./components/StickyHeaderNav";
 import AnchorNavLink from "./components/AnchorNavLink";
 import HomeCaseStudies from "./components/HomeCaseStudies";
 import SocialLinks from "./components/SocialLinks";
+import BookCallButton from "./components/BookCallButton";
 export default function Home() {
 	return (
 		<>
@@ -90,22 +91,24 @@ export default function Home() {
 								your website, branding, SEO and AI processes under one roof,
 								simplifying your life and helping your business grow faster.
 							</p>
+							{/* mt-4 = one blank line at this size, so the gap reads as
+							an even paragraph break below the description. */}
+							<section id="hero-contact" className="mt-4 font-light">
+								<p>
+									<a href="mailto:olly@greencrown.studio">
+										olly@greencrown.studio
+									</a>
+								</p>
+								<p>
+									<a href="tel:+01225699150" className="whitespace-nowrap">
+										+44 1225 699150
+									</a>
+								</p>
+							</section>
 						</div>
-						<section
-							id="hero-contact"
-							className="mt-10 row-start-4 xl:col-start-1 font-light"
-						>
-							<p>
-								<a href="mailto:olly@greencrown.studio">
-									olly@greencrown.studio
-								</a>
-							</p>
-							<p>
-								<a href="tel:+01225699150" className="whitespace-nowrap">
-									+44 1225 699150
-								</a>
-							</p>
-						</section>
+						<div className="mt-10 row-start-4 xl:col-start-1 xl:col-span-4">
+							<BookCallButton variant="charcoal" />
+						</div>
 					</div>
 					<SocialLinks
 						size="md"

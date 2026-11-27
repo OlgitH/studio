@@ -24,7 +24,7 @@ export default function ContactPage() {
 					<div className="relative z-10 max-w-2xl">
 					<h1 className="text-3xl font-bold mb-4">Contact</h1>
 					<p className="mb-4 body-text">
-						Pick a time that suits you for a website analysis call, or get in
+						Pick a time that suits you for a free website review, or get in
 						touch directly below.
 					</p>
 					<p className="mb-8">
