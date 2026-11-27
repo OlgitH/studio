@@ -107,7 +107,10 @@ export default function Home() {
 							</section>
 						</div>
 						<div className="mt-10 row-start-4 xl:col-start-1 xl:col-span-4">
-							<BookCallButton variant="charcoal" />
+							<BookCallButton
+								variant="charcoal"
+								className="text-sm sm:text-base"
+							/>
 						</div>
 					</div>
 					<SocialLinks

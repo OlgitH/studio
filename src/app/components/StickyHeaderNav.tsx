@@ -104,6 +104,43 @@ export default function StickyHeaderNav() {
 					))}
 				</ul>
 			</div>
+			{/* Back to top: a small charcoal quarter circle (same #2a2424 as the hero
+			booking pill) hanging off the left
+			edge just under this bar (top-full), with a lime arrow. It rides
+			along with the header's slide, and fades out with it, since the
+			slide alone would leave it on screen. */}
+			<button
+				type="button"
+				onClick={() =>
+					window.scrollTo({
+						top: 0,
+						behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+							.matches
+							? "auto"
+							: "smooth",
+					})
+				}
+				aria-label="Back to top"
+				title="Back to top"
+				tabIndex={visible ? undefined : -1}
+				className={`absolute top-full left-0 h-[40px] w-[40px] cursor-pointer rounded-br-full bg-[#2a2424] text-[var(--color-highlight)] transition-opacity duration-150 hover:text-white ${
+					visible ? "opacity-100" : "opacity-0"
+				}`}
+			>
+				<svg
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					aria-hidden="true"
+					className="absolute top-[8px] left-[8px] h-3.5 w-3.5"
+				>
+					<line x1="12" y1="19" x2="12" y2="5" />
+					<polyline points="5 12 12 5 19 12" />
+				</svg>
+			</button>
 		</div>
 	);
 }
